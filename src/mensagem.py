@@ -56,10 +56,30 @@ def campos(o: Oferta, d: Decisao) -> list[str]:
     )]
 
 
-def montar(o: Oferta, d: Decisao) -> str:
+def juntar_nomes(nomes: list[str]) -> str:
+    nomes = [n for n in nomes if n]
+    return nomes[0] if len(nomes) == 1 else ", ".join(nomes[:-1]) + " e " + nomes[-1]
+
+
+def linha_historico(preco: float, anterior: tuple[float, str, str] | None) -> str | None:
+    """anterior = (menor preço já visto, loja, data) ou None se é o primeiro registro."""
+    if anterior is None:
+        return None
+    p_ant, loja, data = anterior
+    if preco < p_ant - 0.005:
+        return f"🏆 *MENOR PREÇO JÁ VISTO PELO RADAR!* (antes: {brl(p_ant)}, {loja}, {data})"
+    if preco <= p_ant + 0.005:
+        return f"🏆 *Igual ao menor preço já visto* ({loja}, {data})"
+    return f"📊 *Menor já visto:* {brl(p_ant)} ({loja}, {data})"
+
+
+def montar(o: Oferta, d: Decisao, interessados: list[str] | None = None,
+           historico: str | None = None) -> str:
     c = campos(o, d)
-    return "\n".join([
-        "🚨 *NOVA OFERTA ENCONTRADA!*",
+    topo = ["🚨 *NOVA OFERTA ENCONTRADA!*"]
+    if interessados and any(interessados):
+        topo.append(f"👥 *Para:* {juntar_nomes(interessados)}")
+    return "\n".join(topo + [
         "",
         f"📖 *Título:* {c[0]}",
         f"📦 *Formato:* {c[1]}",
@@ -69,6 +89,7 @@ def montar(o: Oferta, d: Decisao) -> str:
         f"🏷️ *Preço de Capa:* {c[4]}",
         f"💰 *Você Paga:* *{c[5]}*",
         f"📉 *Desconto:* {c[6]}",
+    ] + ([historico] if historico else []) + [
         "",
         "🔗 *Link direto de compra:*",
         c[7],

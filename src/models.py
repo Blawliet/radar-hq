@@ -21,7 +21,7 @@ class Oferta:
 @dataclass
 class Decisao:
     alertar: bool
-    regra: str | None = None              # "A", "B", "OMNIBUS"
+    regra: str | None = None              # "A", "B", "RADAR"
     entrada_id: str | None = None
     nome: str | None = None
     formato: str | None = None

@@ -13,7 +13,7 @@ from rules import Catalogo, avaliar  # noqa: E402
 from stock import validar_html  # noqa: E402
 from texto import extrair_volume, normalizar  # noqa: E402
 
-CAT = Catalogo(RAIZ / "config" / "catalogo.yaml")
+CAT = Catalogo(RAIZ / "config" / "catalogo.yaml", RAIZ / "config" / "pessoas" / "bruno.yaml")
 
 
 def of(titulo, preco=50.0, lista=None, cond="novo"):
@@ -31,6 +31,9 @@ def of(titulo, preco=50.0, lista=None, cond="novo"):
     ("Blueberry: Edição Definitiva (Vol. 3 de 4)", 3),
     ("Battle Royale Omnibus #4", 4),
     ("One Piece 3 em 1 - Vol. 33", 33),
+    ("ONE PIECE - 103 (Panini)", 103),
+    ("Frieren 5 - Panini Mangá Novo Lacrado", 5),
+    ("Tartarugas Ninja 4 Pipoca e Nanquim", 4),
 ])
 def test_volume(titulo, vol):
     assert extrair_volume(normalizar(titulo)) == vol
@@ -97,15 +100,41 @@ def test_box_gantz_parte_2_nao_e_bloqueado():
 
 def test_radar_omnibus():
     d = avaliar(of("Homem-Aranha por Todd McFarlane Omnibus", preco=300), CAT, ref_capa=450)
-    assert d.alertar and d.regra == "OMNIBUS" and d.formato == "Omnibus"
+    assert d.alertar and d.regra == "RADAR" and d.formato == "Omnibus"
 
 
 def test_battle_royale_vol_6_nao_cai_no_radar():
     assert not avaliar(of("Battle Royale Omnibus Vol. 6", preco=10), CAT, ref_capa=100).alertar
 
 
-def test_series_inativas_nao_alertam():
-    assert not avaliar(of("Frieren Vol. 14", preco=10), CAT, ref_capa=100).alertar
+@pytest.mark.parametrize("titulo,alerta", [
+    ("Frieren Vol. 1", False), ("Frieren Vol. 2", True), ("Sakamoto Days Vol. 1", False),
+    ("Sakamoto Days Vol. 5", True), ("Hunter x Hunter Vol. 37", False), ("Hunter x Hunter Vol. 38", True),
+    ("Dandadan Vol. 1", True), ("Tartarugas Ninja Vol. 1 (Pipoca & Nanquim)", True),
+])
+def test_series_em_andamento(titulo, alerta):
+    assert avaliar(of(titulo, preco=70), CAT, ref_capa=100).alertar is alerta, titulo
+
+
+@pytest.mark.parametrize("titulo", [
+    "Box Chainsaw Man - Volumes 1 ao 11 (Panini)",
+    "Kit Mangá Jujutsu Kaisen 1 a 5",
+    "Coleção Completa Vagabond Mangá - 37 volumes",
+])
+def test_radar_boxes_sugere(titulo):
+    d = avaliar(of(titulo, preco=300), CAT, ref_capa=450)
+    assert d.alertar and d.entrada_id == "radar-boxes" and d.formato == "Box", (titulo, d.motivo)
+
+
+@pytest.mark.parametrize("titulo", [
+    "Box Demon Slayer Kimetsu no Yaiba Mangá 1 ao 23",   # bloqueado: já tem
+    "Box Hunter x Hunter Mangá Vol 1 ao 10",             # série do catálogo, volumes que já tem
+    "Box Gantz Caixa 1 Panini (Vols. 1 ao 18)",          # bloqueado
+    "Box Harry Potter 7 livros",                         # não é quadrinho
+    "Kit Poster Mangá Naruto",                           # não é livro
+])
+def test_radar_boxes_ignora(titulo):
+    assert not avaliar(of(titulo, preco=10), CAT, ref_capa=450).alertar, titulo
 
 
 def test_fora_do_catalogo():
@@ -199,3 +228,117 @@ def test_telegram_html_e_botao():
     assert "&lt;19 ao 37&gt; &amp; extras" in p["text"]
     assert "*" not in p["text"]
     assert p["reply_markup"]["inline_keyboard"][0][0]["url"] == "https://loja.com/p/gantz2"
+
+
+def test_telegram_varios_destinos(monkeypatch):
+    from whatsapp import TelegramClient
+    enviados = []
+    cli = TelegramClient("tok", "111, 222,-100333")
+    monkeypatch.setattr(cli, "_post", lambda p: enviados.append(p["chat_id"]) or p["chat_id"] != "222")
+    assert cli.enviar_alerta("", ["x"] * 7 + ["https://l.com/p"], "*oi*")
+    assert enviados == ["111", "222", "-100333"]
+
+
+# ---------------- Vários perfis
+def _grupo_teste(tmp_path):
+    import shutil
+    from rules import Grupo
+    (tmp_path / "pessoas").mkdir()
+    shutil.copy(RAIZ / "config" / "catalogo.yaml", tmp_path / "catalogo.yaml")
+    shutil.copy(RAIZ / "config" / "pessoas" / "bruno.yaml", tmp_path / "pessoas" / "bruno.yaml")
+    (tmp_path / "pessoas" / "ivan.yaml").write_text("""
+nome: Ivan
+radares: [radar-boxes]
+bloqueios:
+  - id: op-tem
+    termos: [one piece]
+    volumes: "1-100"
+promocoes:
+  - id: one-piece
+    nome: One Piece
+    termos: [one piece]
+    volumes: "101+"
+    buscas: [one piece]
+raros: []
+""", encoding="utf-8")
+    return Grupo(tmp_path)
+
+
+def test_perfis_independentes(tmp_path):
+    g = _grupo_teste(tmp_path)
+    assert [p.nome for p in g.perfis] == ["Bruno", "Ivan"]
+    bruno, ivan = g.perfis
+    # One Piece 103: raro para o Bruno, promo para o Ivan
+    d_b = avaliar(of("One Piece Vol. 103", preco=90), bruno, ref_capa=40)
+    d_i = avaliar(of("One Piece Vol. 103", preco=90), ivan, ref_capa=40)
+    assert d_b.alertar and d_b.regra == "A" and not d_i.alertar
+    d_i2 = avaliar(of("One Piece Vol. 103", preco=25), ivan, ref_capa=40)
+    assert d_i2.alertar and d_i2.regra == "B"
+    # One Piece 97: Ivan bloqueou; Bruno quer
+    assert not avaliar(of("One Piece Vol. 97", preco=10), ivan, ref_capa=40).alertar
+    # Box Demon Slayer: bloqueado para o Bruno, sugestão para o Ivan
+    box = of("Box Demon Slayer Mangá 1 ao 23", preco=300)
+    assert not avaliar(box, bruno, ref_capa=500).alertar
+    assert avaliar(box, ivan, ref_capa=500).alertar
+    # Omnibus: radar ligado só para o Bruno
+    omni = of("X-Men Omnibus Vol. 1", preco=300)
+    assert avaliar(omni, bruno, ref_capa=500).alertar and not avaliar(omni, ivan, ref_capa=500).alertar
+    assert ("x", "one piece") in [("x", b) for _, b in g.todas_buscas()]
+
+
+def test_mensagem_com_interessados():
+    o = of("One Piece Vol. 103", preco=90)
+    d = avaliar(o, CAT, ref_capa=40)
+    txt = montar(o, d, ["Bruno", "Ivan", "Thiago"])
+    assert txt.startswith("🚨 *NOVA OFERTA ENCONTRADA!*\n👥 *Para:* Bruno, Ivan e Thiago\n\n📖")
+    assert "👥" not in montar(o, d)
+
+
+def test_resumo_perfil():
+    from rules import resumo_perfil, volumes_legivel
+    assert volumes_legivel("9+") == "a partir do vol. 9"
+    assert volumes_legivel("10,12+") == "vol. 10 e do 12 em diante"
+    r = resumo_perfil(CAT, {"radar-omnibus": "Omnibus", "radar-boxes": "Boxes e coleções"})
+    assert "Radar de Bruno" in r and "Hunter x Hunter: a partir do vol. 38" in r and "Omnibus, Boxes" in r
+
+
+# ---------------- Histórico de preços
+def test_historico_de_precos(tmp_path):
+    from datetime import datetime, timedelta
+    from db import Banco
+    from mensagem import linha_historico
+    b = Banco(tmp_path / "r.db")
+    ontem = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    assert b.menor_preco_anterior("one piece:103", "https://a/1") is None       # nunca visto
+    b.con.execute("INSERT INTO precos VALUES ('one piece:103','https://a/1',?,52.9,'Amazon Brasil')", (ontem,))
+    b.con.execute("INSERT INTO precos VALUES ('one piece:103','https://b/2',?,49.9,'Loja Panini')", (ontem,))
+    b.registrar_preco("one piece:103", "https://c/3", 44.9, "Rika Comic Shop")
+    ant = b.menor_preco_anterior("one piece:103", "https://c/3")
+    assert ant[0] == 49.9 and ant[1] == "Loja Panini"
+    assert linha_historico(44.9, ant).startswith("🏆 *MENOR PREÇO JÁ VISTO PELO RADAR!* (antes: R$ 49,90, Loja Panini,")
+    assert linha_historico(49.9, ant).startswith("🏆 *Igual ao menor")
+    assert linha_historico(60.0, ant).startswith("📊 *Menor já visto:* R$ 49,90 (Loja Panini,")
+    assert linha_historico(10.0, None) is None
+    # mesmo link, mesmo dia: guarda o menor
+    b.registrar_preco("one piece:103", "https://c/3", 47.0, "Rika Comic Shop")
+    assert b.con.execute("SELECT preco FROM precos WHERE url='https://c/3'").fetchone()[0] == 44.9
+
+
+def test_chave_produto_igual_entre_lojas():
+    import main
+    from rules import Grupo
+    g = Grupo(RAIZ / "config")
+    a = main.chave_produto(of("One Piece Vol. 103"), g)
+    b = main.chave_produto(of("ONE PIECE - 103 (Panini)"), g)
+    assert a == b == "one piece:103"
+    x = main.chave_produto(of("X-Men Omnibus Vol. 1 Capa Dura Panini"), g)
+    y = main.chave_produto(of("X-Men Omnibus Vol. 1"), g)
+    assert x == y
+
+
+def test_mensagem_com_historico():
+    o = of("One Piece Vol. 103", preco=44.9)
+    d = avaliar(o, CAT, ref_capa=49.9)
+    txt = montar(o, d, ["Bruno"], "🏆 *MENOR PREÇO JÁ VISTO PELO RADAR!* (antes: R$ 49,90, Loja Panini, 21/10/2026)")
+    assert "📉 *Desconto:*" in txt and "\n🏆 *MENOR PREÇO" in txt
+    assert txt.index("🏆") > txt.index("📉") and txt.index("🏆") < txt.index("🔗")

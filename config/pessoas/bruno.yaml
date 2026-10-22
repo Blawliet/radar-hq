@@ -1,0 +1,226 @@
+# =====================================================================
+# RADAR DO BRUNO
+# =====================================================================
+nome: Bruno
+
+# radares permanentes ligados para esta pessoa (definidos em catalogo.yaml)
+radares: [radar-omnibus, radar-boxes]
+
+# ---------------------------------------------------------------------
+# BLOQUEIOS (já tenho, NUNCA alertar)
+# ---------------------------------------------------------------------
+bloqueios:
+  - id: battle-royale-2-5
+    nome: Battle Royale Omnibus
+    termos: [battle royale]
+    volumes: "2,5"
+  - id: demon-slayer
+    nome: Demon Slayer
+    qualquer: [demon slayer, kimetsu no yaiba]
+    volumes: todos
+  - id: zero-hora
+    nome: Zero Hora (Grandes Eventos DC)
+    termos: [zero hora]
+    volumes: todos
+  - id: invencivel-1-2
+    nome: Invencível
+    termos: [invencivel]
+    volumes: "1-2"
+  - id: spawn-mensal-1-8
+    nome: Spawn (mensal)
+    termos: [spawn]
+    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
+    volumes: "1-8"
+  - id: spawn-origens-1-9-11
+    nome: Spawn Origens
+    termos: [spawn, origens]
+    volumes: "1-9,11"
+  - id: box-gantz-parte-1
+    nome: Box Gantz Parte 1
+    termos: [gantz]
+    qualquer: [box, caixa, colecao]
+    excluir_regex: 'parte\s*2|caixa\s*2|19\s*(a|ao|-|ate)\s*37'
+    volumes: box
+
+# ---------------------------------------------------------------------
+# RAROS (alerta em QUALQUER valor, com estoque real)
+# ---------------------------------------------------------------------
+raros:
+  - id: saga-do-flash
+    nome: A Saga do Flash
+    editora: Panini
+    termos: [saga do flash]
+    volumes: "8,14"
+    prioridade: maxima
+    formato: Encadernado
+    buscas: [a saga do flash]
+
+  - id: quarteto-hickman
+    nome: Quarteto Fantástico por Jonathan Hickman
+    editora: Panini
+    termos: [quarteto fantastico, hickman]
+    volumes: "2"
+    formato: Omnibus
+    buscas: [quarteto fantastico hickman omnibus]
+
+  - id: one-piece
+    nome: One Piece
+    editora: Panini
+    termos: [one piece]
+    excluir: [3 em 1, 3 in 1, novel, film, databook, color walk, guia, blue, yellow, red, green]
+    volumes: "97,98,103,104"
+    formato: Mangá
+    buscas: [one piece vol 97, one piece vol 98, one piece vol 103, one piece vol 104]
+
+  - id: blueberry-definitiva
+    nome: "Blueberry: Edição Definitiva"
+    editora: Pipoca & Nanquim
+    termos: [blueberry]
+    volumes: "3,4"
+    formato: Capa Dura
+    buscas: [blueberry edicao definitiva]
+
+  - id: supergirl-peter-david
+    nome: Supergirl por Peter David e Gary Frank
+    editora: Panini
+    termos: [supergirl]
+    qualquer: [peter david, gary frank]
+    volumes: "4,5"
+    formato: Encadernado
+    buscas: [supergirl peter david]
+
+  - id: spawn-origens
+    nome: Spawn Origens
+    editora: Panini
+    termos: [spawn, origens]
+    volumes: "10,12+"
+    formato: Encadernado
+    buscas: [spawn origens]
+
+  - id: spawn-mensal
+    nome: Spawn (mensal)
+    editora: Panini
+    termos: [spawn]
+    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
+    volumes: "9+"
+    formato: Encadernado
+    buscas: [spawn panini]
+
+  - id: saga-lanterna-verde
+    nome: A Saga do Lanterna Verde
+    editora: Panini
+    termos: [saga do lanterna verde]
+    volumes: "3+"
+    formato: Encadernado
+    buscas: [a saga do lanterna verde]
+
+  - id: absolute-batman
+    nome: Absolute Batman
+    editora: Panini
+    termos: [absolute batman]
+    volumes: "2"
+    formato: Encadernado
+    buscas: [absolute batman]
+
+# ---------------------------------------------------------------------
+# PROMOÇÕES (só com desconto real >= desconto_minimo)
+# ---------------------------------------------------------------------
+promocoes:
+  - id: flash-geoff-johns
+    nome: Flash por Geoff Johns
+    editora: Panini
+    termos: [flash, geoff johns]
+    volumes: "2,3"
+    formato: Omnibus
+    buscas: [flash geoff johns omnibus]
+
+  - id: box-ajin
+    nome: Box Ajin (vols. 1 ao 17)
+    editora: Panini
+    termos: [ajin]
+    qualquer: [box, caixa, colecao completa]
+    volumes: box
+    formato: Mangá
+    buscas: [box ajin]
+
+  - id: box-gantz-parte-2
+    nome: Box Gantz Parte 2 (vols. 19 ao 37)
+    editora: Panini
+    termos: [gantz]
+    regex: 'parte\s*2|caixa\s*2|19\s*(a|ao|-|ate)\s*37'
+    volumes: box
+    formato: Mangá
+    buscas: [box gantz parte 2]
+
+  - id: battle-royale-omnibus
+    nome: Battle Royale Omnibus
+    editora: Pipoca & Nanquim
+    termos: [battle royale]
+    volumes: "1,3,4"
+    formato: Omnibus
+    buscas: [battle royale omnibus]
+
+  - id: invencivel
+    nome: Invencível
+    editora: Panini
+    termos: [invencivel]
+    volumes: "3+"
+    formato: Encadernado
+    buscas: [invencivel panini]
+
+  - id: lote-mulher-maravilha
+    nome: Lote A Saga da Mulher-Maravilha
+    termos: [saga da mulher maravilha]
+    qualquer: [kit, lote, pacote, combo, box]
+    volumes: box
+    formato: Encadernado
+    buscas: [kit a saga da mulher maravilha]
+
+  - id: lote-lanterna-verde-2024
+    nome: Lote Lanterna Verde (fase 2024)
+    termos: [lanterna verde]
+    qualquer: [kit, lote, pacote, combo]
+    excluir: [saga do lanterna]
+    volumes: box
+    formato: Encadernado
+    buscas: [kit lanterna verde panini]
+
+  # Séries em andamento: volumes que você ainda NÃO tem.
+  # Quando comprar um volume, suba o número (ex.: "2+" vira "3+").
+  - id: dandadan
+    nome: Dandadan
+    termos: [dandadan]
+    volumes: "1+"
+    formato: Mangá
+    buscas: [dandadan]
+
+  - id: tmnt-idw
+    nome: Tartarugas Ninja IDW
+    editora: Pipoca & Nanquim
+    termos: [tartarugas ninja]
+    excluir: [omnibus]
+    volumes: "1+"
+    formato: Encadernado
+    buscas: [tartarugas ninja pipoca e nanquim]
+
+  - id: hunter-x-hunter
+    nome: Hunter x Hunter
+    termos: [hunter x hunter]
+    volumes: "38+"
+    formato: Mangá
+    buscas: [hunter x hunter vol 38, hunter x hunter]
+
+  - id: frieren
+    nome: Frieren
+    termos: [frieren]
+    volumes: "2+"
+    formato: Mangá
+    buscas: [frieren]
+
+  - id: sakamoto-days
+    nome: Sakamoto Days
+    termos: [sakamoto days]
+    volumes: "2+"
+    formato: Mangá
+    buscas: [sakamoto days]
+

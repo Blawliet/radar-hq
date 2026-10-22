@@ -30,8 +30,14 @@ _RUIDO = re.compile(
 )
 
 
+# palavras que as lojas penduram no fim do título: "One Piece 103 Panini Novo Lacrado"
+_SUFIXO = re.compile(
+    r"(\s+(panini|jbc|newpop|pipoca|e|nanquim|mythos|devir|conrad|darkside|novo|lacrado|capa|dura|"
+    r"brochura|manga|mangas|hq|lancamento|original|br|editora|comics))+$")
+
+
 def extrair_volume(titulo_norm: str) -> int | None:
-    t = _RUIDO.sub(" ", titulo_norm)
+    t = _SUFIXO.sub("", _RUIDO.sub(" ", titulo_norm).strip())
     m = _VOL_ROTULADO.search(t)
     if m:
         return int(m.group(1))

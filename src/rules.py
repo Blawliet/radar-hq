@@ -63,6 +63,7 @@ class Entrada:
     nome: str
     termos: list
     qualquer: list
+    qualquer_2: list
     excluir: list
     regex: re.Pattern | None
     excluir_regex: re.Pattern | None
@@ -72,6 +73,7 @@ class Entrada:
     ativo: bool
     buscas: list
     editora: str | None
+    volumes_txt: str = "todos"
 
     @classmethod
     def de_dict(cls, d: dict) -> "Entrada":
@@ -80,6 +82,7 @@ class Entrada:
             nome=d.get("nome", d["id"]),
             termos=d.get("termos", []),
             qualquer=d.get("qualquer", []),
+            qualquer_2=d.get("qualquer_2", []),
             excluir=d.get("excluir", []),
             regex=re.compile(d["regex"]) if d.get("regex") else None,
             excluir_regex=re.compile(d["excluir_regex"]) if d.get("excluir_regex") else None,
@@ -89,12 +92,15 @@ class Entrada:
             ativo=d.get("ativo", True),
             buscas=d.get("buscas", []),
             editora=d.get("editora"),
+            volumes_txt=str(d.get("volumes", "todos")),
         )
 
     def casa(self, t: str) -> bool:
         if not all(contem(t, x) for x in self.termos):
             return False
         if self.qualquer and not any(contem(t, x) for x in self.qualquer):
+            return False
+        if self.qualquer_2 and not any(contem(t, x) for x in self.qualquer_2):
             return False
         if any(contem(t, x) for x in self.excluir):
             return False
@@ -106,29 +112,44 @@ class Entrada:
 
 
 # ------------------------------------------------------------------ catálogo
+def _yaml(caminho) -> dict:
+    return yaml.safe_load(Path(caminho).read_text(encoding="utf-8")) or {}
+
+
 class Catalogo:
-    def __init__(self, caminho: str | Path):
-        dados = yaml.safe_load(Path(caminho).read_text(encoding="utf-8"))
+    """Catálogo de UMA pessoa: config e radares do arquivo geral + listas da pessoa.
+    Sem arquivo de pessoa, lê tudo do arquivo geral (formato antigo)."""
+
+    def __init__(self, caminho: str | Path, pessoa: str | Path | None = None):
+        dados = _yaml(caminho)
         cfg = dados.get("config", {})
         self.desconto_minimo = float(cfg.get("desconto_minimo", 25))
         self.margem_lista = float(cfg.get("margem_preco_lista", 1.05))
-        self.bloqueios = [Entrada.de_dict(d) for d in dados.get("bloqueios", [])]
-        self.raros = [Entrada.de_dict(d) for d in dados.get("raros", [])]
-        self.promocoes = [Entrada.de_dict(d) for d in dados.get("promocoes", [])]
-        ro = dados.get("radar_omnibus", {}) or {}
-        self.omnibus = Entrada.de_dict(
-            {"id": "radar-omnibus", "nome": "Radar Omnibus", "termos": ro.get("termos", ["omnibus"]),
-             "volumes": "todos", "formato": "Omnibus", "ativo": ro.get("ativo", True),
-             "buscas": ro.get("buscas", [])}
-        )
+        radares = dados.get("radares", [])
+        listas, self.nome = dados, None
+        if pessoa:
+            listas = _yaml(pessoa)
+            self.nome = listas.get("nome") or Path(pessoa).stem.title()
+            ligados = set(listas.get("radares") or [])
+            radares = [r for r in radares if r["id"] in ligados]
+        self.bloqueios = [Entrada.de_dict(d) for d in listas.get("bloqueios") or []]
+        self.raros = [Entrada.de_dict(d) for d in listas.get("raros") or []]
+        self.promocoes = [Entrada.de_dict(d) for d in listas.get("promocoes") or []]
+        self.radares = [Entrada.de_dict({**d, "volumes": "todos"}) for d in radares]
+        ro = dados.get("radar_omnibus")          # formato antigo do catálogo
+        if ro and not any(r.id == "radar-omnibus" for r in self.radares):
+            self.radares.insert(0, Entrada.de_dict(
+                {"id": "radar-omnibus", "nome": "Radar Omnibus", "termos": ro.get("termos", ["omnibus"]),
+                 "volumes": "todos", "formato": "Omnibus", "ativo": ro.get("ativo", True),
+                 "buscas": ro.get("buscas", [])}))
         inativos = [e.id for e in self.promocoes + self.raros if not e.ativo]
         if inativos:
-            log.warning("Entradas inativas (preencha o volume e ative): %s", ", ".join(inativos))
+            log.warning("%sEntradas inativas: %s", f"[{self.nome}] " if self.nome else "", ", ".join(inativos))
 
     def todas_buscas(self) -> list[tuple[str, str]]:
         """[(entrada_id, termo_de_busca)] sem duplicatas, raros primeiro."""
         vistos, saida = set(), []
-        for e in self.raros + self.promocoes + [self.omnibus]:
+        for e in self.raros + self.promocoes + self.radares:
             if not e.ativo:
                 continue
             for b in e.buscas:
@@ -138,10 +159,79 @@ class Catalogo:
         return saida
 
 
+class Grupo:
+    """Todos os perfis: config/catalogo.yaml + config/pessoas/*.yaml."""
+
+    def __init__(self, pasta_config: str | Path):
+        pasta = Path(pasta_config)
+        arquivos = sorted((pasta / "pessoas").glob("*.yaml")) if (pasta / "pessoas").is_dir() else []
+        geral = pasta / "catalogo.yaml"
+        self.perfis = [Catalogo(geral, a) for a in arquivos] or [Catalogo(geral)]
+
+    def todas_buscas(self) -> list[tuple[str, str]]:
+        vistos, saida = set(), []
+        for p in self.perfis:
+            for eid, b in p.todas_buscas():
+                if b.lower() not in vistos:
+                    vistos.add(b.lower())
+                    saida.append((eid, b))
+        return saida
+
+
+def melhor_decisao(decisoes: list[Decisao]) -> Decisao:
+    """Para montar a mensagem: raro primeiro, depois prioridade, depois maior desconto."""
+    ordem = {"maxima": 0, "alta": 1, "normal": 2}
+    return sorted(decisoes, key=lambda d: (d.regra != "A", ordem.get(d.prioridade, 2),
+                                           -(d.desconto_pct or 0)))[0]
+
+
+def volumes_legivel(spec: str) -> str:
+    s = str(spec).strip().lower()
+    if s in ("todos", "*"):
+        return "todos"
+    if s == "box":
+        return "box/kit"
+    itens = [p.strip() for p in s.split(",") if p.strip()]
+    if len(itens) == 1 and itens[0].endswith("+"):
+        return f"a partir do vol. {itens[0][:-1]}"
+    partes = []
+    for x in itens:
+        if x.endswith("+"):
+            partes.append(f"do {x[:-1]} em diante")
+        elif "-" in x:
+            a, b = x.split("-")
+            partes.append(f"{a} ao {b}")
+        else:
+            partes.append(x)
+    texto = partes[0] if len(partes) == 1 else ", ".join(partes[:-1]) + " e " + partes[-1]
+    return "vol. " + texto
+
+
+def resumo_perfil(cat: Catalogo, nomes_radares: dict | None = None) -> str:
+    def linhas(entradas):
+        return "\n".join(f"• {e.nome}: {volumes_legivel(e.volumes_txt)}" for e in entradas if e.ativo) or "• nada ainda"
+    nomes_radares = nomes_radares or {}
+    radares = ", ".join(nomes_radares.get(r.id, r.nome) for r in cat.radares if r.ativo) or "desligados"
+    partes = [
+        f"📋 *Radar de {cat.nome or 'todos'}*",
+        "",
+        f"⭐ *Raros (alerta em qualquer preço)*\n{linhas(cat.raros)}",
+        "",
+        f"🏷️ *Promoções ({cat.desconto_minimo:.0f}% OFF ou mais)*\n{linhas(cat.promocoes)}",
+        "",
+        f"📡 *Radares:* {radares}",
+        "",
+        f"🚫 *Já tem (não alerta)*\n{linhas(cat.bloqueios)}",
+    ]
+    return "\n".join(partes)
+
+
 # ------------------------------------------------------------------ avaliação
 def detectar_formato(t: str, padrao: str | None) -> str:
     if contem(t, "omnibus"):
         return "Omnibus"
+    if padrao == "Box":
+        return "Box"
     if contem(t, "capa dura"):
         return "Capa Dura"
     if padrao:
@@ -203,8 +293,9 @@ def avaliar(oferta: Oferta, cat: Catalogo, ref_capa: float | None = None) -> Dec
                        motivo=f"volume {vol} fora da lista ({reivindicado.id})", volume=vol)
 
     # Radar Omnibus
-    if cat.omnibus.ativo and cat.omnibus.casa(t):
-        return _decidir_promo(oferta, cat, cat.omnibus, t, vol, ref_capa, "OMNIBUS")
+    for radar in cat.radares:
+        if radar.ativo and radar.casa(t):
+            return _decidir_promo(oferta, cat, radar, t, vol, ref_capa, "RADAR")
 
     return Decisao(False, motivo="fora do catálogo", volume=vol)
 

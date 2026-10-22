@@ -18,6 +18,9 @@ class Banco:
                     url TEXT PRIMARY KEY, preco REAL, enviado_em TEXT, regra TEXT);
                 CREATE TABLE IF NOT EXISTS capas (
                     chave TEXT PRIMARY KEY, preco REAL, loja TEXT, atualizado TEXT);
+                CREATE TABLE IF NOT EXISTS precos (
+                    chave TEXT, url TEXT, dia TEXT, preco REAL, loja TEXT,
+                    PRIMARY KEY (chave, url, dia));
                 CREATE TABLE IF NOT EXISTS historico (
                     quando TEXT, loja TEXT, titulo TEXT, url TEXT, preco REAL,
                     disponivel INTEGER, motivo TEXT);
@@ -58,6 +61,27 @@ class Banco:
         with self.lock:
             row = self.con.execute("SELECT preco FROM capas WHERE chave=?", (chave,)).fetchone()
         return row[0] if row else None
+
+    # ---------- histórico de preços (todas as lojas, só ofertas com estoque confirmado)
+    def registrar_preco(self, chave: str, url: str, preco: float, loja: str):
+        dia = datetime.now().strftime("%Y-%m-%d")
+        with self.lock, self.con:
+            self.con.execute(
+                "INSERT INTO precos VALUES (?,?,?,?,?) ON CONFLICT(chave, url, dia) DO UPDATE SET "
+                "preco=MIN(preco, excluded.preco)", (chave, url, dia, preco, loja))
+
+    def menor_preco_anterior(self, chave: str, url: str) -> tuple[float, str, str] | None:
+        """Menor preço já registrado para o produto, sem contar o registro de hoje deste mesmo link.
+        Devolve (preco, loja, 'dd/mm/aaaa') ou None se o produto nunca foi visto antes."""
+        hoje = datetime.now().strftime("%Y-%m-%d")
+        with self.lock:
+            row = self.con.execute(
+                "SELECT preco, loja, dia FROM precos WHERE chave=? AND NOT (url=? AND dia=?) "
+                "ORDER BY preco ASC, dia ASC LIMIT 1", (chave, url, hoje)).fetchone()
+        if not row:
+            return None
+        a, m, d = row[2].split("-")
+        return row[0], row[1], f"{d}/{m}/{a}"
 
     # ---------- log de tudo que foi checado (útil para depurar)
     def historico(self, loja, titulo, url, preco, disponivel, motivo):

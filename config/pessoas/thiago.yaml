@@ -1,0 +1,47 @@
+# =====================================================================
+# RADAR DO THIAGO
+# =====================================================================
+nome: Thiago
+
+# Radares permanentes. Descomente para ligar:
+#   radar-omnibus  qualquer omnibus com 25% OFF ou mais
+#   radar-boxes    qualquer box, kit ou coleção de mangá/HQ com 25% OFF ou mais
+radares: []
+# radares: [radar-omnibus, radar-boxes]
+
+# ---------------------------------------------------------------------
+# BLOQUEIOS (já tem, NUNCA alertar)
+# ---------------------------------------------------------------------
+bloqueios: []
+# Exemplo:
+# bloqueios:
+#   - id: one-piece-ja-tenho
+#     nome: One Piece
+#     termos: [one piece]
+#     volumes: "1-100"
+
+# ---------------------------------------------------------------------
+# RAROS (alerta em QUALQUER valor, com estoque real)
+# ---------------------------------------------------------------------
+raros: []
+# Exemplo:
+# raros:
+#   - id: vagabond-37
+#     nome: Vagabond
+#     termos: [vagabond]
+#     volumes: "37"
+#     formato: Mangá
+#     buscas: [vagabond vol 37]
+
+# ---------------------------------------------------------------------
+# PROMOÇÕES (só com 25% OFF ou mais)
+# ---------------------------------------------------------------------
+promocoes: []
+# Exemplo:
+# promocoes:
+#   - id: chainsaw-man
+#     nome: Chainsaw Man
+#     termos: [chainsaw man]
+#     volumes: "12+"
+#     formato: Mangá
+#     buscas: [chainsaw man]

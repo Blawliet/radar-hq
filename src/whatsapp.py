@@ -164,11 +164,15 @@ BaileysClient.enviar_alerta = _alerta_por_texto
 
 class TelegramClient:
     """Bot do Telegram (API oficial, grátis). Converte o *negrito* do WhatsApp para HTML
-    e adiciona um botão "Comprar" com o link do produto."""
+    e adiciona um botão "Comprar" com o link do produto.
+
+    chat_id aceita vários destinos separados por vírgula: "111,222,-100333"
+    (pessoas no privado ou um grupo, cujo ID começa com -100)."""
 
     def __init__(self, token: str, chat_id: str):
         self.url = f"https://api.telegram.org/bot{token}/sendMessage"
-        self.chat_id = chat_id
+        self.chat_ids = [c.strip() for c in str(chat_id).split(",") if c.strip()]
+        self.chat_id = self.chat_ids[0] if self.chat_ids else ""
         self.http = httpx.Client(timeout=30)
 
     @staticmethod
@@ -201,11 +205,22 @@ class TelegramClient:
             time.sleep(3 * i)
         return False
 
+    def _para_todos(self, texto: str, url_botao: str | None = None) -> bool:
+        ok = False
+        for cid in self.chat_ids:
+            p = self.payload(texto, url_botao)
+            p["chat_id"] = cid
+            if self._post(p):
+                ok = True
+            else:
+                log.warning("Telegram: não consegui entregar para o chat %s", cid)
+        return ok        # basta uma entrega para não reenviar o alerta na próxima janela
+
     def enviar_texto(self, numero: str, texto: str) -> bool:
-        return self._post(self.payload(texto))
+        return self._para_todos(texto)
 
     def enviar_alerta(self, numero: str, valores: list[str], texto: str) -> bool:
-        return self._post(self.payload(texto, valores[-1] if valores else None))
+        return self._para_todos(texto, valores[-1] if valores else None)
 
 
 def cliente_do_ambiente():
