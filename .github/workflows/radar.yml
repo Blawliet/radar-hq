@@ -1,3 +1,6 @@
+# Radar HQ rodando no GitHub Actions: sem PC ligado, sem servidor.
+# Horários em UTC (Brasília = UTC-3). O GitHub pode atrasar alguns minutos.
+
 name: Radar HQ
 
 on:
@@ -8,12 +11,15 @@ on:
     - cron: "0 18 * * *"    # 15h00
     - cron: "0 22 * * *"    # 19h00
     - cron: "30 2 * * *"    # 23h30
+  # quando alguém muda a lista de uma pessoa, o bot manda as listas atualizadas no grupo
+  push:
+    paths: ["config/pessoas/**"]
   workflow_dispatch:
     inputs:
       modo:
-        description: "teste = só manda mensagem de exemplo | seco = varre sem enviar | agora = varre e envia"
+        description: "teste = mensagem de exemplo | lista = manda o que cada um busca | seco = varre sem enviar | agora = varre e envia"
         type: choice
-        options: [teste, seco, agora]
+        options: [teste, lista, seco, agora]
         default: teste
 
 permissions:
@@ -34,6 +40,7 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       USE_PLAYWRIGHT: "true"
       DELAY_SEGUNDOS: "3"
+      MODO: ${{ github.event_name == 'push' && 'lista' || github.event.inputs.modo || 'agora' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,20 +53,24 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Cache do navegador
+        if: env.MODO == 'seco' || env.MODO == 'agora'
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: pw-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
 
       - name: Instalar Chromium
+        if: env.MODO == 'seco' || env.MODO == 'agora'
         run: python -m playwright install --with-deps chromium
 
       - name: Testes das regras
         run: python -m pytest -q
 
       - name: Rodar o radar
-        run: python src/main.py --${{ github.event.inputs.modo || 'agora' }}
+        run: python src/main.py --$MODO
 
+      # Guarda no próprio repositório o que já foi alertado e os preços de capa,
+      # para não repetir alerta na próxima janela.
       - name: Salvar memória do radar
         if: always()
         run: |
