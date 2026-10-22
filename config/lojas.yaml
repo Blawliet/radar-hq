@@ -5,23 +5,25 @@
 #   auto          detecta a plataforma (VTEX, Shopify, Nuvemshop, Woo, Tray, Magento...)
 #   amazon        coletor próprio
 #   mercadolivre  coletor próprio (API com token ou HTML)
+#   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
+#   woocommerce   Store API do WordPress (Monstra)
 #   html          busca HTML genérica (use "busca" e "padrao_produto")
 # oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
 # playwright: true  abre num navegador real (lojas com muito JavaScript)
 #
-# ATENÇÃO: confira os endereços marcados com "CONFIRA" rodando:
-#   python verificar_lojas.py
+# Para conferir se cada loja responde:  python verificar_lojas.py
 # =====================================================================
 
 lojas:
   - nome: Loja Panini
-    adaptador: auto
-    base: https://panini.com.br            # CONFIRA
+    adaptador: magento
+    base: https://panini.com.br
     oficial: true
 
   - nome: Pipoca & Nanquim
-    adaptador: auto
-    base: https://lojapipocaenanquim.com.br   # CONFIRA
+    adaptador: magento
+    base: https://pipocaenanquim.com.br
+    sufixo_url: ".html"
     oficial: true
 
   - nome: Amazon Brasil
@@ -52,19 +54,21 @@ lojas:
 
   - nome: Rika Comic Shop
     adaptador: auto
-    base: https://www.rika.com.br          # CONFIRA
+    base: https://www.rika.com.br
 
   - nome: Comix Book Shop
-    adaptador: auto
-    base: https://www.comix.com.br         # CONFIRA
+    adaptador: magento
+    base: https://www.comix.com.br
+    sufixo_url: ".html"
 
   - nome: Monstra
-    adaptador: auto
-    base: https://www.monstra.com.br       # CONFIRA
+    adaptador: woocommerce
+    base: https://lojamonstra.com.br
 
   - nome: Comic Boom
-    adaptador: auto
-    base: https://www.comicboom.com.br     # CONFIRA
+    adaptador: magento
+    base: https://comicboom.com.br
+    sufixo_url: ""
 
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam

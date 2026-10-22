@@ -20,7 +20,11 @@
 
 config:
   desconto_minimo: 25        # % mínimo da Regra B
-  margem_preco_lista: 1.05   # preço "de" acima da capa x 1.05 é tratado como inflado
+  margem_preco_lista: 1.05
+  # títulos com estas palavras são edições estrangeiras (inglês, japonês...)
+  excluir_titulos: [paperback, hardcover, english, english edition, by, edition, book one, book two,
+                    book three, deluxe edition, tpb, comic book, kodansha, viz media,
+                    yen press, shueisha, japanese, japones, ingles, espanol, edicion]   # preço "de" acima da capa x 1.05 é tratado como inflado
 
 
 # ---------------------------------------------------------------------

@@ -65,6 +65,7 @@ def detectar_plataforma(f: Fetcher, base: str) -> str:
 
 
 BUSCA_PADRAO = {
+    "woocommerce": "/?s={q}&post_type=product",
     "nuvemshop": "/search/?q={q}",
     "magento": "/catalogsearch/result/?q={q}",
     "tray": "/loja/busca.php?palavra_busca={q}",
@@ -72,6 +73,7 @@ BUSCA_PADRAO = {
     "html": "/busca?q={q}",
 }
 PRODUTO_PADRAO = {
+    "woocommerce": r"/produto/",
     "nuvemshop": r"/produtos/",
     "lojaintegrada": r"/[^/]+-\d+$|/produto/",
 }
@@ -141,37 +143,6 @@ class ShopifyLoja(Loja):
         r = self.f.get(o.url)
         res = validar_html(o.url, r.url_final, r.status, r.html, False, sinal_externo=True)
         o.disponivel, o.motivo_estoque = res.disponivel, f"Shopify variant.available | {res.motivo}"
-        return o
-
-
-# ----------------------------------------------------------------- WooCommerce
-class WooLoja(Loja):
-    def buscar(self, termo):
-        base = self.cfg["base"].rstrip("/")
-        status, dados = self.f.get(
-            f"{base}/wp-json/wc/store/v1/products?search={quote_plus(termo)}&per_page={self.max_resultados}",
-            json=True)
-        saida = []
-        for p in dados or []:
-            if not (p.get("is_in_stock") and p.get("is_purchasable")):
-                continue
-            if not relevante(p.get("name", ""), termo):
-                continue
-            pr = p.get("prices", {})
-            div = 10 ** int(pr.get("currency_minor_unit", 2))
-            preco = int(pr.get("price") or 0) / div
-            lista = int(pr.get("regular_price") or 0) / div
-            saida.append(Oferta(
-                loja=self.nome, titulo=BeautifulSoup(p["name"], "lxml").get_text(),
-                url=limpar_url(p["permalink"]), preco=preco,
-                preco_lista=lista if lista > preco else None,
-            ))
-        return saida
-
-    def validar(self, o):
-        r = self.f.get(o.url)
-        res = validar_html(o.url, r.url_final, r.status, r.html, False, sinal_externo=True)
-        o.disponivel, o.motivo_estoque = res.disponivel, f"Woo is_in_stock | {res.motivo}"
         return o
 
 
@@ -266,3 +237,113 @@ class HtmlLoja(Loja):
             return
         o.disponivel = True
         o.motivo_estoque = "Nuvemshop variant.available | " + o.motivo_estoque
+
+
+# ----------------------------------------------------------------- Magento
+GRAPHQL_MAGENTO = (
+    '{products(search:"%s",pageSize:%d){items{name url_key %s stock_status '
+    'price_range{minimum_price{regular_price{value} final_price{value}}}}}}'
+)
+
+
+class MagentoLoja(HtmlLoja):
+    """Magento 2 (Loja Panini, Pipoca & Nanquim, Comix, Comic Boom).
+    Usa a API GraphQL pública da loja: traz estoque (IN_STOCK/OUT_OF_STOCK),
+    preço cheio e preço com desconto. Se a API estiver fechada, cai para a busca HTML."""
+
+    def __init__(self, fetcher, cfg, plataforma="magento"):
+        super().__init__(fetcher, cfg, "magento")
+        self.sufixo = cfg.get("sufixo_url")          # ".html", "" ou None (= perguntar à API)
+        self.graphql_ok = True
+
+    def _graphql(self, termo):
+        base = self.cfg["base"].rstrip("/")
+        termo_q = termo.replace('"', " ")
+        for campo_sufixo in ("url_suffix", ""):
+            q = GRAPHQL_MAGENTO % (termo_q, self.max_resultados, campo_sufixo)
+            status, dados = self.f.get(f"{base}/graphql?query={quote(q)}", json=True)
+            if status == 200 and dados and not dados.get("errors"):
+                return dados["data"]["products"]["items"]
+        return None
+
+    def buscar(self, termo):
+        if not self.graphql_ok:
+            return super().buscar(termo)
+        itens = self._graphql(termo)
+        if itens is None:
+            log.info("%s: GraphQL indisponível, usando busca HTML.", self.nome)
+            self.graphql_ok = False
+            return super().buscar(termo)
+        base = self.cfg["base"].rstrip("/")
+        saida = []
+        for it in itens:
+            if it.get("stock_status") != "IN_STOCK" or not relevante(it.get("name", ""), termo):
+                continue
+            pr = (it.get("price_range") or {}).get("minimum_price") or {}
+            preco = float((pr.get("final_price") or {}).get("value") or 0)
+            cheio = float((pr.get("regular_price") or {}).get("value") or 0)
+            sufixo = self.sufixo if self.sufixo is not None else (it.get("url_suffix") or ".html")
+            saida.append(Oferta(
+                loja=self.nome, titulo=it["name"], url=f"{base}/{it['url_key']}{sufixo}",
+                preco=preco, preco_lista=cheio if cheio > preco else None,
+                extra={"api": "magento", "preco_cheio": cheio},
+            ))
+        return saida
+
+    def validar(self, o):
+        if o.extra.get("api") != "magento":
+            return super().validar(o)
+        r = self._pegar(o.url, self.cfg.get("seletor_espera"))
+        res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser", sinal_externo=True)
+        o.titulo = res.titulo or o.titulo
+        o.disponivel = res.disponivel
+        o.motivo_estoque = f"Magento IN_STOCK | {res.motivo}"
+        if self.oficial and o.extra.get("preco_cheio"):
+            o.preco_lista = o.extra["preco_cheio"]      # loja da editora: preço cheio = preço de capa
+        return o
+
+
+# ----------------------------------------------------------------- WooCommerce
+class WooLoja(HtmlLoja):
+    """WooCommerce (Loja Monstra). Store API pública com is_in_stock; se fechada, busca HTML."""
+
+    def __init__(self, fetcher, cfg, plataforma="woocommerce"):
+        super().__init__(fetcher, cfg, "woocommerce")
+        self.api_ok = True
+
+    def buscar(self, termo):
+        if not self.api_ok:
+            return super().buscar(termo)
+        base = self.cfg["base"].rstrip("/")
+        status, dados = self.f.get(
+            f"{base}/wp-json/wc/store/v1/products?search={quote_plus(termo)}&per_page={self.max_resultados}",
+            json=True)
+        if status != 200 or not isinstance(dados, list):
+            log.info("%s: Store API indisponível (HTTP %s), usando busca HTML.", self.nome, status)
+            self.api_ok = False
+            return super().buscar(termo)
+        saida = []
+        for p in dados:
+            if not (p.get("is_in_stock") and p.get("is_purchasable")):
+                continue
+            nome = BeautifulSoup(p.get("name", ""), "lxml").get_text()
+            if not relevante(nome, termo):
+                continue
+            pr = p.get("prices", {})
+            div = 10 ** int(pr.get("currency_minor_unit", 2))
+            preco = int(pr.get("price") or 0) / div
+            lista = int(pr.get("regular_price") or 0) / div
+            saida.append(Oferta(
+                loja=self.nome, titulo=nome, url=limpar_url(p["permalink"]), preco=preco,
+                preco_lista=lista if lista > preco else None, extra={"api": "woo"},
+            ))
+        return saida
+
+    def validar(self, o):
+        if o.extra.get("api") != "woo":
+            return super().validar(o)
+        r = self._pegar(o.url)
+        res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser", sinal_externo=True)
+        o.titulo = res.titulo or o.titulo
+        o.disponivel, o.motivo_estoque = res.disponivel, f"Woo is_in_stock | {res.motivo}"
+        return o

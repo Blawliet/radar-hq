@@ -41,6 +41,11 @@ URL_RUIM = re.compile(r"/(busca|search|s|catalogsearch|login|signin|account|carr
 AREA_COMPRA = re.compile(r"buy|compra|product-info|productinfo|availability|disponib|stock|estoque|add-to-cart|addtocart|price|preco|sku|ui-pdp", re.I)
 
 
+BLOQUEIO = re.compile(r"captcha|account-verification|/blocked|perimeterx|/challenge", re.I)
+BLOQUEIO_HTML = re.compile(r"validateCaptcha|Robot Check|Digite os caracteres que voc|Type the characters you see|"
+                           r"px-captcha|cf-chl-|Attention Required! \| Cloudflare", re.I)
+
+
 @dataclass
 class ResultadoEstoque:
     disponivel: bool
@@ -96,6 +101,13 @@ def ler_jsonld(soup) -> dict:
         if not tipos & {"product", "book", "productgroup", "individualproduct"}:
             continue
         out.setdefault("titulo", item.get("name"))
+        if item.get("isbn"):
+            out.setdefault("isbn", item["isbn"] if isinstance(item["isbn"], str) else str(item["isbn"]))
+        lang = item.get("inLanguage")
+        if isinstance(lang, dict):
+            lang = lang.get("name") or lang.get("alternateName")
+        if lang:
+            out.setdefault("idioma", lang)
         ofertas = item.get("offers")
         ofertas = ofertas if isinstance(ofertas, list) else [ofertas] if ofertas else []
         for of in ofertas:
@@ -184,9 +196,43 @@ def preco_lista_html(soup) -> float | None:
         return _num(meta.get("content"))
     padrao = re.compile(r"old-price|price-old|list-price|listprice|preco-de|precode|from-price|compare-at|price--compare|was-price|de-por", re.I)
     for el in soup.find_all(attrs={"class": padrao})[:5]:
-        v = _num(re.sub(r"[^\d,\.]", "", el.get_text(" ")))
+        v = preco_no_texto(el.get_text(" "))
         if v and v > 1:
             return v
+    return None
+
+
+_VALOR = re.compile(r"\d{1,3}(?:\.\d{3})+,\d{2}|\d+,\d{2}|\d+\.\d{2}(?!\d)")
+
+
+def preco_no_texto(texto: str) -> float | None:
+    """Primeiro valor em reais dentro de um texto ("De R$ 89,90 por R$ 59,90" -> 89.9)."""
+    m = _VALOR.search(texto or "")
+    return _num(m.group(0)) if m else None
+
+
+# ---------------------------------------------------------------- idioma / edição
+_IDIOMA_FORA = re.compile(r"\bidioma\s*:?\s*(ingles|english|espanhol|spanish|japones|japanese|frances|french|italiano|italian|alemao|german)\b")
+
+
+def isbn_estrangeiro(isbn: str | None) -> bool:
+    """ISBN brasileiro começa com 85 ou 65 (978-85..., 978-65...). Qualquer outro é edição de fora."""
+    d = re.sub(r"[^0-9Xx]", "", str(isbn or ""))
+    if len(d) == 13 and d[:3] in ("978", "979"):
+        d = d[3:]
+    elif len(d) != 10:
+        return False
+    return not (d.startswith("85") or d.startswith("65"))
+
+
+def edicao_estrangeira(soup, ld: dict) -> str | None:
+    if ld.get("idioma") and not str(ld["idioma"]).lower().startswith(("pt", "por")):
+        return f"idioma {ld['idioma']}"
+    if ld.get("isbn") and isbn_estrangeiro(ld["isbn"]):
+        return f"ISBN estrangeiro {ld['isbn']}"
+    m = _IDIOMA_FORA.search(normalizar(soup.get_text(" "))[:60000])
+    if m:
+        return f"idioma {m.group(1)}"
     return None
 
 
@@ -198,7 +244,7 @@ def validar_html(url_original: str, url_final: str, status: int, html: str,
         return ResultadoEstoque(False, f"HTTP {status}")
     if not url_eh_produto(url_original, url_final):
         return ResultadoEstoque(False, f"redirecionou para página genérica ({url_final})")
-    if re.search(r"captcha|validatecaptcha|account-verification|robot check", url_final + html[:5000], re.I):
+    if BLOQUEIO.search(url_final) or BLOQUEIO_HTML.search(html[:30000]):
         return ResultadoEstoque(False, "bloqueado por verificação anti-robô (não contornamos)")
 
     soup = BeautifulSoup(html, "lxml")
@@ -220,7 +266,21 @@ def validar_html(url_original: str, url_final: str, status: int, html: str,
     if aviso:
         return ResultadoEstoque(False, f"aviso na página: '{aviso}'", **base)
 
+    fora = edicao_estrangeira(soup, ld)
+    if fora:
+        return ResultadoEstoque(False, f"edição estrangeira ({fora})", **base)
+
+    # Magento: o estoque vem num bloco "stock available/unavailable"
+    estoque_magento = soup.select_one("div.stock.available, div.stock.unavailable, p.stock.available, p.stock.unavailable")
+    if estoque_magento is not None:
+        if "unavailable" in estoque_magento.get("class", []):
+            return ResultadoEstoque(False, "Magento: stock unavailable", **base)
+        return ResultadoEstoque(True, "Magento: stock available" + (f" + JSON-LD {disp}" if disp else ""), **base)
+
     botao = _botao_habilitado(soup)
+    if botao is False and sinal_externo and not renderizado:
+        # VTEX e afins desenham o botão desabilitado no HTML inicial; a API já confirmou o estoque
+        return ResultadoEstoque(True, "API da loja confirma estoque (botão ativado via JS)", **base)
     if botao is False:
         return ResultadoEstoque(False, "botão de compra desabilitado", **base)
     if botao is True:

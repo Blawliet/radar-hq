@@ -12,7 +12,7 @@ from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
 
 from models import Oferta
-from stock import _num
+from stock import _num, isbn_estrangeiro
 from stores.base import Loja
 from stores.plataformas import relevante
 from texto import normalizar
@@ -22,7 +22,20 @@ BASE = "https://www.amazon.com.br"
 
 
 def _bloqueado(html: str, url: str) -> bool:
-    return bool(re.search(r"validateCaptcha|captcha|Robot Check|api-services-support@amazon", url + html[:8000], re.I))
+    return bool(re.search(r"validateCaptcha|captcha", url, re.I)) or bool(re.search(
+        r"validateCaptcha|Robot Check|Digite os caracteres que voc|Type the characters you see|"
+        r"api-services-support@amazon\.com", html[:30000], re.I))
+
+
+def _idioma_amazon(s) -> str | None:
+    el = s.select_one("#rpi-attribute-language .rpi-attribute-value")
+    if el:
+        return normalizar(el.get_text(" "))
+    for li in s.select("#detailBullets_feature_div li, #productDetails_detailBullets_sections1 tr"):
+        t = normalizar(li.get_text(" "))
+        if t.startswith("idioma"):
+            return t.replace("idioma", "", 1).strip(" :")
+    return None
 
 
 class AmazonLoja(Loja):
@@ -44,6 +57,8 @@ class AmazonLoja(Loja):
             titulo = h2.get_text(" ", strip=True)
             if not relevante(titulo, termo):
                 continue
+            if re.fullmatch(r"[0-9]{9}[0-9X]", asin) and isbn_estrangeiro(asin):
+                continue        # ISBN de fora do Brasil: nem abre a página
             preco = div.select_one(".a-price .a-offscreen")
             saida.append(Oferta(
                 loja=self.nome, titulo=titulo, url=f"{BASE}/dp/{asin}",
@@ -63,6 +78,16 @@ class AmazonLoja(Loja):
         titulo = s.select_one("#productTitle")
         if titulo:
             o.titulo = titulo.get_text(" ", strip=True)
+
+        # só edição brasileira: ISBN (o ASIN de livro é o ISBN-10) e idioma da ficha
+        asin = o.extra.get("asin", "")
+        if re.fullmatch(r"[0-9]{9}[0-9X]", asin) and isbn_estrangeiro(asin):
+            o.disponivel, o.motivo_estoque = False, f"edição estrangeira (ISBN {asin})"
+            return o
+        idioma = _idioma_amazon(s)
+        if idioma and "portugu" not in idioma:
+            o.disponivel, o.motivo_estoque = False, f"edição estrangeira (idioma {idioma})"
+            return o
 
         disp = normalizar(s.select_one("#availability").get_text(" ")) if s.select_one("#availability") else ""
         if re.search(r"indisponivel|nao disponivel|nao temos previsao|esgotado", disp):

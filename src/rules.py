@@ -125,6 +125,7 @@ class Catalogo:
         cfg = dados.get("config", {})
         self.desconto_minimo = float(cfg.get("desconto_minimo", 25))
         self.margem_lista = float(cfg.get("margem_preco_lista", 1.05))
+        self.excluir_global = list(cfg.get("excluir_titulos", []))
         radares = dados.get("radares", [])
         listas, self.nome = dados, None
         if pessoa:
@@ -244,11 +245,17 @@ def detectar_formato(t: str, padrao: str | None) -> str:
 def calcular_capa(oferta: Oferta, ref_capa: float | None, margem: float) -> float | None:
     """Preço de capa confiável: referência da editora > preço 'de' da loja (se não inflado)."""
     lista = oferta.preco_lista if oferta.preco_lista and oferta.preco_lista > 0 else None
+    preco = oferta.preco or 0
     if ref_capa:
         if lista and ref_capa <= lista <= ref_capa * margem:
             return lista
-        return ref_capa
-    return lista
+        capa = ref_capa
+    else:
+        capa = lista
+    # mais de 75% de desconto quase sempre é preço lido errado: melhor não confiar
+    if capa and preco > 0 and capa > preco * 4:
+        return None
+    return capa
 
 
 def _desconto(preco: float, capa: float | None) -> float | None:
@@ -260,6 +267,10 @@ def _desconto(preco: float, capa: float | None) -> float | None:
 def avaliar(oferta: Oferta, cat: Catalogo, ref_capa: float | None = None) -> Decisao:
     t = normalizar(oferta.titulo)
     vol = extrair_volume(t)
+
+    for termo in cat.excluir_global:
+        if contem(t, termo):
+            return Decisao(False, motivo=f"título indica edição estrangeira ('{termo}')", volume=vol)
 
     # Regra C
     for b in cat.bloqueios:

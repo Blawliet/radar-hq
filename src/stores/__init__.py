@@ -10,7 +10,8 @@ import yaml
 from stores.amazon import AmazonLoja
 from stores.base import Fetcher, Loja
 from stores.mercadolivre import MercadoLivreLoja
-from stores.plataformas import HtmlLoja, ShopifyLoja, VtexLoja, WooLoja, detectar_plataforma
+from stores.plataformas import (HtmlLoja, MagentoLoja, ShopifyLoja, VtexLoja, WooLoja,
+                                 detectar_plataforma)
 
 log = logging.getLogger("coleta")
 CACHE = Path(__file__).resolve().parents[2] / "data" / "plataformas.json"
@@ -46,7 +47,8 @@ def montar_lojas(caminho: str | Path) -> list[Loja]:
                 continue
             cache[c["base"]] = adapt
             log.info("%s: plataforma %s", c["nome"], adapt)
-        classe = {"vtex": VtexLoja, "shopify": ShopifyLoja, "woocommerce": WooLoja}.get(adapt)
+        classe = {"vtex": VtexLoja, "shopify": ShopifyLoja, "woocommerce": WooLoja,
+                  "magento": MagentoLoja}.get(adapt)
         lojas.append(classe(fetcher, c) if classe else HtmlLoja(fetcher, c, adapt))
     CACHE.parent.mkdir(exist_ok=True)
     CACHE.write_text(json.dumps(cache, indent=2))

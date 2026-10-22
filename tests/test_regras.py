@@ -342,3 +342,121 @@ def test_mensagem_com_historico():
     txt = montar(o, d, ["Bruno"], "🏆 *MENOR PREÇO JÁ VISTO PELO RADAR!* (antes: R$ 49,90, Loja Panini, 21/10/2026)")
     assert "📉 *Desconto:*" in txt and "\n🏆 *MENOR PREÇO" in txt
     assert txt.index("🏆") > txt.index("📉") and txt.index("🏆") < txt.index("🔗")
+
+
+# ---------------- Ajustes da primeira varredura real
+@pytest.mark.parametrize("titulo", [
+    "The Flash by Geoff Johns Book One", "Green Lantern by Geoff Johns Omnibus Vol. 2",
+    "By Peter David - Supergirl (1998-04-16) [Paperback]", "One Piece Vol. 97 (English Edition)",
+])
+def test_titulo_estrangeiro_nao_alerta(titulo):
+    d = avaliar(of(titulo, preco=10), CAT, ref_capa=100)
+    assert not d.alertar and "estrangeira" in d.motivo, (titulo, d.motivo)
+
+
+def test_isbn():
+    from stock import isbn_estrangeiro
+    assert isbn_estrangeiro("1974722899") and isbn_estrangeiro("408883190X")
+    assert isbn_estrangeiro("978-1-4012-5873-5")
+    assert not isbn_estrangeiro("6525944201") and not isbn_estrangeiro("852505612X")
+    assert not isbn_estrangeiro("978-65-259-4420-1") and not isbn_estrangeiro("9788525056122")
+
+
+def test_pagina_em_ingles_rejeitada():
+    html = """<html><head><script type="application/ld+json">{"@type":"Book","name":"One Piece 97",
+    "isbn":"9781974722891","offers":{"price":"72.30","availability":"https://schema.org/InStock"}}</script>
+    </head><body><button>Comprar</button></body></html>"""
+    r = validar_html("https://l.com/p/1", "https://l.com/p/1", 200, html, True)
+    assert not r.disponivel and "estrangeira" in r.motivo
+    html2 = "<html><body><h1>Blueberry 4</h1><ul><li>Idioma: Inglês</li></ul><button>Comprar</button></body></html>"
+    assert not validar_html("https://l.com/p/1", "https://l.com/p/1", 200, html2, True).disponivel
+    html3 = "<html><body><h1>Blueberry 4</h1><ul><li>Idioma: Português</li></ul><button>Comprar</button></body></html>"
+    assert validar_html("https://l.com/p/1", "https://l.com/p/1", 200, html3, True).disponivel
+
+
+def test_preco_de_nao_concatena_numeros():
+    from stock import preco_no_texto
+    assert preco_no_texto("De R$ 3.548,02 5 parcelas de 709,60") == 3548.02
+    assert preco_no_texto("R$ 89,90") == 89.9
+    html = """<html><body><h1>Blueberry 4</h1><span class="old-price">R$ 35,48 · 025 vendidos</span>
+    <script type="application/ld+json">{"@type":"Product","offers":{"price":"266.10","availability":"InStock"}}</script>
+    <button>Comprar</button></body></html>"""
+    r = validar_html("https://l.com/p/1", "https://l.com/p/1", 200, html, True)
+    assert r.preco_lista == 35.48
+
+
+def test_capa_absurda_e_descartada():
+    d = avaliar(of("Blueberry: Edição Definitiva (Vol. 4 de 4)", preco=266.1, lista=3548025.0), CAT)
+    assert d.alertar and d.regra == "A" and d.preco_capa is None      # raro: alerta, mas sem inventar desconto
+    d2 = avaliar(of("Invencível Vol. 5", preco=20, lista=500), CAT)
+    assert not d2.alertar                                               # promo: não alerta com capa suspeita
+
+
+def test_magento_e_vtex():
+    mag = """<html><body><h1>A Saga do Flash 8</h1><div class="stock available"><span>Em estoque</span></div>
+    <button id="product-addtocart-button" class="action primary tocart" disabled>Adicionar ao carrinho</button></body></html>"""
+    assert validar_html("https://l.com/p/1", "https://l.com/p/1", 200, mag, False).disponivel
+    mag_fora = mag.replace("stock available", "stock unavailable")
+    assert not validar_html("https://l.com/p/1", "https://l.com/p/1", 200, mag_fora, False).disponivel
+    vtex = "<html><body><h1>Mangá</h1><button disabled class='vtex-add-to-cart-button'>Adicionar ao carrinho</button></body></html>"
+    assert validar_html("https://l.com/p/1", "https://l.com/p/1", 200, vtex, False, sinal_externo=True).disponivel
+    assert not validar_html("https://l.com/p/1", "https://l.com/p/1", 200, vtex, False).disponivel
+
+
+def test_palavra_captcha_solta_nao_bloqueia():
+    html = "<html><head><script>var captchaConfig = {};</script></head><body><h1>X</h1><button>Comprar</button></body></html>"
+    assert validar_html("https://l.com/p/1", "https://l.com/p/1", 200, html, True).disponivel
+
+
+# ---------------- Coletores Magento e WooCommerce (sem rede)
+class _FetcherFalso:
+    def __init__(self, respostas):
+        self.respostas, self.pedidos = respostas, []
+    def get(self, url, json=False, headers=None):
+        from stores.base import Resposta
+        self.pedidos.append(url)
+        for chave, valor in self.respostas.items():
+            if chave in url:
+                return valor if json else Resposta(200, url, valor)
+        return (404, None) if json else Resposta(404, url, "")
+    def get_render(self, url, seletor=None):
+        return self.get(url)
+
+
+def test_magento_graphql():
+    from stores.plataformas import MagentoLoja
+    api = {"data": {"products": {"items": [
+        {"name": "Thorgal Vol. 3", "url_key": "thorgal-vol-3", "url_suffix": ".html", "stock_status": "IN_STOCK",
+         "price_range": {"minimum_price": {"regular_price": {"value": 99.9}, "final_price": {"value": 69.9}}}},
+        {"name": "Thorgal Vol. 2", "url_key": "thorgal-vol-2", "url_suffix": ".html", "stock_status": "OUT_OF_STOCK",
+         "price_range": {"minimum_price": {"regular_price": {"value": 99.9}, "final_price": {"value": 99.9}}}},
+    ]}}}
+    pagina = "<html><body><h1>Thorgal Vol. 3</h1><div class='stock available'>Em estoque</div></body></html>"
+    f = _FetcherFalso({"/graphql": (200, api), "thorgal-vol-3.html": pagina})
+    loja = MagentoLoja(f, {"nome": "Pipoca & Nanquim", "base": "https://pipocaenanquim.com.br/", "oficial": True})
+    achados = loja.buscar("thorgal")
+    assert [o.url for o in achados] == ["https://pipocaenanquim.com.br/thorgal-vol-3.html"]
+    o = loja.validar(achados[0])
+    assert o.disponivel and o.preco == 69.9 and o.preco_lista == 99.9
+
+
+def test_magento_sem_graphql_cai_para_html():
+    from stores.plataformas import MagentoLoja
+    busca = '<a href="https://www.comix.com.br/gantz-e-01.html">Gantz E 01</a><a href="/conta">Conta</a>'
+    f = _FetcherFalso({"/catalogsearch/result": busca})
+    loja = MagentoLoja(f, {"nome": "Comix", "base": "https://www.comix.com.br"})
+    assert [o.url for o in loja.buscar("gantz")] == ["https://www.comix.com.br/gantz-e-01.html"]
+    assert loja.graphql_ok is False
+
+
+def test_woocommerce():
+    from stores.plataformas import WooLoja
+    api = [{"name": "O Fantasma: a fase DC Comics completa", "permalink": "https://lojamonstra.com.br/produto/o-fantasma/",
+            "is_in_stock": True, "is_purchasable": True,
+            "prices": {"price": "15990", "regular_price": "19990", "currency_minor_unit": 2}},
+           {"name": "O Fantasma vol 2", "permalink": "https://lojamonstra.com.br/produto/f2/",
+            "is_in_stock": False, "is_purchasable": True, "prices": {"price": "100", "currency_minor_unit": 2}}]
+    f = _FetcherFalso({"/wp-json/wc/store": (200, api)})
+    loja = WooLoja(f, {"nome": "Monstra", "base": "https://lojamonstra.com.br"})
+    achados = loja.buscar("o fantasma")
+    assert len(achados) == 1 and achados[0].preco == 159.9 and achados[0].preco_lista == 199.9
