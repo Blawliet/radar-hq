@@ -1,0 +1,6 @@
+.env
+data/qrcode.png
+__pycache__/
+.pytest_cache/
+whatsapp-baileys/node_modules/
+whatsapp-baileys/auth/

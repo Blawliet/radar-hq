@@ -1,0 +1,69 @@
+# Radar HQ: Evolution API (WhatsApp) + monitor de ofertas
+# Subir tudo:    docker compose up -d
+# Ver logs:      docker compose logs -f radar
+#
+# Portas ficam presas em 127.0.0.1 de propósito: nada fica exposto para a internet.
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: radar_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: evolution
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: radar_redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  evolution:
+    image: evoapicloud/evolution-api:v2.3.7
+    container_name: radar_evolution
+    restart: unless-stopped
+    depends_on: [postgres, redis]
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      SERVER_URL: http://localhost:8080
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY}
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evolution:${POSTGRES_PASSWORD}@postgres:5432/evolution?schema=public
+      DATABASE_CONNECTION_CLIENT_NAME: radar_hq
+      DATABASE_SAVE_DATA_INSTANCE: "true"
+      DATABASE_SAVE_DATA_NEW_MESSAGE: "false"
+      CACHE_REDIS_ENABLED: "true"
+      CACHE_REDIS_URI: redis://redis:6379/6
+      CACHE_REDIS_PREFIX_KEY: evolution
+      CACHE_LOCAL_ENABLED: "false"
+      LANGUAGE: pt-BR
+      LOG_LEVEL: ERROR,WARN
+    volumes:
+      - evolution_instances:/evolution/instances
+
+  radar:
+    build: .
+    container_name: radar_monitor
+    restart: unless-stopped
+    depends_on: [evolution]
+    env_file: .env
+    environment:
+      EVOLUTION_URL: http://evolution:8080
+      TZ: America/Sao_Paulo
+    ports:
+      - "127.0.0.1:8099:8099"   # webhook opcional para escutar grupos de ofertas
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+
+volumes:
+  postgres_data:
+  redis_data:
+  evolution_instances:
