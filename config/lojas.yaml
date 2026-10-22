@@ -1,0 +1,75 @@
+# =====================================================================
+# LOJAS MONITORADAS
+# =====================================================================
+# adaptador:
+#   auto          detecta a plataforma (VTEX, Shopify, Nuvemshop, Woo, Tray, Magento...)
+#   amazon        coletor próprio
+#   mercadolivre  coletor próprio (API com token ou HTML)
+#   html          busca HTML genérica (use "busca" e "padrao_produto")
+# oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
+# playwright: true  abre num navegador real (lojas com muito JavaScript)
+#
+# ATENÇÃO: confira os endereços marcados com "CONFIRA" rodando:
+#   python verificar_lojas.py
+# =====================================================================
+
+lojas:
+  - nome: Loja Panini
+    adaptador: auto
+    base: https://panini.com.br            # CONFIRA
+    oficial: true
+
+  - nome: Pipoca & Nanquim
+    adaptador: auto
+    base: https://lojapipocaenanquim.com.br   # CONFIRA
+    oficial: true
+
+  - nome: Amazon Brasil
+    adaptador: amazon
+    max_resultados: 8
+
+  - nome: Mercado Livre
+    adaptador: mercadolivre
+    max_resultados: 15
+
+  - nome: Magalu
+    adaptador: html
+    base: https://www.magazineluiza.com.br
+    busca: "/busca/{q_path}/"
+    padrao_produto: "/p/[0-9a-z]+/?"
+    playwright: true
+
+  - nome: Ri Happy
+    adaptador: auto
+    base: https://www.rihappy.com.br
+
+  - nome: Estante Virtual
+    adaptador: html
+    base: https://www.estantevirtual.com.br
+    busca: "/busca?q={q}"
+    padrao_produto: "/livros?/"
+    playwright: true
+
+  - nome: Rika Comic Shop
+    adaptador: auto
+    base: https://www.rika.com.br          # CONFIRA
+
+  - nome: Comix Book Shop
+    adaptador: auto
+    base: https://www.comix.com.br         # CONFIRA
+
+  - nome: Monstra
+    adaptador: auto
+    base: https://www.monstra.com.br       # CONFIRA
+
+  - nome: Comic Boom
+    adaptador: auto
+    base: https://www.comicboom.com.br     # CONFIRA
+
+  # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
+  # coletor estável violaria os termos de uso. Ofertas da Shopee costumam
+  # aparecer em grupos de promoção, que o webhook do WhatsApp já escuta.
+  - nome: Shopee
+    adaptador: html
+    base: https://shopee.com.br
+    ativo: false

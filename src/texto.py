@@ -1,0 +1,47 @@
+"""Normalização de títulos e extração do número do volume."""
+from __future__ import annotations
+
+import re
+import unicodedata
+
+_ESPACOS = re.compile(r"\s+")
+
+
+def normalizar(s: str) -> str:
+    s = s.replace("º", "").replace("°", "").replace("ª", "")
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = s.lower()
+    s = re.sub(r"[^\w#+]+", " ", s)   # pontuação vira espaço (mantém # e +)
+    s = s.replace("_", " ")
+    return _ESPACOS.sub(" ", s).strip()
+
+
+# "vol 8", "volume 14", "v 3", "n 97", "no 97", "numero 2", "edicao 5", "tomo 2", "#10"
+_VOL_ROTULADO = re.compile(
+    r"(?:\bvol(?:ume)?s?|\bv|\bn|\bno|\bnum(?:ero)?|\bedicao|\bed|\btomo|\blivro|#)\s*0*(\d{1,3})\b"
+)
+# número solto no fim do título: "absolute batman 2"
+_VOL_FINAL = re.compile(r"(?:^|\s)0*(\d{1,3})$")
+# ruídos que parecem número de volume mas não são
+_RUIDO = re.compile(
+    r"\b\d+\s*em\s*1\b|\b\d+\s*in\s*1\b|\b\d+\s*paginas?\b|\b\d+\s*x\s*\d+\b"
+    r"|\bde\s+\d+\b|\b\d+\s*cm\b|\b\d+\s*a\s*\d+\b|\b\d+\s*ao\s*\d+\b|\b\d+\s*ate\s*\d+\b"
+)
+
+
+def extrair_volume(titulo_norm: str) -> int | None:
+    t = _RUIDO.sub(" ", titulo_norm)
+    m = _VOL_ROTULADO.search(t)
+    if m:
+        return int(m.group(1))
+    m = _VOL_FINAL.search(t.strip())
+    if m:
+        return int(m.group(1))
+    return None
+
+
+def contem(titulo_norm: str, termo: str) -> bool:
+    """Busca por palavra/frase inteira, sem acento."""
+    termo = normalizar(termo)
+    return re.search(rf"(?<!\w){re.escape(termo)}(?!\w)", titulo_norm) is not None
