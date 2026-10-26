@@ -46,6 +46,7 @@ radares:
     qualquer_2: [manga, mangas, hq, hqs, quadrinho, quadrinhos, graphic novel, panini, jbc, newpop,
                  pipoca, nanquim, mythos, devir, conrad, darkside, marvel, dc, comics, shonen, seinen]
     excluir: [colorir, adesivo, adesivos, poster, camiseta, funko, action figure, chaveiro, marcador,
-              caneca, luminaria, pelucia, card game, deck, booster, cartas, papelaria, caderno]
+              caneca, luminaria, pelucia, card game, deck, booster, cartas, papelaria, caderno,
+              console, playstation, ps5, ps4, xbox, nintendo, switch, controle, dualsense, jogo, game]
     formato: Box
     buscas: [box manga, box mangá panini, box manga jbc, box hq, kit hq panini, colecao completa manga]

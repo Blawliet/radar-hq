@@ -38,11 +38,17 @@ def _idioma_amazon(s) -> str | None:
     return None
 
 
+DEPARTAMENTO = {"livros": "stripbooks", "games": "videogames"}
+
+
 class AmazonLoja(Loja):
     nome = "Amazon Brasil"
+    categorias_padrao = ["livros", "games"]
+    base_padrao = BASE
 
     def buscar(self, termo):
-        url = f"{BASE}/s?k={quote_plus(termo)}&i=stripbooks"
+        depto = DEPARTAMENTO.get(self.categoria_atual, "stripbooks")
+        url = f"{BASE}/s?k={quote_plus(termo)}&i={depto}"
         r = self.f.get_render(url, 'div[data-component-type="s-search-result"]')
         if r.status != 200 or _bloqueado(r.html, r.url_final):
             log.warning("Amazon: busca bloqueada ou falhou (HTTP %s).", r.status)
@@ -62,7 +68,8 @@ class AmazonLoja(Loja):
             preco = div.select_one(".a-price .a-offscreen")
             saida.append(Oferta(
                 loja=self.nome, titulo=titulo, url=f"{BASE}/dp/{asin}",
-                preco=_num(preco.get_text()) if preco else 0, extra={"asin": asin},
+                preco=_num(preco.get_text()) if preco else 0,
+                extra={"asin": asin, "categoria": self.categoria_atual},
             ))
             if len(saida) >= self.max_resultados:
                 break
@@ -84,7 +91,7 @@ class AmazonLoja(Loja):
         if re.fullmatch(r"[0-9]{9}[0-9X]", asin) and isbn_estrangeiro(asin):
             o.disponivel, o.motivo_estoque = False, f"edição estrangeira (ISBN {asin})"
             return o
-        idioma = _idioma_amazon(s)
+        idioma = _idioma_amazon(s) if o.extra.get("categoria", "livros") == "livros" else None
         if idioma and "portugu" not in idioma:
             o.disponivel, o.motivo_estoque = False, f"edição estrangeira (idioma {idioma})"
             return o

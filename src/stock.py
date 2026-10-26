@@ -160,8 +160,24 @@ def _botao_habilitado(soup) -> bool | None:
     return False if achou_desabilitado else None
 
 
+VITRINE = re.compile(r"related|upsell|up-sells|cross-sell|crosssell|vitrine|carousel|carrossel|"
+                     r"recommend|recomend|similar|shelf|you-may|veja-tambem|quem-viu|products-grid|product-list", re.I)
+
+
+def _em_vitrine(el) -> bool:
+    """O elemento está dentro de uma vitrine de OUTROS produtos (relacionados, carrossel...)?"""
+    for pai in el.parents:
+        if pai.name in ("body", "html", None):
+            return False
+        ident = " ".join([pai.get("id", "") or "", " ".join(pai.get("class", []) or [])])
+        if pai.name in ("section", "aside", "div", "ul") and VITRINE.search(ident):
+            return True
+    return False
+
+
 def _avisos_na_area_de_compra(soup) -> str | None:
     blocos = soup.find_all(attrs={"class": AREA_COMPRA}) + soup.find_all(attrs={"id": AREA_COMPRA})
+    blocos = [b for b in blocos if not _em_vitrine(b)]
     for b in blocos[:60]:
         t = normalizar(b.get_text(" "))
         if len(t) > 3000:       # bloco grande demais (provável página inteira), ignora

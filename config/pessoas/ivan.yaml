@@ -3,45 +3,34 @@
 # =====================================================================
 nome: Ivan
 
-# Radares permanentes. Descomente para ligar:
-#   radar-omnibus  qualquer omnibus com 25% OFF ou mais
-#   radar-boxes    qualquer box, kit ou coleção de mangá/HQ com 25% OFF ou mais
+# Radares permanentes de quadrinhos (omnibus, boxes). Desligados.
 radares: []
-# radares: [radar-omnibus, radar-boxes]
 
-# ---------------------------------------------------------------------
-# BLOQUEIOS (já tem, NUNCA alertar)
-# ---------------------------------------------------------------------
 bloqueios: []
-# Exemplo:
-# bloqueios:
-#   - id: one-piece-ja-tenho
-#     nome: One Piece
-#     termos: [one piece]
-#     volumes: "1-100"
 
 # ---------------------------------------------------------------------
-# RAROS (alerta em QUALQUER valor, com estoque real)
+# MONITORADOS
+# so_menor_preco: true  -> só alerta quando bate o menor preço já visto
+#                          (a primeira vez que encontra, alerta para marcar a referência)
+# categoria: games      -> busca só nas lojas de games (Amazon e KaBuM!)
+# urls                  -> páginas de produto conferidas em toda varredura
 # ---------------------------------------------------------------------
-raros: []
-# Exemplo:
-# raros:
-#   - id: vagabond-37
-#     nome: Vagabond
-#     termos: [vagabond]
-#     volumes: "37"
-#     formato: Mangá
-#     buscas: [vagabond vol 37]
+raros:
+  - id: ps5-wolverine
+    nome: "PS5 Edição Limitada Marvel's Wolverine"
+    categoria: games
+    so_menor_preco: true
+    termos: [wolverine]
+    # o pacote oficial já vem com o DualSense amarelo do Wolverine;
+    # kits com controle extra também valem. Controle vendido sozinho fica de fora.
+    qualquer: [console, pacote, bundle, edicao digital, slim]
+    excluir: [tampa, tampas, cover, skin, adesivo, standard, deluxe, funko, camiseta, ps4, suporte, case]
+    excluir_regex: '^(controle|dualsense|kit\s+(?:\d+\s+)?controles?)\b'
+    prioridade: alta
+    volumes: todos
+    formato: Console
+    buscas: [playstation 5 wolverine edicao limitada, console ps5 wolverine]
+    urls:
+      - https://www.kabum.com.br/produto/1065184/console-playstation-5-sony-edicao-digital-marvel-s-wolverine-pacote-de-edicao-limitada-825-gb-amarelo-1000056865
 
-# ---------------------------------------------------------------------
-# PROMOÇÕES (só com 25% OFF ou mais)
-# ---------------------------------------------------------------------
 promocoes: []
-# Exemplo:
-# promocoes:
-#   - id: chainsaw-man
-#     nome: Chainsaw Man
-#     termos: [chainsaw man]
-#     volumes: "12+"
-#     formato: Mangá
-#     buscas: [chainsaw man]

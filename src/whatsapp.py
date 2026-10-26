@@ -181,6 +181,8 @@ class TelegramClient:
         return re.sub(r"\*([^*\n]+)\*", r"<b>\1</b>", texto)
 
     def payload(self, texto: str, url_botao: str | None = None) -> dict:
+        if len(texto) > 3900:                       # limite do Telegram: 4096 caracteres
+            texto = texto[:3900].rsplit("\n", 1)[0] + "\n(...)"
         p = {"chat_id": self.chat_id, "text": self.para_html(texto), "parse_mode": "HTML",
              "link_preview_options": {"is_disabled": False}}
         if url_botao and url_botao.startswith("http"):

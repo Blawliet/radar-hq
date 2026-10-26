@@ -23,7 +23,7 @@ sys.path.insert(0, str(RAIZ / "src"))
 from db import Banco  # noqa: E402
 from dotenv_mini import carregar_env  # noqa: E402
 from texto import normalizar  # noqa: E402
-from mensagem import campos, linha_historico, montar  # noqa: E402
+from mensagem import campos, juntar_nomes, linha_historico, montar, resumo_do_dia  # noqa: E402
 from models import Decisao, Oferta  # noqa: E402
 from rules import Catalogo, Grupo, avaliar, melhor_decisao, resumo_perfil  # noqa: E402
 
@@ -35,8 +35,11 @@ logging.basicConfig(
 )
 log = logging.getLogger("radar")
 
-JANELAS = [(5, 30), (9, 0), (12, 0), (15, 0), (19, 0), (23, 30)]
+JANELAS = [(5, 30), (7, 30), (9, 30), (11, 30), (13, 30), (15, 30), (17, 30), (19, 30), (21, 30), (23, 30)]
+JANELA_RESUMO = (23, 30)
 _rodando = threading.Lock()
+_vistos_lock = threading.Lock()
+VISTOS_NA_VARREDURA: list[dict] = []     # tudo que casou com alguma lista e tinha estoque (para o relatório)
 
 
 def chave_capa(d: Decisao) -> str:
@@ -47,6 +50,8 @@ def descartavel(d: Decisao) -> bool:
     """Pode pular sem abrir a página? Só quando temos certeza pelo título."""
     if not d.entrada_id:
         return True                                    # bloqueado ou fora do catálogo
+    if d.motivo.startswith("pacote"):
+        return True                                    # "pacote" sem quantidade de volumes no título
     return d.motivo.startswith("volume") and d.volume is not None   # volume conhecido e fora da lista
 
 
@@ -67,6 +72,20 @@ def chave_produto(o: Oferta, grupo: Grupo) -> str:
     return "titulo:" + " ".join(palavras)[:120]
 
 
+def registrar_visto(o: Oferta, grupo: Grupo):
+    """Guarda, para o relatório, cada item com estoque que casa com a lista de alguém
+    (mesmo que não tenha virado alerta por causa de preço)."""
+    for p in grupo.perfis:
+        d = avaliar(o, p)
+        if not d.entrada_id or d.entrada_id.startswith("radar-") or d.motivo.startswith(("volume", "pacote")):
+            continue
+        if d.motivo.startswith("bloqueado"):
+            continue
+        with _vistos_lock:
+            VISTOS_NA_VARREDURA.append({"pessoa": p.nome, "entrada": d.entrada_id, "volume": d.volume,
+                                        "loja": o.loja, "preco": o.preco, "url": o.url})
+
+
 def varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao, list[str]]]:
     try:
         return _varrer_loja(loja, grupo, banco)
@@ -78,10 +97,19 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, loja, banco: Banco) -> Decisao | No
     d0 = avaliar(o, cat)                               # com título e preço da página
     if not d0.entrada_id or d0.volume is None and d0.motivo.startswith("volume"):
         return None
-    chave = chave_capa(d0)
-    if loja.oficial:
-        banco.salvar_capa(chave, o.preco_lista or o.preco, loja.nome)
-    d = avaliar(o, cat, banco.capa(chave))
+    chave = "capa:" + o.extra.get("chave", chave_capa(d0))
+    if d0.pacote:
+        # pacote: capa estimada = nº de volumes x preço típico de um volume da série
+        entrada = next((e for e in cat.promocoes if e.id == d0.entrada_id), None)
+        serie = normalizar(entrada.termos[0]) if entrada and entrada.termos else ""
+        unit = (entrada.preco_volume if entrada and entrada.preco_volume else None) \
+            or (banco.preco_tipico_volume(serie) if serie else None)
+        d = avaliar(o, cat, unit * d0.pacote if unit else None)
+        d.preco_volume = unit
+    else:
+        if loja.oficial:
+            banco.salvar_capa(chave, o.preco_lista or o.preco, loja.nome)
+        d = avaliar(o, cat, banco.capa(chave))
     quem = f"[{cat.nome}] " if cat.nome else ""
     if d.alertar:
         log.info("ALERTA %s%s [%s] %s R$ %.2f", quem, d.regra, loja.nome, o.titulo[:60], o.preco)
@@ -92,19 +120,30 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, loja, banco: Banco) -> Decisao | No
 
 def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao, list[str]]]:
     achados, vistos = [], set()
-    for _, termo in grupo.todas_buscas():
-        try:
-            candidatos = loja.buscar(termo)
-        except Exception as e:
-            log.warning("%s: erro na busca '%s': %s", loja.nome, termo, e)
-            continue
+    # páginas fixas (ex.: um produto específico) primeiro, depois as buscas
+    fixas = [Oferta(loja.nome, nome, url, 0, extra={"fixa": True})
+             for url, nome in grupo.urls_fixas() if loja.dominio and loja.dominio in url]
+    lotes = [(None, fixas)]
+    for _, termo, categoria in grupo.todas_buscas():
+        if categoria in loja.categorias:
+            lotes.append((categoria, termo))
+    for categoria, item in lotes:
+        if categoria is None:
+            candidatos = item
+        else:
+            loja.categoria_atual = categoria
+            try:
+                candidatos = loja.buscar(item)
+            except Exception as e:
+                log.warning("%s: erro na busca '%s': %s", loja.nome, item, e)
+                continue
         for o in candidatos:
             if o.url in vistos:
                 continue
             vistos.add(o.url)
 
             # filtro barato pelo título da busca: só abre a página se interessar a alguém
-            if all(descartavel(avaliar(o, p)) for p in grupo.perfis):
+            if not o.extra.get("fixa") and all(descartavel(avaliar(o, p)) for p in grupo.perfis):
                 continue
 
             try:
@@ -120,6 +159,7 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao
             o.extra["chave"] = chave_produto(o, grupo)
             banco.registrar_preco(o.extra["chave"], o.url, o.preco, o.loja)
 
+            registrar_visto(o, grupo)
             por_pessoa = [(p.nome, avaliar_perfil(o, p, loja, banco)) for p in grupo.perfis]
             por_pessoa = [(n, d) for n, d in por_pessoa if d]
             if por_pessoa:
@@ -127,7 +167,7 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao
     return achados
 
 
-def varredura(enviar: bool = True) -> int:
+def varredura(enviar: bool = True, imprimir: bool = True) -> int:
     if not _rodando.acquire(blocking=False):
         log.warning("Varredura anterior ainda rodando, pulando esta janela.")
         return 0
@@ -159,24 +199,44 @@ def varredura(enviar: bool = True) -> int:
                 unicos[o.url] = (o, melhor_decisao([d, d_ant]), sorted(set(n_ant) | set(nomes), key=str))
             else:
                 unicos[o.url] = (o, d, nomes)
+        # o mesmo produto em várias lojas: um alerta só, com a oferta mais barata
+        por_produto: dict[str, list] = {}
+        for o, d, nomes in unicos.values():
+            por_produto.setdefault(o.extra.get("chave", o.url), []).append((o, d, nomes))
+        agrupados = []
+        for itens in por_produto.values():
+            itens.sort(key=lambda x: x[0].preco)
+            o, d, nomes = itens[0]
+            todos = sorted({n for _, _, ns in itens for n in ns if n}, key=str)
+            outras = [(x[0].loja, x[0].preco) for x in itens[1:]]
+            o.extra["urls_grupo"] = [x[0].url for x in itens[1:]]
+            agrupados.append((o, d, todos or nomes, outras))
         ordem = {"maxima": 0, "alta": 1, "normal": 2}
-        achados = sorted(unicos.values(), key=lambda x: (x[1].regra != "A", ordem.get(x[1].prioridade, 2),
-                                                         -(x[1].desconto_pct or 0)))
+        achados = sorted(agrupados, key=lambda x: (x[1].regra != "A", ordem.get(x[1].prioridade, 2),
+                                                   -(x[1].desconto_pct or 0)))
 
         realertar = int(os.getenv("REALERTAR_DIAS", "7"))
         destino = os.getenv("WHATSAPP_DESTINO", "")
         cli = cliente_do_ambiente() if enviar else None
         enviados = 0
-        for o, d, nomes in achados:
+        for o, d, nomes, outras in achados:
             if not banco.deve_alertar(o.url, o.preco, realertar):
                 continue
-            anterior = banco.menor_preco_anterior(o.extra.get("chave", o.url), o.url)
-            texto = montar(o, d, nomes, linha_historico(o.preco, anterior))
+            anterior = banco.menor_preco_anterior(o.extra.get("chave", o.url), o.url,
+                                                  o.extra.get("urls_grupo", []))
+            if d.so_menor_preco and anterior and o.preco > anterior[0] - 0.005:
+                log.info("sem alerta (não é o menor preço já visto) %s R$ %.2f", o.titulo[:50], o.preco)
+                continue
+            texto = montar(o, d, nomes, linha_historico(o.preco, anterior), outras)
             if not enviar:
+                if not imprimir:
+                    continue
                 print("\n" + texto + "\n" + "-" * 40)
                 continue
             if cli.enviar_alerta(destino, campos(o, d), texto):
-                banco.registrar_alerta(o.url, o.preco, d.regra)
+                recorde = bool(anterior and o.preco < anterior[0] - 0.005)
+                banco.registrar_alerta(o.url, o.preco, d.regra, o.titulo, o.loja, d.desconto_pct,
+                                       juntar_nomes(nomes) if nomes and any(nomes) else None, recorde)
                 enviados += 1
                 time.sleep(2.5)
         log.info("Fim: %d achados, %d enviados, %.0fs.", len(achados), enviados, time.time() - inicio)
@@ -192,7 +252,8 @@ def agendar():
     tz = "America/Sao_Paulo"
     sched = BlockingScheduler(timezone=tz)
     for h, m in JANELAS:
-        sched.add_job(varredura, CronTrigger(hour=h, minute=m, timezone=tz),
+        tarefa = resumo if (h, m) == JANELA_RESUMO else varredura
+        sched.add_job(tarefa, CronTrigger(hour=h, minute=m, timezone=tz),
                       id=f"janela_{h:02d}{m:02d}", max_instances=1, coalesce=True,
                       misfire_grace_time=1800)
     log.info("Agendado: %s (horário de Brasília).", ", ".join(f"{h:02d}h{m:02d}" for h, m in JANELAS))
@@ -202,6 +263,73 @@ def agendar():
         iniciar_webhook()
 
     sched.start()
+
+
+def resumo(enviar: bool = True):
+    """Última janela do dia: varre, manda os alertas e depois o resumão do dia."""
+    from datetime import datetime
+    from whatsapp import cliente_do_ambiente
+    varredura(enviar)
+    banco = Banco(RAIZ / "data" / "radar.db")
+    hoje = datetime.now()
+    checados, lojas = banco.checagens_do_dia(hoje.strftime("%Y-%m-%d"))
+    texto = resumo_do_dia(hoje.strftime("%d/%m"), banco.alertas_do_dia(hoje.strftime("%Y-%m-%d")),
+                          checados, lojas)
+    if enviar:
+        cliente_do_ambiente().enviar_texto(os.getenv("WHATSAPP_DESTINO", ""), texto)
+    else:
+        print(texto)
+
+
+def relatorio(enviar: bool = True):
+    """Varre todas as lojas sem mandar alertas e envia, por pessoa, o quanto cada item
+    está fácil ou difícil de achar (quantas lojas têm em estoque e o menor preço)."""
+    from mensagem import brl
+    from whatsapp import cliente_do_ambiente
+    VISTOS_NA_VARREDURA.clear()
+    varredura(enviar=False, imprimir=False)
+    cli = cliente_do_ambiente() if enviar else None
+    textos = []
+    for p in Grupo(RAIZ / "config").perfis:
+        itens = []
+        for e in p.raros + p.promocoes:
+            if not e.ativo:
+                continue
+            vols = sorted(e.volumes.exatos) if e.volumes.exatos and not e.volumes.faixas \
+                and e.volumes.a_partir is None and len(e.volumes.exatos) > 1 else [None]
+            for v in vols:
+                achados = [x for x in VISTOS_NA_VARREDURA if x["pessoa"] == p.nome and x["entrada"] == e.id
+                           and (v is None or x["volume"] == v)]
+                lojas = {}
+                for x in achados:
+                    if x["loja"] not in lojas or x["preco"] < lojas[x["loja"]]:
+                        lojas[x["loja"]] = x["preco"]
+                nome = e.nome + (f" vol. {v}" if v is not None else "")
+                itens.append((nome, lojas))
+        if not itens:
+            continue
+        faceis = [(n, l) for n, l in itens if len(l) >= 3]
+        poucos = [(n, l) for n, l in itens if 1 <= len(l) <= 2]
+        sumidos = [n for n, l in itens if not l]
+
+        def linha(n, l):
+            loja_min = min(l, key=l.get)
+            return f"• {n}: {len(l)} loja{'s' if len(l) > 1 else ''}, a partir de {brl(l[loja_min])} ({loja_min})"
+        partes = [f"📊 *Rastreamento de {p.nome}*", ""]
+        if faceis:
+            partes += ["🟢 *Fácil de achar (3+ lojas)*"] + [linha(n, l) for n, l in faceis] + [""]
+        if poucos:
+            partes += ["🟡 *Pouca oferta (1 ou 2 lojas)*"] + [linha(n, l) for n, l in poucos] + [""]
+        if sumidos:
+            partes += ["🔴 *Não achei com estoque*"] + [f"• {n}" for n in sumidos] + [""]
+        partes.append("_Amazon e Mercado Livre às vezes bloqueiam o radar, então um item em 🔴 pode existir lá._")
+        textos.append("\n".join(partes))
+    for t in textos:
+        if enviar:
+            cli.enviar_texto(os.getenv("WHATSAPP_DESTINO", ""), t)
+            time.sleep(1.5)
+        else:
+            print(t + "\n")
 
 
 def listar(enviar: bool = True):
@@ -242,11 +370,17 @@ if __name__ == "__main__":
     g.add_argument("--agendar", action="store_true")
     g.add_argument("--teste", action="store_true")
     g.add_argument("--lista", action="store_true")
+    g.add_argument("--relatorio", action="store_true")
+    g.add_argument("--resumo", action="store_true")
     a = ap.parse_args()
     if a.teste:
         teste()
     elif a.lista:
         listar(True)
+    elif a.relatorio:
+        relatorio(True)
+    elif a.resumo:
+        resumo(True)
     elif a.agora:
         varredura(True)
     elif a.seco:

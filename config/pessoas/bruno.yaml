@@ -22,10 +22,11 @@ bloqueios:
     nome: Zero Hora (Grandes Eventos DC)
     termos: [zero hora]
     volumes: todos
-  - id: invencivel-1-2
-    nome: Invencível
+  - id: invencivel
+    nome: Invencível (fora do radar)
     termos: [invencivel]
-    volumes: "1-2"
+    excluir: [homem de ferro]
+    volumes: todos
   - id: spawn-mensal-1-8
     nome: Spawn (mensal)
     termos: [spawn]
@@ -89,23 +90,6 @@ raros:
     formato: Encadernado
     buscas: [supergirl peter david]
 
-  - id: spawn-origens
-    nome: Spawn Origens
-    editora: Panini
-    termos: [spawn, origens]
-    volumes: "10,12+"
-    formato: Encadernado
-    buscas: [spawn origens]
-
-  - id: spawn-mensal
-    nome: Spawn (mensal)
-    editora: Panini
-    termos: [spawn]
-    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
-    volumes: "9+"
-    formato: Encadernado
-    buscas: [spawn panini]
-
   - id: saga-lanterna-verde
     nome: A Saga do Lanterna Verde
     editora: Panini
@@ -126,6 +110,24 @@ raros:
 # PROMOÇÕES (só com desconto real >= desconto_minimo)
 # ---------------------------------------------------------------------
 promocoes:
+  # Spawn: saiu dos raros (aparece em várias lojas). Alerta com 25% OFF, a melhor oferta.
+  - id: spawn-origens
+    nome: Spawn Origens
+    editora: Panini
+    termos: [spawn, origens]
+    volumes: "10,12+"
+    formato: Encadernado
+    buscas: [spawn origens]
+
+  - id: spawn-mensal
+    nome: Spawn (mensal)
+    editora: Panini
+    termos: [spawn]
+    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
+    volumes: "9+"
+    formato: Encadernado
+    buscas: [spawn panini]
+
   - id: flash-geoff-johns
     nome: Flash por Geoff Johns
     editora: Panini
@@ -160,14 +162,6 @@ promocoes:
     formato: Omnibus
     buscas: [battle royale omnibus]
 
-  - id: invencivel
-    nome: Invencível
-    editora: Panini
-    termos: [invencivel]
-    volumes: "3+"
-    formato: Encadernado
-    buscas: [invencivel panini]
-
   - id: lote-mulher-maravilha
     nome: Lote A Saga da Mulher-Maravilha
     termos: [saga da mulher maravilha]
@@ -187,18 +181,22 @@ promocoes:
 
   # Séries em andamento: volumes que você ainda NÃO tem.
   # Quando comprar um volume, suba o número (ex.: "2+" vira "3+").
+  # Dandadan: só pacotes/kits com vários volumes (novo ou usado). O preço de capa
+  # do pacote é estimado: nº de volumes x preço típico de um volume avulso.
   - id: dandadan
-    nome: Dandadan
+    nome: Dandadan (pacote)
     termos: [dandadan]
-    volumes: "1+"
+    qualquer: [box, kit, pack, pacote, lote, combo, colecao, volumes, vols]
+    modo: pacote
     formato: Mangá
-    buscas: [dandadan]
+    buscas: [dandadan kit, dandadan box, dandadan colecao, dandadan volumes]
 
   - id: tmnt-idw
     nome: Tartarugas Ninja IDW
     editora: Pipoca & Nanquim
     termos: [tartarugas ninja]
-    excluir: [omnibus]
+    excluir: [omnibus, batman, power rangers, colecao classica, ultimo ronin, mutantes, mutant,
+              x men, ghostbusters, jogos, colorir, figura, action figure]
     volumes: "1+"
     formato: Encadernado
     buscas: [tartarugas ninja pipoca e nanquim]

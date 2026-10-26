@@ -165,7 +165,8 @@ class HtmlLoja(Loja):
     def buscar(self, termo):
         base = self.cfg["base"].rstrip("/")
         q = quote(termo) if "{q_path}" in self.busca else quote_plus(termo)
-        url = base + self.busca.replace("{q_path}", q).replace("{q}", q)
+        slug = re.sub(r"[^a-z0-9]+", "-", normalizar(termo)).strip("-")
+        url = base + self.busca.replace("{q_slug}", slug).replace("{q_path}", q).replace("{q}", q)
         r = self._pegar(url)
         if r.status != 200:
             log.info("%s: busca devolveu HTTP %s", self.nome, r.status)
@@ -259,7 +260,7 @@ class MagentoLoja(HtmlLoja):
     def _graphql(self, termo):
         base = self.cfg["base"].rstrip("/")
         termo_q = termo.replace('"', " ")
-        for campo_sufixo in ("url_suffix", ""):
+        for campo_sufixo in ("url_suffix url_rewrites{url}", "url_suffix", ""):
             q = GRAPHQL_MAGENTO % (termo_q, self.max_resultados, campo_sufixo)
             status, dados = self.f.get(f"{base}/graphql?query={quote(q)}", json=True)
             if status == 200 and dados and not dados.get("errors"):
@@ -282,9 +283,15 @@ class MagentoLoja(HtmlLoja):
             pr = (it.get("price_range") or {}).get("minimum_price") or {}
             preco = float((pr.get("final_price") or {}).get("value") or 0)
             cheio = float((pr.get("regular_price") or {}).get("value") or 0)
-            sufixo = self.sufixo if self.sufixo is not None else (it.get("url_suffix") or ".html")
+            reescritas = [r.get("url") for r in (it.get("url_rewrites") or []) if r.get("url")]
+            direta = next((u for u in reescritas if "/" not in u.strip("/")), None)
+            if direta:
+                url = f"{base}/{direta.lstrip('/')}"
+            else:
+                sufixo = self.sufixo if self.sufixo is not None else (it.get("url_suffix") or "")
+                url = f"{base}/{it['url_key']}{sufixo}"
             saida.append(Oferta(
-                loja=self.nome, titulo=it["name"], url=f"{base}/{it['url_key']}{sufixo}",
+                loja=self.nome, titulo=it["name"], url=url,
                 preco=preco, preco_lista=cheio if cheio > preco else None,
                 extra={"api": "magento", "preco_cheio": cheio},
             ))
@@ -294,6 +301,13 @@ class MagentoLoja(HtmlLoja):
         if o.extra.get("api") != "magento":
             return super().validar(o)
         r = self._pegar(o.url, self.cfg.get("seletor_espera"))
+        if r.status == 404:
+            # a loja usa outro sufixo de URL: tenta com/sem ".html" e memoriza o que funcionar
+            alt = o.url[:-5] if o.url.endswith(".html") else o.url + ".html"
+            r2 = self._pegar(alt, self.cfg.get("seletor_espera"))
+            if r2.status == 200:
+                self.sufixo = ".html" if alt.endswith(".html") else ""
+                o.url, r = alt, r2
         res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser", sinal_externo=True)
         o.titulo = res.titulo or o.titulo
         o.disponivel = res.disponivel

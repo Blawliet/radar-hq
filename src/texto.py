@@ -51,3 +51,26 @@ def contem(titulo_norm: str, termo: str) -> bool:
     """Busca por palavra/frase inteira, sem acento."""
     termo = normalizar(termo)
     return re.search(rf"(?<!\w){re.escape(termo)}(?!\w)", titulo_norm) is not None
+
+
+_FAIXA = re.compile(r"(\d{1,3})\s*(?:a|ao|ate|até|-|–|/)\s*(\d{1,3})(?!\d)")
+_QTD = re.compile(r"(\d{1,3})\s*(?:volumes|vols?\.?|livros|edi[cç][oõ]es|mang[aá]s|exemplares|unidades|hqs|revistas)\b")
+_LISTA = re.compile(r"\bvol(?:ume)?s?\.?\s*((?:\d{1,3}\s*(?:,|e|\+|&)\s*)+\d{1,3})\b")
+
+
+def contar_volumes(titulo: str) -> int | None:
+    """Quantos volumes tem um pacote/kit, pelo título. None se não der para saber."""
+    t = (titulo or "").lower()
+    candidatos = []
+    for a, b in _FAIXA.findall(t):
+        a, b = int(a), int(b)
+        if 1 <= a < b <= 150 and b - a < 100:
+            candidatos.append(b - a + 1)
+    for n in _QTD.findall(t):
+        if 2 <= int(n) <= 150:
+            candidatos.append(int(n))
+    for grupo in _LISTA.findall(t):
+        nums = re.findall(r"\d{1,3}", grupo)
+        if len(nums) >= 2:
+            candidatos.append(len(nums))
+    return max(candidatos) if candidatos else None

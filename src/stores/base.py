@@ -122,6 +122,11 @@ class Loja:
         self.nome = cfg.get("nome", self.nome)
         self.oficial = cfg.get("oficial", False)
         self.max_resultados = int(cfg.get("max_resultados", 12))
+        # "livros" (padrão) e/ou "games": quais buscas do catálogo esta loja recebe
+        self.categorias = list(cfg.get("categorias") or getattr(self, "categorias_padrao", ["livros"]))
+        self.categoria_atual = "livros"
+        base = cfg.get("base") or getattr(self, "base_padrao", "")
+        self.dominio = urlparse(base).netloc.replace("www.", "")
 
     def buscar(self, termo: str) -> list[Oferta]:
         raise NotImplementedError

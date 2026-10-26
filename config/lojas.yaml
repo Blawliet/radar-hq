@@ -8,6 +8,7 @@
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
 #   woocommerce   Store API do WordPress (Monstra)
 #   html          busca HTML genérica (use "busca" e "padrao_produto")
+# categorias:     o que buscar nesta loja: [livros] (padrão), [games] ou [livros, games]
 # oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
 # playwright: true  abre num navegador real (lojas com muito JavaScript)
 #
@@ -64,11 +65,20 @@ lojas:
   - nome: Monstra
     adaptador: woocommerce
     base: https://lojamonstra.com.br
+    oficial: true        # loja da editora Monstra (Fantasma, Dylan Dog...)
 
   - nome: Comic Boom
     adaptador: magento
     base: https://comicboom.com.br
     sufixo_url: ""
+
+  - nome: KaBuM!
+    adaptador: html
+    base: https://www.kabum.com.br
+    busca: "/busca/{q_slug}"
+    padrao_produto: "/produto/\\d+"
+    playwright: true
+    categorias: [games]
 
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam

@@ -13,35 +13,151 @@ radares: []
 # BLOQUEIOS (já tem, NUNCA alertar)
 # ---------------------------------------------------------------------
 bloqueios: []
-# Exemplo:
-# bloqueios:
-#   - id: one-piece-ja-tenho
-#     nome: One Piece
-#     termos: [one piece]
-#     volumes: "1-100"
 
 # ---------------------------------------------------------------------
 # RAROS (alerta em QUALQUER valor, com estoque real)
+# Para mover um item da lista de baixo para cá, recorte o bloco inteiro
+# (do "- id:" até o "buscas:") e cole aqui.
 # ---------------------------------------------------------------------
 raros: []
-# Exemplo:
-# raros:
-#   - id: vagabond-37
-#     nome: Vagabond
-#     termos: [vagabond]
-#     volumes: "37"
-#     formato: Mangá
-#     buscas: [vagabond vol 37]
 
 # ---------------------------------------------------------------------
 # PROMOÇÕES (só com 25% OFF ou mais)
 # ---------------------------------------------------------------------
-promocoes: []
-# Exemplo:
-# promocoes:
-#   - id: chainsaw-man
-#     nome: Chainsaw Man
-#     termos: [chainsaw man]
-#     volumes: "12+"
-#     formato: Mangá
-#     buscas: [chainsaw man]
+promocoes:
+  # ---------- DC
+  - id: lv-dia-mais-claro
+    nome: "Lanterna Verde: O Dia Mais Claro (Grandes Eventos DC)"
+    termos: [lanterna verde, dia mais claro]
+    volumes: "2"
+    buscas: [lanterna verde o dia mais claro]
+
+  - id: superman-mundos-em-guerra
+    nome: "Superman: Mundos em Guerra (Grandes Eventos DC)"
+    termos: [superman, mundos em guerra]
+    volumes: "2"
+    buscas: [superman mundos em guerra]
+
+  - id: parcerias-perseguicao
+    nome: "Parcerias: Perseguição Até o Fim dos Tempos! (O Melhor da DC)"
+    termos: [perseguicao ate o fim dos tempos]
+    volumes: todos
+    buscas: [parcerias perseguicao ate o fim dos tempos]
+
+  - id: lv-outro-lanterna
+    nome: "Lanterna Verde: O Outro Lanterna Verde da Terra (O Melhor da DC)"
+    termos: [outro lanterna verde da terra]
+    volumes: todos
+    buscas: [o outro lanterna verde da terra]
+
+  - id: batman-padroes-sombrios
+    nome: "Batman: Padrões Sombrios"
+    termos: [batman, padroes sombrios]
+    volumes: "2"
+    buscas: [batman padroes sombrios]
+
+  - id: batman-neal-adams-absoluta
+    nome: "Batman por Neal Adams: Edição Absoluta"
+    termos: [batman, neal adams]
+    qualquer: [absoluta, absolute]
+    volumes: "2"
+    formato: Capa Dura
+    buscas: [batman por neal adams edicao absoluta]
+
+  - id: sja-geoff-johns
+    nome: "Sociedade da Justiça da América por Geoff Johns (Omnibus)"
+    termos: [sociedade da justica, geoff johns]
+    volumes: "3"
+    formato: Omnibus
+    buscas: [sociedade da justica da america geoff johns omnibus]
+
+  - id: superman-quatro-estacoes-bolso
+    nome: "Superman: As Quatro Estações (DC de Bolso)"
+    termos: [superman, quatro estacoes]
+    qualquer: [bolso]
+    volumes: todos
+    buscas: [superman as quatro estacoes dc de bolso]
+
+  - id: superman-o-mundo
+    nome: "Superman: O Mundo"
+    termos: [superman]
+    regex: 'superman\s+o\s+mundo\b'
+    volumes: todos
+    buscas: [superman o mundo]
+
+  - id: supergirl-o-mundo
+    nome: "Supergirl: O Mundo"
+    termos: [supergirl]
+    regex: 'supergirl\s+o\s+mundo\b'
+    volumes: todos
+    buscas: [supergirl o mundo]
+
+  - id: coringa-o-mundo
+    nome: "Coringa: O Mundo"
+    termos: [coringa]
+    regex: 'coringa\s+o\s+mundo\b'
+    volumes: todos
+    buscas: [coringa o mundo]
+
+  - id: batman-ano-100
+    nome: "Batman: Ano 100 (Year 100)"
+    termos: [batman]
+    regex: '\b(ano|year)\s*100\b'
+    volumes: todos
+    buscas: [batman ano 100]
+
+  # ---------- Tartarugas Ninja (Pipoca & Nanquim)
+  - id: tmnt-classico
+    nome: "Tartarugas Ninja: Coleção Clássica"
+    termos: [tartarugas ninja]
+    qualquer: [classica, classico]
+    volumes: "5,6"
+    buscas: [tartarugas ninja colecao classica]
+
+  - id: tmnt-ultimo-ronin
+    nome: "Tartarugas Ninja: O Último Ronin (1 e 2)"
+    termos: [ultimo ronin]
+    excluir: [anos perdidos]
+    volumes: todos
+    buscas: [o ultimo ronin tartarugas ninja]
+
+  - id: tmnt-anos-perdidos
+    nome: "Tartarugas Ninja: Os Anos Perdidos"
+    termos: [anos perdidos]
+    qualquer: [tartarugas, ronin]
+    volumes: todos
+    buscas: [tartarugas ninja anos perdidos]
+
+  - id: tmnt-preto-branco-verde
+    nome: "Tartarugas Ninja: Preto, Branco e Verde"
+    termos: [preto, branco, verde]
+    qualquer: [tartarugas]
+    volumes: todos
+    buscas: [tartarugas ninja preto branco e verde]
+
+  # ---------- Europeus e outros
+  - id: eternauta-segunda-parte
+    nome: "O Eternauta: Segunda Parte"
+    termos: [eternauta]
+    qualquer: [segunda parte, parte 2, ii]
+    volumes: todos
+    buscas: [o eternauta segunda parte]
+
+  - id: dylan-dog-omnibus
+    nome: "Dylan Dog Omnibus"
+    termos: [dylan dog, omnibus]
+    volumes: "4,5"
+    formato: Omnibus
+    buscas: [dylan dog omnibus]
+
+  - id: fantasma-fase-marvel
+    nome: "O Fantasma: A Fase Marvel"
+    termos: [fantasma, fase marvel]
+    volumes: todos
+    buscas: [o fantasma fase marvel]
+
+  - id: fantasma-fase-dc
+    nome: "O Fantasma: A Fase DC"
+    termos: [fantasma, fase dc]
+    volumes: todos
+    buscas: [o fantasma fase dc]

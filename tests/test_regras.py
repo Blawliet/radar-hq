@@ -43,7 +43,6 @@ def test_volume(titulo, vol):
 @pytest.mark.parametrize("titulo", [
     "A Saga do Flash Vol. 8", "A Saga do Flash Vol. 14", "One Piece Vol. 97", "One Piece Vol. 104",
     "Blueberry: Edição Definitiva Vol. 4", "Supergirl por Peter David Vol. 5",
-    "Spawn Origens Vol. 10", "Spawn Origens Vol. 15", "Spawn Vol. 9", "Spawn Vol. 30",
     "A Saga do Lanterna Verde Vol. 3", "A Saga do Lanterna Verde Vol. 7", "Absolute Batman Vol. 2",
     "Quarteto Fantástico por Jonathan Hickman Omnibus Vol. 2",
 ])
@@ -64,7 +63,7 @@ def test_raros_fora_da_lista(titulo):
 @pytest.mark.parametrize("titulo", [
     "Battle Royale Omnibus Vol. 2", "Battle Royale Omnibus Vol. 5", "Demon Slayer Vol. 12",
     "Kimetsu no Yaiba Box", "Zero Hora - Grandes Eventos DC", "Invencível Vol. 1",
-    "Invencível Vol. 2", "Spawn Vol. 3", "Spawn Origens Vol. 11", "Spawn Origens Vol. 4",
+    "Invencível Vol. 2", "Invencível Vol. 7", "Box Invencível Panini HQ", "Spawn Vol. 3", "Spawn Origens Vol. 11", "Spawn Origens Vol. 4",
     "Box Gantz Caixa 1 (Vols. 1 ao 18)",
 ])
 def test_bloqueios(titulo):
@@ -79,17 +78,17 @@ def test_promo_com_desconto_suficiente():
 
 
 def test_promo_desconto_insuficiente():
-    assert not avaliar(of("Invencível Vol. 4", preco=80), CAT, ref_capa=100).alertar
+    assert not avaliar(of("Battle Royale Omnibus Vol. 3", preco=160), CAT, ref_capa=100).alertar
 
 
 def test_promo_sem_capa_nao_alerta():
-    d = avaliar(of("Invencível Vol. 4", preco=50), CAT, ref_capa=None)
+    d = avaliar(of("Battle Royale Omnibus Vol. 3", preco=50), CAT, ref_capa=None)
     assert not d.alertar and "capa" in d.motivo
 
 
 def test_preco_de_inflado_e_ignorado():
     # loja diz "de R$ 200 por R$ 90", mas a capa real é 100: só 10% off
-    d = avaliar(of("Invencível Vol. 5", preco=90, lista=200), CAT, ref_capa=100)
+    d = avaliar(of("Battle Royale Omnibus Vol. 4", preco=90, lista=200), CAT, ref_capa=100)
     assert not d.alertar and d.preco_capa == 100
 
 
@@ -110,7 +109,7 @@ def test_battle_royale_vol_6_nao_cai_no_radar():
 @pytest.mark.parametrize("titulo,alerta", [
     ("Frieren Vol. 1", False), ("Frieren Vol. 2", True), ("Sakamoto Days Vol. 1", False),
     ("Sakamoto Days Vol. 5", True), ("Hunter x Hunter Vol. 37", False), ("Hunter x Hunter Vol. 38", True),
-    ("Dandadan Vol. 1", True), ("Tartarugas Ninja Vol. 1 (Pipoca & Nanquim)", True),
+    ("Dandadan Vol. 1", False), ("Tartarugas Ninja Vol. 1 (Pipoca & Nanquim)", True),
 ])
 def test_series_em_andamento(titulo, alerta):
     assert avaliar(of(titulo, preco=70), CAT, ref_capa=100).alertar is alerta, titulo
@@ -210,7 +209,7 @@ def test_template_meta_payload():
     assert p["template"]["language"]["code"] == "pt_BR"
     params = p["template"]["components"][0]["parameters"]
     assert [x["text"] for x in params][-1] == "https://loja.com/p/spawn12"
-    assert params[3]["text"] == "Raro em Estoque"
+    assert params[3]["text"] == "Novo Lacrado"
 
 
 
@@ -283,7 +282,7 @@ def test_perfis_independentes(tmp_path):
     # Omnibus: radar ligado só para o Bruno
     omni = of("X-Men Omnibus Vol. 1", preco=300)
     assert avaliar(omni, bruno, ref_capa=500).alertar and not avaliar(omni, ivan, ref_capa=500).alertar
-    assert ("x", "one piece") in [("x", b) for _, b in g.todas_buscas()]
+    assert ("x", "one piece") in [("x", b) for _, b, _ in g.todas_buscas()]
 
 
 def test_mensagem_com_interessados():
@@ -388,7 +387,7 @@ def test_preco_de_nao_concatena_numeros():
 def test_capa_absurda_e_descartada():
     d = avaliar(of("Blueberry: Edição Definitiva (Vol. 4 de 4)", preco=266.1, lista=3548025.0), CAT)
     assert d.alertar and d.regra == "A" and d.preco_capa is None      # raro: alerta, mas sem inventar desconto
-    d2 = avaliar(of("Invencível Vol. 5", preco=20, lista=500), CAT)
+    d2 = avaliar(of("Battle Royale Omnibus Vol. 4", preco=20, lista=500), CAT)
     assert not d2.alertar                                               # promo: não alerta com capa suspeita
 
 
@@ -460,3 +459,243 @@ def test_woocommerce():
     loja = WooLoja(f, {"nome": "Monstra", "base": "https://lojamonstra.com.br"})
     achados = loja.buscar("o fantasma")
     assert len(achados) == 1 and achados[0].preco == 159.9 and achados[0].preco_lista == 199.9
+
+
+# ---------------- Ajustes da varredura seca (22/10 14h)
+def test_esgotado_em_produtos_relacionados_nao_conta():
+    html = """<html><body><div class="summary entry-summary"><h1>O Fantasma</h1>
+    <p class="stock in-stock">3 em estoque</p><button class="single_add_to_cart_button">Comprar</button></div>
+    <section class="related products"><ul><li class="product"><p class="stock out-of-stock">Esgotado</p></li></ul></section>
+    </body></html>"""
+    assert validar_html("https://l.com/produto/x/", "https://l.com/produto/x/", 200, html, False, sinal_externo=True).disponivel
+
+
+@pytest.mark.parametrize("titulo,alerta", [
+    ("Tartarugas Ninja Vol. 3", True),
+    ("Power Rangers e Tartarugas Ninja Vol. 2", False),
+    ("Batman e Tartarugas Ninja Vol. 2", False),
+    ("Tartarugas Ninja: Coleção Clássica Vol. 2", False),
+])
+def test_tmnt_sem_crossovers(titulo, alerta):
+    assert avaliar(of(titulo, preco=70), CAT, ref_capa=120).alertar is alerta, titulo
+
+
+def test_magento_url_pela_api():
+    from stores.plataformas import MagentoLoja
+    api = {"data": {"products": {"items": [
+        {"name": "A Saga do Flash Vol. 8", "url_key": "saga-flash-8", "url_suffix": "",
+         "url_rewrites": [{"url": "quadrinhos/dc/saga-flash-8"}, {"url": "a-saga-do-flash-8.html"}],
+         "stock_status": "IN_STOCK",
+         "price_range": {"minimum_price": {"regular_price": {"value": 54.9}, "final_price": {"value": 54.9}}}}]}}}
+    f = _FetcherFalso({"/graphql": (200, api)})
+    loja = MagentoLoja(f, {"nome": "Loja Panini", "base": "https://panini.com.br"})
+    assert loja.buscar("saga do flash")[0].url == "https://panini.com.br/a-saga-do-flash-8.html"
+
+
+
+# ---------------- Spawn em promoção, Dandadan só pacote, melhor loja
+@pytest.mark.parametrize("titulo", ["Spawn Origens Vol. 10", "Spawn Origens Vol. 15", "Spawn Vol. 9", "Spawn Vol. 30"])
+def test_spawn_agora_e_promocao(titulo):
+    assert not avaliar(of(titulo, preco=45), CAT, ref_capa=54.9).alertar          # 18% off: não
+    d = avaliar(of(titulo, preco=39.9), CAT, ref_capa=54.9)                          # 27% off: sim
+    assert d.alertar and d.regra == "B"
+
+
+def test_dandadan_so_pacote():
+    assert not avaliar(of("Dandadan Vol. 5", preco=10), CAT, ref_capa=45).alertar
+    d = avaliar(of("Kit Dandadan Vols. 1 ao 10 (usado)", preco=290), CAT, ref_capa=10 * 42.0)
+    assert d.alertar and d.pacote == 10 and d.entrada_id == "dandadan"
+    assert not avaliar(of("Kit Dandadan Vols. 1 ao 10", preco=380), CAT, ref_capa=420).alertar   # só 10% off
+    assert not avaliar(of("Kit Dandadan", preco=10), CAT, ref_capa=420).alertar                 # sem nº de volumes
+
+
+def test_preco_tipico_volume(tmp_path):
+    from db import Banco
+    b = Banco(tmp_path / "r.db")
+    for v, p in [(1, 40.0), (2, 42.0), (3, 45.0), (4, 30.0)]:
+        b.registrar_preco(f"dandadan:{v}", f"https://l/{v}", p, "Loja")
+    b.registrar_preco("dandadan pacote:unico", "https://l/kit", 300.0, "Loja")
+    assert b.preco_tipico_volume("dandadan") == 41.0
+    b.salvar_capa("capa:dandadan:5", 44.9, "Loja Panini")
+    assert b.preco_tipico_volume("dandadan") == 44.9
+
+
+def test_mensagem_pacote_e_outras_lojas():
+    o = of("Kit Dandadan Vols. 1 ao 10 (usado)", preco=290, cond="usado")
+    d = avaliar(o, CAT, ref_capa=420)
+    d.preco_volume = 42.0
+    txt = montar(o, d, ["Bruno"], None, [("Comic Boom", 310.0), ("Estante Virtual", 320.0)])
+    assert "🏷️ *Preço de Capa:* R$ 420,00 (estimado: 10 vols x R$ 42,00)" in txt
+    assert "⚡ *Status:* Seminovo" in txt
+    assert "🛍️ *Também em:* Comic Boom R$ 310,00 · Estante Virtual R$ 320,00" in txt
+
+
+
+# ---------------- Thiago e Ivan
+def _perfil(nome):
+    return Catalogo(RAIZ / "config" / "catalogo.yaml", RAIZ / "config" / "pessoas" / f"{nome}.yaml")
+
+
+@pytest.mark.parametrize("titulo,alerta", [
+    ("Lanterna Verde: O Dia Mais Claro Vol. 02 (Grandes Eventos DC)", True),
+    ("Lanterna Verde: O Dia Mais Claro Vol. 01", False),
+    ("Superman: Mundos em Guerra Vol. 2", True),
+    ("Parcerias: Perseguição Até o Fim dos Tempos! (O Melhor da DC)", True),
+    ("Lanterna Verde: O Outro Lanterna Verde da Terra", True),
+    ("Batman: Padrões Sombrios Vol. 2", True),
+    ("Batman por Neal Adams - Edição Absoluta Vol. 2", True),
+    ("Sociedade da Justiça da América por Geoff Johns Vol. 3 (Omnibus)", True),
+    ("Superman: As Quatro Estações (DC de Bolso)", True),
+    ("Superman: O Mundo", True), ("Supergirl: O Mundo", True), ("Coringa: O Mundo", True),
+    ("Superman: O Homem que salvou o mundo", False),
+    ("Tartarugas Ninja: Coleção Clássica Vol. 5", True), ("Tartarugas Ninja: Coleção Clássica Vol. 4", False),
+    ("Tartarugas Ninja: O Último Ronin", True), ("Tartarugas Ninja: O Último Ronin - Os Anos Perdidos", True),
+    ("Tartarugas Ninja: Preto, Branco e Verde", True),
+    ("O Eternauta: Segunda Parte", True), ("O Eternauta", False),
+    ("Dylan Dog Omnibus Vol. 4", True), ("Dylan Dog Omnibus Vol. 3", False),
+    ("O Fantasma: A Fase Marvel Completa", True), ("O Fantasma: A Fase DC Comics Completa", True),
+    ("Batman: Ano 100", True),
+])
+def test_lista_thiago(titulo, alerta):
+    d = avaliar(of(titulo, preco=70), _perfil("thiago"), ref_capa=100)
+    assert d.alertar is alerta, (titulo, d.motivo)
+
+
+@pytest.mark.parametrize("titulo,alerta", [
+    ("Console PlayStation 5 Sony Edição Digital Marvel's Wolverine Pacote de Edição Limitada, 825 GB, Amarelo", True),
+    ("PlayStation 5 Edição Digital - Pacote Marvel's Wolverine Limited Edition Bundle", True),
+    ("Marvel's Wolverine - Edição Standard - PlayStation 5", False),
+    ("Controle DualSense Marvel's Wolverine Edição Limitada", False),
+    ("Tampas do Console PS5 Wolverine", False),
+    ("Wolverine Omnibus Vol. 1", False),
+    ("Console PS5 Slim Edição Digital Marvel's Wolverine + Controle DualSense Extra", True),
+    ("Kit Console PlayStation 5 Pacote Wolverine com 2 Controles", True),
+    ("Kit 2 Controles DualSense Wolverine para PS5 Slim", False),
+    ("DualSense Wolverine Battle Yellow para console PS5", False),
+])
+def test_ivan_ps5_wolverine(titulo, alerta):
+    d = avaliar(of(titulo, preco=4556.07, lista=5099.0), _perfil("ivan"))
+    assert d.alertar is alerta, (titulo, d.motivo)
+    if alerta:
+        assert d.so_menor_preco and d.formato == "Console"
+
+
+def test_console_nao_cai_no_radar_de_boxes():
+    assert not avaliar(of("Kit Console PS5 + Jogo Marvel's Wolverine", preco=3000), CAT, ref_capa=5000).alertar
+
+
+def test_buscas_por_categoria():
+    from rules import Grupo
+    g = Grupo(RAIZ / "config")
+    cats = {b: c for _, b, c in g.todas_buscas()}
+    assert cats["console ps5 wolverine"] == "games" and cats["a saga do flash"] == "livros"
+    assert any("kabum.com.br/produto/1065184" in u for u, _ in g.urls_fixas())
+
+
+def test_ivan_so_menor_preco_no_envio(tmp_path, monkeypatch):
+    import main, stores
+    from db import Banco
+
+    class F:
+        def fechar(self): pass
+
+    class Kabum:
+        nome, oficial, f, dominio = "KaBuM!", False, F(), "kabum.com.br"
+        categorias, categoria_atual = ["games"], "games"
+        preco = 4556.07
+        def buscar(self, termo): return []
+        def validar(self, o):
+            o.titulo = "Console PlayStation 5 Edição Digital Marvel's Wolverine Pacote de Edição Limitada"
+            o.preco, o.disponivel, o.motivo_estoque = Kabum.preco, True, "ok"
+            return o
+
+    (tmp_path / "data").mkdir()
+    monkeypatch.setattr(main, "RAIZ", tmp_path)
+    import shutil; shutil.copytree(RAIZ / "config", tmp_path / "config")
+    monkeypatch.setattr(stores, "montar_lojas", lambda p: [Kabum()])
+    enviados = []
+
+    class Cli:
+        def enviar_alerta(self, d, c, texto): enviados.append(texto); return True
+    import whatsapp
+    monkeypatch.setattr(whatsapp, "cliente_do_ambiente", lambda: Cli())
+    monkeypatch.setattr(main.time, "sleep", lambda s: None)
+
+    main.varredura(True)                       # 1ª vez: marca a referência
+    assert len(enviados) == 1 and "👥 *Para:* Ivan" in enviados[0]
+    b = Banco(tmp_path / "data" / "radar.db")
+    b.con.execute("UPDATE precos SET dia='2026-01-01'"); b.con.execute("DELETE FROM alertas"); b.con.commit()
+    Kabum.preco = 4600.0
+    main.varredura(True)                       # mais caro que o menor: não alerta
+    assert len(enviados) == 1
+    Kabum.preco = 4299.0
+    main.varredura(True)                       # novo menor preço: alerta
+    assert len(enviados) == 2 and "MENOR PREÇO" in enviados[1]
+
+
+
+def test_relatorio_disponibilidade(tmp_path, monkeypatch, capsys):
+    import main, shutil, stores
+
+    class F:
+        def fechar(self): pass
+
+    def loja(nome, itens):
+        class L:
+            oficial, f, dominio = False, F(), ""
+            categorias, categoria_atual = ["livros"], "livros"
+            def buscar(self, termo):
+                return [Oferta(nome, t, f"https://{nome}/{i}", 0) for i, t in enumerate(itens) if
+                        any(w in t.lower() for w in termo.lower().split()[:1])]
+            def validar(self, o):
+                o.preco, o.disponivel, o.motivo_estoque = 50.0 + len(nome), True, "ok"
+                return o
+        l = L(); l.nome = nome; return l
+
+    lojas = [loja(n, ["Superman: O Mundo", "Dylan Dog Omnibus Vol. 4"]) for n in ("A", "BB", "CCC")]
+    lojas.append(loja("DDDD", ["Tartarugas Ninja: Coleção Clássica Vol. 6"]))
+    shutil.copytree(RAIZ / "config", tmp_path / "config"); (tmp_path / "data").mkdir()
+    monkeypatch.setattr(main, "RAIZ", tmp_path)
+    monkeypatch.setattr(stores, "montar_lojas", lambda p: lojas)
+    main.relatorio(enviar=False)
+    out = capsys.readouterr().out
+    thiago = out[out.index("Rastreamento de Thiago"):]
+    assert "🟢" in thiago and "• Superman: O Mundo: 3 lojas, a partir de R$ 51,00 (A)" in thiago
+    assert "• Dylan Dog Omnibus vol. 4: 3 lojas" in thiago
+    assert "🟡" in thiago and "Coleção Clássica vol. 6: 1 loja," in thiago
+    assert "🔴" in thiago and "• Dylan Dog Omnibus vol. 5" in thiago and "• Coringa: O Mundo" in thiago
+
+
+
+# ---------------- Resumão do dia
+def test_resumo_do_dia(tmp_path):
+    import sqlite3
+    from datetime import datetime
+    from db import Banco
+    from mensagem import resumo_do_dia
+    # banco antigo, sem as colunas novas: precisa migrar sem perder nada
+    con = sqlite3.connect(tmp_path / "r.db")
+    con.execute("CREATE TABLE alertas (url TEXT PRIMARY KEY, preco REAL, enviado_em TEXT, regra TEXT)")
+    con.execute("INSERT INTO alertas VALUES ('https://velho', 10, '2026-10-20T10:00:00', 'B')"); con.commit(); con.close()
+    b = Banco(tmp_path / "r.db")
+    b.registrar_alerta("https://a/1", 39.9, "B", "Invencível Vol. 5", "Comix", 33.0, "Bruno")
+    b.registrar_alerta("https://a/2", 4299.0, "A", "PS5 Wolverine", "KaBuM!", 15.7, "Ivan", recorde=True)
+    b.registrar_alerta("https://a/3", 29.9, "A", "Spawn Origens 10", "Estante Virtual", None, "Bruno e Thiago")
+    b.registrar_alerta("https://a/1", 35.0, "B", "Invencível Vol. 5", "Comix", 41.5, "Bruno")
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    al = b.alertas_do_dia(hoje)
+    assert len(al) == 3
+    txt = resumo_do_dia("26/10", al, 812, 9)
+    assert txt.startswith("📰 *Resumão do dia 26/10*")
+    assert "3 ofertas enviadas hoje · 812 anúncios conferidos em 9 lojas" in txt
+    assert txt.index("Invencível") < txt.index("PS5")                      # maior desconto primeiro
+    assert "*R$ 35,00* *42% OFF*" in txt                                    # último preço do dia
+    assert "⭐ *Raros e monitorados encontrados*\n• Spawn Origens 10" in txt
+    assert "👥 *Por pessoa:* Bruno 2 · Ivan 1 · Thiago 1" in txt
+    assert "Dia tranquilo" in resumo_do_dia("27/10", [], 500, 8)
+
+
+def test_telegram_corta_mensagem_grande():
+    from whatsapp import TelegramClient
+    p = TelegramClient("t", "1").payload("linha\n" * 2000)
+    assert len(p["text"]) < 4096 and p["text"].endswith("(...)")

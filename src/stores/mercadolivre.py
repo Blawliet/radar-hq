@@ -25,6 +25,8 @@ API = "https://api.mercadolibre.com"
 
 class MercadoLivreLoja(Loja):
     nome = "Mercado Livre"
+    categorias_padrao = ["livros", "games"]
+    base_padrao = "https://www.mercadolivre.com.br"
 
     def __init__(self, fetcher, cfg):
         super().__init__(fetcher, cfg)
