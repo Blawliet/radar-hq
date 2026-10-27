@@ -32,7 +32,7 @@ def montar_lojas(caminho: str | Path) -> list[Loja]:
     for c in cfg.get("lojas", []):
         if not c.get("ativo", True):
             continue
-        fetcher = Fetcher()
+        fetcher = Fetcher(delay=c.get("delay"))
         adapt = c.get("adaptador", "auto")
         if adapt == "amazon":
             lojas.append(AmazonLoja(fetcher, c))

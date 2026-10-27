@@ -42,6 +42,21 @@ def limpar_url(url: str) -> str:
     return urlunparse((p.scheme, p.netloc, p.path, "", "", ""))
 
 
+def _salvar_debug(loja: str, url: str, r, motivo: str, texto: str):
+    """Para links fixos: guarda um retrato da página em data/debug/ para conferir depois."""
+    from pathlib import Path
+    pasta = Path(__file__).resolve().parents[2] / "data" / "debug"
+    pasta.mkdir(parents=True, exist_ok=True)
+    nome = re.sub(r"[^a-z0-9]+", "-", normalizar(loja + " " + url.rsplit("/", 2)[-2 if url.endswith("/") else -1]))[:80]
+    trecho = texto
+    i = texto.find("comprar")
+    if i > 1500:
+        trecho = texto[:1500] + " [...] " + texto[i - 1500:i + 1500]
+    (pasta / f"{nome}.txt").write_text(
+        f"url: {url}\nfinal: {r.url_final}\nvia: {r.via}\nstatus: {r.status}\nmotivo: {motivo}\n\n{trecho[:6000]}",
+        encoding="utf-8")
+
+
 def _texto_simples(t: str) -> str:
     """minúsculas, sem acento e com espaços normalizados, mas mantendo pontuação (R$ 4.556,07)."""
     import unicodedata
@@ -206,8 +221,16 @@ class HtmlLoja(Loja):
         return saida
 
     def validar(self, o):
-        r = self._pegar(o.url, self.cfg.get("seletor_espera"))
-        res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser")
+        if self.render and self.cfg.get("validar_sem_navegador"):
+            # tenta a página simples primeiro; só abre o navegador se não der para decidir
+            r = self.f.get(o.url)
+            res = validar_html(o.url, r.url_final, r.status, r.html, False)
+            if r.status != 200 or res.motivo.startswith(("sem sinal confiável", "bloqueado")):
+                r = self._pegar(o.url, self.cfg.get("seletor_espera"))
+                res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser")
+        else:
+            r = self._pegar(o.url, self.cfg.get("seletor_espera"))
+            res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser")
         if res.titulo:
             o.titulo = res.titulo
         if res.preco:
@@ -222,6 +245,8 @@ class HtmlLoja(Loja):
         # esgotado e JSON-LD OutOfStock continuam valendo.
         if r.status == 200 and r.html:
             texto = _texto_simples(BeautifulSoup(r.html, "lxml").get_text(" "))
+            if o.extra.get("fixa"):
+                _salvar_debug(self.nome, o.url, r, res.motivo, texto)
             ok_rx = self.cfg.get("estoque_ok_regex")
             fraco = res.motivo.startswith(("botão de compra desabilitado", "página renderizada sem botão",
                                            "sem sinal confiável"))

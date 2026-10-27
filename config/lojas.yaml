@@ -12,17 +12,21 @@
 # categorias:     o que buscar nesta loja: [livros] (padrão), [games] ou [livros, games]
 # oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
 # playwright: true  abre num navegador real (lojas com muito JavaScript)
+# delay:          pausa entre acessos à mesma loja, em segundos (padrão 3; APIs aguentam 1,5)
+# validar_sem_navegador: true  confere a página do produto sem navegador quando possível
 #
 # Para conferir se cada loja responde:  python verificar_lojas.py
 # =====================================================================
 
 lojas:
   - nome: Loja Panini
+    delay: 1.5
     adaptador: magento
     base: https://panini.com.br
     oficial: true
 
   - nome: Pipoca & Nanquim
+    delay: 1.5
     adaptador: magento
     base: https://pipocaenanquim.com.br
     sufixo_url: ".html"
@@ -44,6 +48,7 @@ lojas:
     playwright: true
 
   - nome: Ri Happy
+    delay: 1.5
     adaptador: auto
     base: https://www.rihappy.com.br
 
@@ -53,35 +58,44 @@ lojas:
     busca: "/busca?q={q}"
     padrao_produto: "/livros?/"
     playwright: true
+    validar_sem_navegador: true
+    max_resultados: 8
 
   - nome: Rika Comic Shop
+    delay: 1.5
     adaptador: auto
     base: https://www.rika.com.br
 
   - nome: Comix Book Shop
+    delay: 1.5
     adaptador: magento
     base: https://www.comix.com.br
     sufixo_url: ".html"
 
   - nome: Monstra
+    delay: 1.5
     adaptador: woocommerce
     base: https://lojamonstra.com.br
     oficial: true        # loja da editora Monstra (Fantasma, Dylan Dog...)
 
   - nome: Comic Boom
+    delay: 1.5
     adaptador: magento
     base: https://comicboom.com.br
     sufixo_url: ""
 
   - nome: Capitão Onigiri
+    delay: 1.5
     adaptador: woocommerce
     base: https://www.capitaoonigiri.com.br
 
   - nome: Amora Bookstore
+    delay: 1.5
     adaptador: woocommerce
     base: https://amorabookstore.com.br
 
   - nome: Taverna do Rei
+    delay: 1.5
     adaptador: shopify
     base: https://tavernadorei.com.br
 

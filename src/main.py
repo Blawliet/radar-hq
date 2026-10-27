@@ -86,14 +86,14 @@ def registrar_visto(o: Oferta, grupo: Grupo):
                                         "loja": o.loja, "preco": o.preco, "url": o.url})
 
 
-def varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao, list[str]]]:
+def varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
     try:
         return _varrer_loja(loja, grupo, banco)
     finally:
         loja.f.fechar()        # fecha o navegador na mesma thread que o abriu
 
 
-def avaliar_perfil(o: Oferta, cat: Catalogo, loja, banco: Banco) -> Decisao | None:
+def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco) -> Decisao | None:
     d0 = avaliar(o, cat)                               # com título e preço da página
     if not d0.entrada_id or d0.volume is None and d0.motivo.startswith("volume"):
         return None
@@ -107,18 +107,20 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, loja, banco: Banco) -> Decisao | No
         d = avaliar(o, cat, unit * d0.pacote if unit else None)
         d.preco_volume = unit
     else:
-        if loja.oficial:
-            banco.salvar_capa(chave, o.preco_lista or o.preco, loja.nome)
+        if oficial:
+            banco.salvar_capa(chave, o.preco_lista or o.preco, o.loja)
         d = avaliar(o, cat, banco.capa(chave))
     quem = f"[{cat.nome}] " if cat.nome else ""
     if d.alertar:
-        log.info("ALERTA %s%s [%s] %s R$ %.2f", quem, d.regra, loja.nome, o.titulo[:60], o.preco)
+        log.info("ALERTA %s%s [%s] %s R$ %.2f", quem, d.regra, o.loja, o.titulo[:60], o.preco)
         return d
-    log.info("sem alerta %s[%s] %s: %s", quem, loja.nome, o.titulo[:60], d.motivo)
+    log.info("sem alerta %s[%s] %s: %s", quem, o.loja, o.titulo[:60], d.motivo)
     return None
 
 
-def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao, list[str]]]:
+def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
+    """Busca e valida. Devolve as ofertas com estoque confirmado; as regras de cada
+    pessoa são aplicadas depois, com todas as lojas já varridas."""
     achados, vistos = [], set()
     # páginas fixas (ex.: um produto específico) primeiro, depois as buscas
     fixas = [Oferta(loja.nome, nome, url, 0, extra={"fixa": True})
@@ -160,10 +162,9 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[tuple[Oferta, Decisao
             banco.registrar_preco(o.extra["chave"], o.url, o.preco, o.loja)
 
             registrar_visto(o, grupo)
-            por_pessoa = [(p.nome, avaliar_perfil(o, p, loja, banco)) for p in grupo.perfis]
-            por_pessoa = [(n, d) for n, d in por_pessoa if d]
-            if por_pessoa:
-                achados.append((o, melhor_decisao([d for _, d in por_pessoa]), [n for n, _ in por_pessoa]))
+            o.extra["oficial"] = loja.oficial
+            achados.append(o)
+    log.info("%s: terminou com %d ofertas em estoque.", loja.nome, len(achados))
     return achados
 
 
@@ -179,17 +180,25 @@ def varredura(enviar: bool = True, imprimir: bool = True) -> int:
         grupo = Grupo(RAIZ / "config")
         banco = Banco(RAIZ / "data" / "radar.db")
         lojas = montar_lojas(RAIZ / "config" / "lojas.yaml")
-        oficiais = [l for l in lojas if l.oficial]
-        demais = [l for l in lojas if not l.oficial]
         log.info("Varredura iniciada: %d lojas, %d buscas, perfis: %s.", len(lojas),
                  len(grupo.todas_buscas()), ", ".join(p.nome or "único" for p in grupo.perfis))
 
+        # todas as lojas ao mesmo tempo
+        validadas: list[Oferta] = []
+        with ThreadPoolExecutor(max_workers=max(1, len(lojas))) as ex:
+            for res in ex.map(lambda l: varrer_loja(l, grupo, banco), lojas):
+                validadas.extend(res)
+        log.info("Coleta terminou em %.0fs.", time.time() - inicio)
+
+        # regras de cada pessoa; ofertas das lojas oficiais primeiro, porque elas
+        # atualizam a tabela de preço de capa usada para as demais
         achados: list[tuple[Oferta, Decisao, list[str]]] = []
-        # lojas oficiais primeiro: elas alimentam a tabela de preço de capa
-        for leva in (oficiais, demais):
-            with ThreadPoolExecutor(max_workers=max(1, len(leva))) as ex:
-                for res in ex.map(lambda l: varrer_loja(l, grupo, banco), leva):
-                    achados.extend(res)
+        for o in sorted(validadas, key=lambda x: not x.extra.get("oficial")):
+            por_pessoa = [(p.nome, avaliar_perfil(o, p, bool(o.extra.get("oficial")), banco))
+                          for p in grupo.perfis]
+            por_pessoa = [(n, d) for n, d in por_pessoa if d]
+            if por_pessoa:
+                achados.append((o, melhor_decisao([d for _, d in por_pessoa]), [n for n, _ in por_pessoa]))
 
         # o mesmo produto pode aparecer em buscas diferentes: junta os interessados
         unicos: dict[str, tuple[Oferta, Decisao, list[str]]] = {}
@@ -271,7 +280,9 @@ def resumo(enviar: bool = True):
     from whatsapp import cliente_do_ambiente
     varredura(enviar)
     banco = Banco(RAIZ / "data" / "radar.db")
-    hoje = datetime.now()
+    # se o GitHub atrasar e a execução passar da meia-noite, o resumo continua sendo do dia certo
+    from datetime import timedelta
+    hoje = datetime.now() - timedelta(hours=3)
     checados, lojas = banco.checagens_do_dia(hoje.strftime("%Y-%m-%d"))
     texto = resumo_do_dia(hoje.strftime("%d/%m"), banco.alertas_do_dia(hoje.strftime("%Y-%m-%d")),
                           checados, lojas)
