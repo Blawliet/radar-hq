@@ -6,7 +6,8 @@
 #   amazon        coletor próprio
 #   mercadolivre  coletor próprio (API com token ou HTML)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
-#   woocommerce   Store API do WordPress (Monstra)
+#   woocommerce   Store API do WordPress (Monstra, Capitão Onigiri, Amora Bookstore)
+#   shopify       API pública da Shopify (Taverna do Rei)
 #   html          busca HTML genérica (use "busca" e "padrao_produto")
 # categorias:     o que buscar nesta loja: [livros] (padrão), [games] ou [livros, games]
 # oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
@@ -71,6 +72,24 @@ lojas:
     adaptador: magento
     base: https://comicboom.com.br
     sufixo_url: ""
+
+  - nome: Capitão Onigiri
+    adaptador: woocommerce
+    base: https://www.capitaoonigiri.com.br
+
+  - nome: Amora Bookstore
+    adaptador: woocommerce
+    base: https://amorabookstore.com.br
+
+  - nome: Taverna do Rei
+    adaptador: shopify
+    base: https://tavernadorei.com.br
+
+  - nome: Mundos Infinitos
+    adaptador: html
+    base: https://mundosinfinitos.com.br
+    busca: "/geek/solucoes/busca.aspx?t={q}"
+    padrao_produto: "/geek/produto/"
 
   - nome: KaBuM!
     adaptador: html

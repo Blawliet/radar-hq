@@ -750,3 +750,32 @@ def test_woo_confia_na_api_de_estoque():
     o2 = WooLoja(f2, {"nome": "Monstra", "base": "https://lojamonstra.com.br"}).validar(
         Oferta("Monstra", "Frieren 13", "https://lojamonstra.com.br/produto/frieren-13/", 39.9, extra={"api": "woo"}))
     assert not o2.disponivel
+
+
+# ---------------- Lojas novas
+def test_lojas_novas_configuradas(tmp_path, monkeypatch):
+    import stores
+    from stores.plataformas import HtmlLoja, ShopifyLoja, WooLoja
+    monkeypatch.setattr(stores, "detectar_plataforma", lambda f, base: "vtex")   # sem rede no teste
+    monkeypatch.setattr(stores, "CACHE", tmp_path / "plataformas.json")
+    lojas = {l.nome: l for l in stores.montar_lojas(RAIZ / "config" / "lojas.yaml")}
+    assert isinstance(lojas["Capitão Onigiri"], WooLoja) and isinstance(lojas["Amora Bookstore"], WooLoja)
+    assert isinstance(lojas["Taverna do Rei"], ShopifyLoja)
+    assert type(lojas["Mundos Infinitos"]) is HtmlLoja
+    assert lojas["Capitão Onigiri"].busca == "/?s={q}&post_type=product"
+
+
+def test_mundos_infinitos_busca():
+    from stores.plataformas import HtmlLoja
+    busca = """<div class="vitrine">
+      <a href="/geek/produto/Comics-Marvel-O-Incrivel-Hulk-Por-Peter-David-Vol-3-Omnibus-162040.aspx?oid=1366508">
+        Comics Marvel O Incrível Hulk Por Peter David Vol 3 Omnibus</a>
+      <a href="/geek/vitrines/omnibus.aspx">Omnibus</a>
+      <a href="/geek/solucoes/busca.aspx?t=omnibus">Busca</a></div>"""
+    f = _FetcherFalso({"/geek/solucoes/busca.aspx": busca})
+    cfg = {"nome": "Mundos Infinitos", "base": "https://mundosinfinitos.com.br",
+           "busca": "/geek/solucoes/busca.aspx?t={q}", "padrao_produto": "/geek/produto/"}
+    achados = HtmlLoja(f, cfg, "html").buscar("hulk omnibus")
+    assert [o.url for o in achados] == [
+        "https://mundosinfinitos.com.br/geek/produto/Comics-Marvel-O-Incrivel-Hulk-Por-Peter-David-Vol-3-Omnibus-162040.aspx"]
+    assert "busca.aspx?t=hulk+omnibus" in f.pedidos[0]
