@@ -44,7 +44,7 @@ https://www.amazon.com.br/dp/...
 | Quando | O que faz |
 |---|---|
 | 05h30, 07h30, 09h30, 11h30, 13h30, 15h30, 17h30, 19h30, 21h30 | Varredura e alertas |
-| 23h30 | Varredura e **resumão do dia** (maiores descontos, recordes de preço, raros encontrados, total por pessoa) |
+| 23h30 | Varredura, **resumão do dia** (maiores descontos, recordes de preço, raros e difíceis de achar, total por pessoa) e **boletim das lojas** (quais rendem ofertas, quais bloqueiam e quais não trazem nada) |
 | Quando alguém edita uma lista | O bot manda no grupo as listas atualizadas |
 
 O GitHub pode atrasar alguns minutos em horário de pico.
@@ -95,7 +95,7 @@ Cada arquivo em `config/pessoas/` tem quatro partes:
 | Parte | Quando alerta |
 |---|---|
 | `raros` | Em **qualquer preço**, desde que tenha estoque |
-| `promocoes` | Só com **25% OFF ou mais** sobre o preço de capa |
+| `promocoes` | Com **25% OFF ou mais**, ou **sem desconto se for difícil de achar** (estoque em até 2 lojas na varredura) |
 | `bloqueios` | **Nunca**: o que a pessoa já tem |
 | `radares` | Liga os radares gerais: `radar-omnibus` e `radar-boxes` (qualquer omnibus ou box/coleção com 25% OFF) |
 
@@ -179,8 +179,8 @@ Avisos de "esgotado" em produtos relacionados, no rodapé da página, são ignor
 | Estante Virtual | página, com navegador | ✅ muitos usados (aparecem como Seminovo) |
 | Amazon Brasil | página, com navegador | ⚠️ funciona, mas às vezes bloqueia (a janela é pulada) |
 | KaBuM! | página, com navegador | ⚠️ games; em observação |
-| Mercado Livre | API ou página | ❌ bloqueia acessos vindos da nuvem |
-| Magalu | página, com navegador | ❌ bloqueia acessos vindos da nuvem |
+| Mercado Livre | desativada | ❌ bloqueia acessos vindos da nuvem |
+| Magalu | desativada | ❌ bloqueia acessos vindos da nuvem |
 | Shopee | desativada | ❌ exige login |
 
 O radar nunca tenta burlar CAPTCHA ou bloqueio: quando uma loja bloqueia, aquela janela é pulada.

@@ -21,6 +21,9 @@
 config:
   desconto_minimo: 25        # % mínimo da Regra B
   margem_preco_lista: 1.05
+  # item das PROMOÇÕES encontrado com estoque em até N lojas = difícil de achar:
+  # avisa mesmo sem desconto, com a loja mais barata. 0 desliga.
+  escasso_max_lojas: 2
   # títulos com estas palavras são edições estrangeiras (inglês, japonês...)
   excluir_titulos: [paperback, hardcover, english, english edition, by, edition, book one, book two,
                     book three, deluxe edition, tpb, comic book, kodansha, viz media,

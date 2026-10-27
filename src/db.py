@@ -34,6 +34,9 @@ class Banco:
             self.con.execute("""CREATE TABLE IF NOT EXISTS log_alertas (
                 quando TEXT, url TEXT, titulo TEXT, loja TEXT, preco REAL, regra TEXT,
                 desconto REAL, pessoas TEXT, recorde INTEGER)""")
+            self.con.execute("""CREATE TABLE IF NOT EXISTS diagnostico (
+                quando TEXT, loja TEXT, buscas INTEGER, resultados INTEGER, erros INTEGER,
+                validadas INTEGER, com_estoque INTEGER, segundos REAL)""")
             # mantém o arquivo pequeno (ele é salvo no repositório a cada janela)
             limite = (datetime.now() - timedelta(days=10)).isoformat(timespec="seconds")
             self.con.execute("DELETE FROM historico WHERE quando < ?", (limite,))
@@ -140,6 +143,46 @@ class Banco:
         if len(vistos) >= 3:
             return round(statistics.median(vistos), 2)
         return None
+
+    def diagnostico(self, loja, buscas, resultados, erros, validadas, com_estoque, segundos):
+        with self.lock, self.con:
+            self.con.execute("INSERT INTO diagnostico VALUES (?,?,?,?,?,?,?,?)",
+                             (datetime.now().isoformat(timespec="seconds"), loja, buscas, resultados,
+                              erros, validadas, com_estoque, round(segundos, 1)))
+
+    def saude_lojas(self, dia: str) -> dict[str, dict]:
+        """Números do dia por loja, para o boletim do resumão. dia = 'AAAA-MM-DD'."""
+        from datetime import date, timedelta as td
+        semana = (date.fromisoformat(dia) - td(days=6)).isoformat()
+        out: dict[str, dict] = {}
+        with self.lock:
+            for loja, runs, buscas, res, erros, valid, estoque, seg in self.con.execute(
+                    "SELECT loja, COUNT(*), SUM(buscas), SUM(resultados), SUM(erros), SUM(validadas), "
+                    "SUM(com_estoque), AVG(segundos) FROM diagnostico WHERE substr(quando,1,10)=? "
+                    "GROUP BY loja", (dia,)):
+                out[loja] = dict(varreduras=runs, buscas=buscas, resultados=res, erros=erros,
+                                 conferidas=valid, com_estoque=estoque, segundos=seg or 0)
+            for loja, total, ok, bloq in self.con.execute(
+                    "SELECT loja, COUNT(*), SUM(disponivel), SUM(CASE WHEN lower(motivo) LIKE '%bloque%' "
+                    "OR lower(motivo) LIKE '%anti-rob%' THEN 1 ELSE 0 END) FROM historico "
+                    "WHERE substr(quando,1,10)=? GROUP BY loja", (dia,)):
+                o = out.setdefault(loja, {})
+                o.setdefault("conferidas", total)
+                o.setdefault("com_estoque", ok)
+                o["bloqueadas"] = bloq or 0
+                motivo = self.con.execute(
+                    "SELECT motivo, COUNT(*) FROM historico WHERE loja=? AND disponivel=0 "
+                    "AND substr(quando,1,10)=? GROUP BY motivo ORDER BY 2 DESC LIMIT 1", (loja, dia)).fetchone()
+                o["motivo_principal"] = motivo[0] if motivo else None
+            for loja, n in self.con.execute(
+                    "SELECT loja, COUNT(DISTINCT url) FROM log_alertas WHERE substr(quando,1,10)=? GROUP BY loja",
+                    (dia,)):
+                out.setdefault(loja, {})["alertas"] = n
+            for loja, n in self.con.execute(
+                    "SELECT loja, COUNT(DISTINCT url) FROM log_alertas WHERE substr(quando,1,10) BETWEEN ? AND ? "
+                    "GROUP BY loja", (semana, dia)):
+                out.setdefault(loja, {})["alertas_7d"] = n
+        return out
 
     # ---------- log de tudo que foi checado (útil para depurar)
     def historico(self, loja, titulo, url, preco, disponivel, motivo):

@@ -23,7 +23,7 @@ sys.path.insert(0, str(RAIZ / "src"))
 from db import Banco  # noqa: E402
 from dotenv_mini import carregar_env  # noqa: E402
 from texto import normalizar  # noqa: E402
-from mensagem import campos, juntar_nomes, linha_historico, montar, resumo_do_dia  # noqa: E402
+from mensagem import boletim_lojas, campos, juntar_nomes, linha_historico, montar, resumo_do_dia  # noqa: E402
 from models import Decisao, Oferta  # noqa: E402
 from rules import Catalogo, Grupo, avaliar, melhor_decisao, resumo_perfil  # noqa: E402
 
@@ -93,7 +93,8 @@ def varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
         loja.f.fechar()        # fecha o navegador na mesma thread que o abriu
 
 
-def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco) -> Decisao | None:
+def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco,
+                   n_lojas: int | None = None) -> Decisao | None:
     d0 = avaliar(o, cat)                               # com título e preço da página
     if not d0.entrada_id or d0.volume is None and d0.motivo.startswith("volume"):
         return None
@@ -110,6 +111,14 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco) -> Dec
         if oficial:
             banco.salvar_capa(chave, o.preco_lista or o.preco, o.loja)
         d = avaliar(o, cat, banco.capa(chave))
+    d.lojas_com_estoque = n_lojas
+    # difícil de achar: item da lista de promoções que só apareceu em poucas lojas
+    # vale mesmo sem desconto (o mais barato entre elas é o que vai no alerta)
+    if (not d.alertar and d.regra == "B" and not d.pacote and n_lojas and cat.escasso_max_lojas
+            and n_lojas <= cat.escasso_max_lojas
+            and d.motivo.startswith(("desconto", "sem preço de capa"))):
+        d.alertar, d.regra = True, "ESCASSO"
+        d.motivo = f"difícil de achar ({n_lojas} loja{'s' if n_lojas > 1 else ''})"
     quem = f"[{cat.nome}] " if cat.nome else ""
     if d.alertar:
         log.info("ALERTA %s%s [%s] %s R$ %.2f", quem, d.regra, o.loja, o.titulo[:60], o.preco)
@@ -122,6 +131,7 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
     """Busca e valida. Devolve as ofertas com estoque confirmado; as regras de cada
     pessoa são aplicadas depois, com todas as lojas já varridas."""
     achados, vistos = [], set()
+    t0, n_buscas, n_result, n_erros, n_valid = time.time(), 0, 0, 0, 0
     # páginas fixas (ex.: um produto específico) primeiro, depois as buscas
     fixas = [Oferta(loja.nome, nome, url, 0, extra={"fixa": True})
              for url, nome in grupo.urls_fixas() if loja.dominio and loja.dominio in url]
@@ -134,11 +144,14 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
             candidatos = item
         else:
             loja.categoria_atual = categoria
+            n_buscas += 1
             try:
                 candidatos = loja.buscar(item)
             except Exception as e:
+                n_erros += 1
                 log.warning("%s: erro na busca '%s': %s", loja.nome, item, e)
                 continue
+            n_result += len(candidatos)
         for o in candidatos:
             if o.url in vistos:
                 continue
@@ -148,6 +161,7 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
             if not o.extra.get("fixa") and all(descartavel(avaliar(o, p)) for p in grupo.perfis):
                 continue
 
+            n_valid += 1
             try:
                 o = loja.validar(o)
             except Exception as e:
@@ -164,7 +178,9 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
             registrar_visto(o, grupo)
             o.extra["oficial"] = loja.oficial
             achados.append(o)
-    log.info("%s: terminou com %d ofertas em estoque.", loja.nome, len(achados))
+    log.info("%s: %d buscas, %d resultados, %d páginas conferidas, %d com estoque (%.0fs).",
+             loja.nome, n_buscas, n_result, n_valid, len(achados), time.time() - t0)
+    banco.diagnostico(loja.nome, n_buscas, n_result, n_erros, n_valid, len(achados), time.time() - t0)
     return achados
 
 
@@ -193,8 +209,13 @@ def varredura(enviar: bool = True, imprimir: bool = True) -> int:
         # regras de cada pessoa; ofertas das lojas oficiais primeiro, porque elas
         # atualizam a tabela de preço de capa usada para as demais
         achados: list[tuple[Oferta, Decisao, list[str]]] = []
+        # em quantas lojas cada produto apareceu com estoque nesta varredura
+        lojas_por_produto: dict[str, set] = {}
+        for o in validadas:
+            lojas_por_produto.setdefault(o.extra.get("chave", o.url), set()).add(o.loja)
         for o in sorted(validadas, key=lambda x: not x.extra.get("oficial")):
-            por_pessoa = [(p.nome, avaliar_perfil(o, p, bool(o.extra.get("oficial")), banco))
+            n = len(lojas_por_produto.get(o.extra.get("chave", o.url), {o.loja}))
+            por_pessoa = [(p.nome, avaliar_perfil(o, p, bool(o.extra.get("oficial")), banco, n))
                           for p in grupo.perfis]
             por_pessoa = [(n, d) for n, d in por_pessoa if d]
             if por_pessoa:
@@ -221,7 +242,7 @@ def varredura(enviar: bool = True, imprimir: bool = True) -> int:
             o.extra["urls_grupo"] = [x[0].url for x in itens[1:]]
             agrupados.append((o, d, todos or nomes, outras))
         ordem = {"maxima": 0, "alta": 1, "normal": 2}
-        achados = sorted(agrupados, key=lambda x: (x[1].regra != "A", ordem.get(x[1].prioridade, 2),
+        achados = sorted(agrupados, key=lambda x: (x[1].regra not in ("A", "ESCASSO"), ordem.get(x[1].prioridade, 2),
                                                    -(x[1].desconto_pct or 0)))
 
         realertar = int(os.getenv("REALERTAR_DIAS", "7"))
@@ -286,10 +307,17 @@ def resumo(enviar: bool = True):
     checados, lojas = banco.checagens_do_dia(hoje.strftime("%Y-%m-%d"))
     texto = resumo_do_dia(hoje.strftime("%d/%m"), banco.alertas_do_dia(hoje.strftime("%Y-%m-%d")),
                           checados, lojas)
+    import yaml
+    cfg = yaml.safe_load((RAIZ / "config" / "lojas.yaml").read_text(encoding="utf-8")) or {}
+    ativas = [c["nome"] for c in cfg.get("lojas", []) if c.get("ativo", True)]
+    boletim = boletim_lojas(hoje.strftime("%d/%m"), banco.saude_lojas(hoje.strftime("%Y-%m-%d")), ativas)
     if enviar:
-        cliente_do_ambiente().enviar_texto(os.getenv("WHATSAPP_DESTINO", ""), texto)
+        cli = cliente_do_ambiente()
+        cli.enviar_texto(os.getenv("WHATSAPP_DESTINO", ""), texto)
+        time.sleep(1.5)
+        cli.enviar_texto(os.getenv("WHATSAPP_DESTINO", ""), boletim)
     else:
-        print(texto)
+        print(texto + "\n\n" + boletim)
 
 
 def relatorio(enviar: bool = True):

@@ -33,3 +33,4 @@ class Decisao:
     pacote: int | None = None             # nº de volumes, quando é um pacote/kit
     preco_volume: float | None = None     # preço típico de 1 volume usado na estimativa
     so_menor_preco: bool = False          # só alerta se for o menor preço já visto
+    lojas_com_estoque: int | None = None  # em quantas lojas o item estava disponível nesta varredura

@@ -691,7 +691,7 @@ def test_resumo_do_dia(tmp_path):
     assert "3 ofertas enviadas hoje · 812 anúncios conferidos em 9 lojas" in txt
     assert txt.index("Invencível") < txt.index("PS5")                      # maior desconto primeiro
     assert "*R$ 35,00* *42% OFF*" in txt                                    # último preço do dia
-    assert "⭐ *Raros e monitorados encontrados*\n• Spawn Origens 10" in txt
+    assert "⭐ *Raros e difíceis de achar*\n• Spawn Origens 10" in txt
     assert "👥 *Por pessoa:* Bruno 2 · Ivan 1 · Thiago 1" in txt
     assert "Dia tranquilo" in resumo_do_dia("27/10", [], 500, 8)
 
@@ -763,6 +763,9 @@ def test_lojas_novas_configuradas(tmp_path, monkeypatch):
     assert isinstance(lojas["Taverna do Rei"], ShopifyLoja)
     assert type(lojas["Mundos Infinitos"]) is HtmlLoja
     assert lojas["Capitão Onigiri"].busca == "/?s={q}&post_type=product"
+    from stores.plataformas import VtexLoja
+    assert isinstance(lojas["Livrarias Curitiba"], VtexLoja) and "Leitura" in lojas
+    assert lojas["Mirane Comics"].plataforma == "nuvemshop" and lojas["Mirane Comics"].busca == "/search/?q={q}"
 
 
 def test_mundos_infinitos_busca():
@@ -779,3 +782,104 @@ def test_mundos_infinitos_busca():
     assert [o.url for o in achados] == [
         "https://mundosinfinitos.com.br/geek/produto/Comics-Marvel-O-Incrivel-Hulk-Por-Peter-David-Vol-3-Omnibus-162040.aspx"]
     assert "busca.aspx?t=hulk+omnibus" in f.pedidos[0]
+
+
+
+def test_nuvemshop_estoque_pelas_variantes():
+    from stores.plataformas import HtmlLoja
+    pagina = """<html><body><h1>Absolute Batman 07</h1>
+    <div class="js-product-container" data-variants="[{&quot;available&quot;:true,&quot;price_number&quot;:39.9,
+    &quot;compare_at_price_number&quot;:49.9}]"><span class="js-price-display">R$ 39,90</span>
+    <input type="submit" class="js-addtocart" value="Comprar"></div></body></html>"""
+    f = _FetcherFalso({"/produtos/absolute-batman-07": pagina})
+    loja = HtmlLoja(f, {"nome": "Mirane Comics", "base": "https://miranecomics.com.br"}, "nuvemshop")
+    o = loja.validar(Oferta("Mirane Comics", "x", "https://miranecomics.com.br/produtos/absolute-batman-07-63iu6/", 0))
+    assert o.disponivel and o.preco == 39.9 and o.preco_lista == 49.9
+    esgotado = pagina.replace("&quot;available&quot;:true", "&quot;available&quot;:false")
+    f2 = _FetcherFalso({"/produtos/absolute-batman-07": esgotado})
+    o2 = HtmlLoja(f2, {"nome": "Mirane Comics", "base": "https://miranecomics.com.br"}, "nuvemshop").validar(
+        Oferta("Mirane Comics", "x", "https://miranecomics.com.br/produtos/absolute-batman-07-63iu6/", 0))
+    assert not o2.disponivel
+
+
+
+# ---------------- Difícil de achar x fácil de achar
+def _varredura_fake(tmp_path, monkeypatch, ofertas_por_loja):
+    """ofertas_por_loja: {loja: [(titulo, preco, preco_lista)]}. Devolve os textos enviados."""
+    import main, shutil, stores, whatsapp
+
+    class F:
+        def fechar(self): pass
+
+    def loja(nome, itens):
+        class L:
+            oficial, f, dominio = False, F(), ""
+            categorias, categoria_atual = ["livros"], "livros"
+            def buscar(self, termo):
+                return [Oferta(nome, t, f"https://{nome}/{i}", p, preco_lista=pl, extra={})
+                        for i, (t, p, pl) in enumerate(itens)]
+            def validar(self, o):
+                o.disponivel, o.motivo_estoque = True, "ok"
+                return o
+        l = L(); l.nome = nome; return l
+
+    if not (tmp_path / "config").exists():
+        shutil.copytree(RAIZ / "config", tmp_path / "config"); (tmp_path / "data").mkdir()
+    monkeypatch.setattr(main, "RAIZ", tmp_path)
+    monkeypatch.setattr(stores, "montar_lojas", lambda p: [loja(n, i) for n, i in ofertas_por_loja.items()])
+    enviados = []
+
+    class Cli:
+        def enviar_alerta(self, d, c, texto): enviados.append(texto); return True
+    monkeypatch.setattr(whatsapp, "cliente_do_ambiente", lambda: Cli())
+    monkeypatch.setattr(main.time, "sleep", lambda s: None)
+    main.varredura(True)
+    return enviados
+
+
+def test_dificil_de_achar_avisa_sem_desconto(tmp_path, monkeypatch):
+    env = _varredura_fake(tmp_path, monkeypatch, {
+        "Mirane": [("Coringa: O Mundo", 69.9, 69.9)],
+        "Amora": [("Coringa: O Mundo", 72.0, 72.0)],
+    })
+    assert len(env) == 1
+    assert "Difícil de achar (só em 2 lojas)" in env[0] and "*R$ 69,90*" in env[0]
+    assert "🛍️ *Também em:* Amora R$ 72,00" in env[0]
+
+
+def test_facil_de_achar_sem_desconto_nao_avisa(tmp_path, monkeypatch):
+    env = _varredura_fake(tmp_path, monkeypatch, {
+        "A": [("Coringa: O Mundo", 69.9, 69.9)], "B": [("Coringa: O Mundo", 70.0, 70.0)],
+        "C": [("Coringa: O Mundo", 71.0, 71.0)],
+    })
+    assert env == []
+
+
+def test_facil_de_achar_com_desconto_manda_a_melhor(tmp_path, monkeypatch):
+    env = _varredura_fake(tmp_path, monkeypatch, {
+        "A": [("Coringa: O Mundo", 69.9, 69.9)], "B": [("Coringa: O Mundo", 49.9, 69.9)],
+        "C": [("Coringa: O Mundo", 52.0, 69.9)],
+    })
+    assert len(env) == 1 and "🏪 *Loja:* B" in env[0] and "29% OFF" in env[0]
+    assert "Difícil" not in env[0]
+
+
+
+def test_boletim_das_lojas(tmp_path):
+    from datetime import datetime
+    from db import Banco
+    from mensagem import boletim_lojas
+    b = Banco(tmp_path / "r.db")
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    b.diagnostico("Comix", 60, 300, 0, 50, 40, 240)
+    b.diagnostico("Amora", 60, 0, 0, 0, 0, 90)
+    b.diagnostico("Amazon", 60, 200, 0, 100, 30, 480)
+    b.diagnostico("Rika", 60, 30, 0, 10, 1, 60)
+    for i in range(60):
+        b.historico("Amazon", "x", f"u{i}", 10, 0, "Amazon bloqueou ou falhou (HTTP 200)")
+    b.registrar_alerta("https://c/1", 30, "B", "Frieren 5", "Comix", 30.0, "Bruno")
+    txt = boletim_lojas("27/10", b.saude_lojas(hoje), ["Comix", "Amora", "Amazon", "Rika", "Leitura"])
+    assert "✅ *Rendendo ofertas*\n• Comix: 1 oferta enviada, 40 itens com estoque, 4 min por varredura" in txt
+    assert "🟢 *Funcionando, sem oferta hoje*\n• Rika: 1 item com estoque" in txt
+    assert "⚠️" in txt and "• Amazon: 60 de 100 páginas bloqueadas" in txt
+    assert "• Amora: 60 buscas sem nenhum resultado" in txt and "• Leitura: não rodou hoje" in txt

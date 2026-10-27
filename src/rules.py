@@ -135,6 +135,8 @@ class Catalogo:
         cfg = dados.get("config", {})
         self.desconto_minimo = float(cfg.get("desconto_minimo", 25))
         self.margem_lista = float(cfg.get("margem_preco_lista", 1.05))
+        # item de promoção achado em até N lojas = difícil de achar: avisa mesmo sem desconto (0 desliga)
+        self.escasso_max_lojas = int(cfg.get("escasso_max_lojas", 2))
         self.excluir_global = list(cfg.get("excluir_titulos", []))
         radares = dados.get("radares", [])
         listas, self.nome = dados, None
@@ -250,7 +252,9 @@ def resumo_perfil(cat: Catalogo, nomes_radares: dict | None = None) -> str:
         "",
         f"⭐ *Raros / monitorados*\n{linhas(cat.raros)}",
         "",
-        f"🏷️ *Promoções ({cat.desconto_minimo:.0f}% OFF ou mais)*\n{linhas(cat.promocoes)}",
+        f"🏷️ *Promoções ({cat.desconto_minimo:.0f}% OFF ou mais"
+        + (f"; em até {cat.escasso_max_lojas} lojas avisa mesmo sem desconto" if cat.escasso_max_lojas else "")
+        + f")*\n{linhas(cat.promocoes)}",
         "",
         f"📡 *Radares:* {radares}",
         "",

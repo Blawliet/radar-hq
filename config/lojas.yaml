@@ -6,8 +6,10 @@
 #   amazon        coletor próprio
 #   mercadolivre  coletor próprio (API com token ou HTML)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
+#   vtex          API de catálogo da VTEX (Livrarias Curitiba; Rika e Ri Happy são detectadas)
 #   woocommerce   Store API do WordPress (Monstra, Capitão Onigiri, Amora Bookstore)
 #   shopify       API pública da Shopify (Taverna do Rei)
+#   nuvemshop     busca da loja + estoque das variantes na página (Mirane Comics)
 #   html          busca HTML genérica (use "busca" e "padrao_produto")
 # categorias:     o que buscar nesta loja: [livros] (padrão), [games] ou [livros, games]
 # oficial: true   loja da editora; preço cheio dela vira referência de "preço de capa"
@@ -36,11 +38,15 @@ lojas:
     adaptador: amazon
     max_resultados: 8
 
+  # desativado: bloqueia acessos vindos da nuvem (0 ofertas em todas as varreduras)
   - nome: Mercado Livre
+    ativo: false
     adaptador: mercadolivre
     max_resultados: 15
 
+  # desativado: bloqueia acessos vindos da nuvem (nenhum resultado em todas as varreduras)
   - nome: Magalu
+    ativo: false
     adaptador: html
     base: https://www.magazineluiza.com.br
     busca: "/busca/{q_path}/"
@@ -104,6 +110,22 @@ lojas:
     base: https://mundosinfinitos.com.br
     busca: "/geek/solucoes/busca.aspx?t={q}"
     padrao_produto: "/geek/produto/"
+
+  - nome: Livrarias Curitiba
+    delay: 1.5
+    adaptador: vtex
+    base: https://www.livrariascuritiba.com.br
+
+  # plataforma não identificada daqui: o radar detecta sozinho na primeira execução
+  # (o resultado fica em data/plataformas.json)
+  - nome: Leitura
+    adaptador: auto
+    base: https://leitura.com.br
+
+  - nome: Mirane Comics
+    delay: 1.5
+    adaptador: nuvemshop
+    base: https://miranecomics.com.br
 
   - nome: KaBuM!
     adaptador: html
