@@ -66,6 +66,7 @@ jobs:
         run: python -m pytest -q
 
       - name: Rodar o radar
+        timeout-minutes: 35
         run: python src/main.py --$MODO
 
       # Guarda no próprio repositório o que já foi alertado e os preços de capa,
