@@ -5,10 +5,11 @@ name: Radar HQ
 
 on:
   schedule:
-    # horários em UTC (Brasília = UTC-3)
-    - cron: "30 8-22/2 * * *"   # 05h30, 07h30, 09h30, 11h30, 13h30, 15h30, 17h30, 19h30
-    - cron: "30 0 * * *"        # 21h30
-    - cron: "30 2 * * *"        # 23h30: varredura + resumão do dia
+    # Horários em UTC (Brasília = UTC-3). O agendador do GitHub costuma começar
+    # ~40 min atrasado, então pedimos 40 min antes para cair perto do horário certo.
+    - cron: "50 7-21/2 * * *"   # alvo 05h30, 07h30, 09h30, 11h30, 13h30, 15h30, 17h30, 19h30
+    - cron: "50 23 * * *"       # alvo 21h30
+    - cron: "50 1 * * *"        # alvo 23h30: varredura + resumão do dia
   # quando alguém muda a lista de uma pessoa, o bot manda as listas atualizadas no grupo
   push:
     paths: ["config/pessoas/**"]
@@ -38,7 +39,7 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       USE_PLAYWRIGHT: "true"
       DELAY_SEGUNDOS: "3"
-      MODO: ${{ github.event_name == 'push' && 'lista' || github.event.schedule == '30 2 * * *' && 'resumo' || github.event.inputs.modo || 'agora' }}
+      MODO: ${{ github.event_name == 'push' && 'lista' || github.event.schedule == '50 1 * * *' && 'resumo' || github.event.inputs.modo || 'agora' }}
     steps:
       - uses: actions/checkout@v4
 
