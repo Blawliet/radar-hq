@@ -36,7 +36,9 @@ class Banco:
                 desconto REAL, pessoas TEXT, recorde INTEGER)""")
             self.con.execute("""CREATE TABLE IF NOT EXISTS diagnostico (
                 quando TEXT, loja TEXT, buscas INTEGER, resultados INTEGER, erros INTEGER,
-                validadas INTEGER, com_estoque INTEGER, segundos REAL)""")
+                validadas INTEGER, com_estoque INTEGER, segundos REAL, parada TEXT)""")
+            if "parada" not in {r[1] for r in self.con.execute("PRAGMA table_info(diagnostico)")}:
+                self.con.execute("ALTER TABLE diagnostico ADD COLUMN parada TEXT")
             # mantém o arquivo pequeno (ele é salvo no repositório a cada janela)
             limite = (datetime.now() - timedelta(days=10)).isoformat(timespec="seconds")
             self.con.execute("DELETE FROM historico WHERE quando < ?", (limite,))
@@ -144,11 +146,11 @@ class Banco:
             return round(statistics.median(vistos), 2)
         return None
 
-    def diagnostico(self, loja, buscas, resultados, erros, validadas, com_estoque, segundos):
+    def diagnostico(self, loja, buscas, resultados, erros, validadas, com_estoque, segundos, parada=""):
         with self.lock, self.con:
-            self.con.execute("INSERT INTO diagnostico VALUES (?,?,?,?,?,?,?,?)",
+            self.con.execute("INSERT INTO diagnostico VALUES (?,?,?,?,?,?,?,?,?)",
                              (datetime.now().isoformat(timespec="seconds"), loja, buscas, resultados,
-                              erros, validadas, com_estoque, round(segundos, 1)))
+                              erros, validadas, com_estoque, round(segundos, 1), parada or None))
 
     def saude_lojas(self, dia: str) -> dict[str, dict]:
         """Números do dia por loja, para o boletim do resumão. dia = 'AAAA-MM-DD'."""
@@ -156,12 +158,13 @@ class Banco:
         semana = (date.fromisoformat(dia) - td(days=6)).isoformat()
         out: dict[str, dict] = {}
         with self.lock:
-            for loja, runs, buscas, res, erros, valid, estoque, seg in self.con.execute(
+            for loja, runs, buscas, res, erros, valid, estoque, seg, paradas, parada in self.con.execute(
                     "SELECT loja, COUNT(*), SUM(buscas), SUM(resultados), SUM(erros), SUM(validadas), "
-                    "SUM(com_estoque), AVG(segundos) FROM diagnostico WHERE substr(quando,1,10)=? "
-                    "GROUP BY loja", (dia,)):
+                    "SUM(com_estoque), AVG(segundos), SUM(CASE WHEN parada IS NOT NULL THEN 1 ELSE 0 END), "
+                    "MAX(parada) FROM diagnostico WHERE substr(quando,1,10)=? GROUP BY loja", (dia,)):
                 out[loja] = dict(varreduras=runs, buscas=buscas, resultados=res, erros=erros,
-                                 conferidas=valid, com_estoque=estoque, segundos=seg or 0)
+                                 conferidas=valid, com_estoque=estoque, segundos=seg or 0,
+                                 paradas=paradas, parada=parada)
             for loja, total, ok, bloq in self.con.execute(
                     "SELECT loja, COUNT(*), SUM(disponivel), SUM(CASE WHEN lower(motivo) LIKE '%bloque%' "
                     "OR lower(motivo) LIKE '%anti-rob%' THEN 1 ELSE 0 END) FROM historico "

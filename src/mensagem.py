@@ -163,6 +163,8 @@ def boletim_lojas(dia_br: str, saude: dict[str, dict], ativas: list[str]) -> str
         estoque, conferidas = s.get("com_estoque") or 0, s.get("conferidas") or 0
         bloq, buscas, res = s.get("bloqueadas", 0), s.get("buscas"), s.get("resultados")
         tempo = f", {s['segundos'] / 60:.0f} min por varredura" if s.get("segundos") else ""
+        if s.get("paradas"):
+            tempo += f" ⏱️ interrompida {s['paradas']}x ({s['parada']})"
         if not s:
             sem_retorno.append(f"• {loja}: não rodou hoje")
         elif alertas:

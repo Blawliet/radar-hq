@@ -883,3 +883,42 @@ def test_boletim_das_lojas(tmp_path):
     assert "🟢 *Funcionando, sem oferta hoje*\n• Rika: 1 item com estoque" in txt
     assert "⚠️" in txt and "• Amazon: 60 de 100 páginas bloqueadas" in txt
     assert "• Amora: 60 buscas sem nenhum resultado" in txt and "• Leitura: não rodou hoje" in txt
+
+
+
+# ---------------- Travas contra loja lenta ou fora do ar
+def test_loja_que_nao_responde_e_abandonada(tmp_path, monkeypatch):
+    import httpx, main
+    from db import Banco
+    from rules import Grupo
+    from stores.base import Fetcher
+    from stores.plataformas import HtmlLoja
+    chamadas = []
+
+    def trava(self, url, headers=None):
+        chamadas.append(url)
+        raise httpx.ReadTimeout("sem resposta")
+    monkeypatch.setattr(httpx.Client, "get", trava)
+    f = Fetcher(delay=0)
+    loja = HtmlLoja(f, {"nome": "Lenta", "base": "https://lenta.com.br"}, "html")
+    achados = main.varrer_loja(loja, Grupo(RAIZ / "config"), Banco(tmp_path / "r.db"))
+    assert achados == [] and len(chamadas) == main.MAX_FALHAS_SEGUIDAS     # não insiste nas 60 buscas
+    linha = Banco(tmp_path / "r.db").con.execute("SELECT parada FROM diagnostico").fetchone()
+    assert linha[0] == "loja não responde"
+
+
+def test_loja_respeita_tempo_maximo(tmp_path, monkeypatch):
+    import main
+    from db import Banco
+    from rules import Grupo
+
+    class F:
+        falhas_seguidas = 0
+        def fechar(self): pass
+
+    class Lerda:
+        nome, oficial, f, dominio, cfg = "Lerda", False, F(), "", {"tempo_max_min": 0}
+        categorias, categoria_atual = ["livros"], "livros"
+        def buscar(self, termo): raise AssertionError("não devia buscar depois do prazo")
+    main.varrer_loja(Lerda(), Grupo(RAIZ / "config"), Banco(tmp_path / "r.db"))
+    assert Banco(tmp_path / "r.db").con.execute("SELECT parada FROM diagnostico").fetchone()[0] == "tempo esgotado"

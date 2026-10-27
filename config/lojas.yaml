@@ -16,6 +16,7 @@
 # playwright: true  abre num navegador real (lojas com muito JavaScript)
 # delay:          pausa entre acessos à mesma loja, em segundos (padrão 3; APIs aguentam 1,5)
 # validar_sem_navegador: true  confere a página do produto sem navegador quando possível
+# tempo_max_min:  minutos máximos para a loja em cada varredura (padrão 15)
 #
 # Para conferir se cada loja responde:  python verificar_lojas.py
 # =====================================================================
@@ -64,7 +65,6 @@ lojas:
     busca: "/busca?q={q}"
     padrao_produto: "/livros?/"
     playwright: true
-    validar_sem_navegador: true
     max_resultados: 8
 
   - nome: Rika Comic Shop

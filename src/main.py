@@ -37,6 +37,8 @@ log = logging.getLogger("radar")
 
 JANELAS = [(5, 30), (7, 30), (9, 30), (11, 30), (13, 30), (15, 30), (17, 30), (19, 30), (21, 30), (23, 30)]
 JANELA_RESUMO = (23, 30)
+TEMPO_MAX_LOJA_MIN = float(os.getenv("TEMPO_MAX_LOJA_MIN", "15"))   # cada loja para depois disso
+MAX_FALHAS_SEGUIDAS = 6                                             # loja que não responde é abandonada
 _rodando = threading.Lock()
 _vistos_lock = threading.Lock()
 VISTOS_NA_VARREDURA: list[dict] = []     # tudo que casou com alguma lista e tinha estoque (para o relatório)
@@ -132,6 +134,19 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
     pessoa são aplicadas depois, com todas as lojas já varridas."""
     achados, vistos = [], set()
     t0, n_buscas, n_result, n_erros, n_valid = time.time(), 0, 0, 0, 0
+    # cada loja tem um tempo máximo; uma loja lenta ou travada não segura as outras
+    prazo = t0 + float(getattr(loja, "cfg", {}).get("tempo_max_min", TEMPO_MAX_LOJA_MIN)) * 60
+    try:
+        loja.f.prazo = prazo
+    except AttributeError:
+        pass
+
+    def estourou():
+        return time.time() > prazo
+
+    def travada():
+        return getattr(loja.f, "falhas_seguidas", 0) >= MAX_FALHAS_SEGUIDAS
+    parada = ""
     # páginas fixas (ex.: um produto específico) primeiro, depois as buscas
     fixas = [Oferta(loja.nome, nome, url, 0, extra={"fixa": True})
              for url, nome in grupo.urls_fixas() if loja.dominio and loja.dominio in url]
@@ -140,6 +155,12 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
         if categoria in loja.categorias:
             lotes.append((categoria, termo))
     for categoria, item in lotes:
+        if estourou():
+            parada = "tempo esgotado"
+            break
+        if travada():
+            parada = "loja não responde"
+            break
         if categoria is None:
             candidatos = item
         else:
@@ -153,6 +174,8 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
                 continue
             n_result += len(candidatos)
         for o in candidatos:
+            if estourou() or travada():
+                break
             if o.url in vistos:
                 continue
             vistos.add(o.url)
@@ -178,9 +201,14 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
             registrar_visto(o, grupo)
             o.extra["oficial"] = loja.oficial
             achados.append(o)
-    log.info("%s: %d buscas, %d resultados, %d páginas conferidas, %d com estoque (%.0fs).",
-             loja.nome, n_buscas, n_result, n_valid, len(achados), time.time() - t0)
-    banco.diagnostico(loja.nome, n_buscas, n_result, n_erros, n_valid, len(achados), time.time() - t0)
+    if not parada and travada():
+        parada = "loja não responde"
+    elif not parada and estourou():
+        parada = "tempo esgotado"
+    log.info("%s: %d buscas, %d resultados, %d páginas conferidas, %d com estoque (%.0fs)%s.",
+             loja.nome, n_buscas, n_result, n_valid, len(achados), time.time() - t0,
+             f" | PAROU: {parada}" if parada else "")
+    banco.diagnostico(loja.nome, n_buscas, n_result, n_erros, n_valid, len(achados), time.time() - t0, parada)
     return achados
 
 

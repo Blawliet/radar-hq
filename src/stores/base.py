@@ -40,7 +40,7 @@ class Fetcher:
         self._lock = threading.Lock()
         self.http = httpx.Client(
             follow_redirects=True,
-            timeout=25,
+            timeout=httpx.Timeout(15, connect=8),
             headers={
                 "User-Agent": random.choice(USER_AGENTS),
                 "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.6",
@@ -49,6 +49,11 @@ class Fetcher:
         )
         self._pw = None
         self._browser = None
+        self.falhas_seguidas = 0      # timeouts/erros em sequência (a loja pode estar travando)
+        self.prazo: float | None = None   # horário limite para esta loja (time.time())
+
+    def estourou(self) -> bool:
+        return self.prazo is not None and time.time() > self.prazo
 
     def _esperar(self, url: str) -> None:
         host = urlparse(url).netloc
@@ -60,24 +65,38 @@ class Fetcher:
 
     def get(self, url: str, json: bool = False, headers: dict | None = None, tentativas: int = 2):
         for i in range(tentativas):
+            if self.estourou():
+                break
             self._esperar(url)
             try:
                 r = self.http.get(url, headers=headers)
+                self.falhas_seguidas = 0
                 if r.status_code in (429, 503) and i + 1 < tentativas:
-                    time.sleep(10 * (i + 1))
+                    time.sleep(5)
                     continue
                 if json:
-                    return r.status_code, (r.json() if r.status_code == 200 else None)
+                    try:
+                        return r.status_code, (r.json() if r.status_code == 200 else None)
+                    except ValueError:
+                        return r.status_code, None
                 return Resposta(r.status_code, str(r.url), r.text)
-            except (httpx.HTTPError, ValueError) as e:
+            except httpx.TimeoutException as e:
+                # loja que não responde: não insiste (era isso que travava a varredura)
+                self.falhas_seguidas += 1
+                log.debug("GET %s sem resposta: %s", url, e)
+                break
+            except httpx.HTTPError as e:
+                self.falhas_seguidas += 1
                 log.debug("GET %s falhou: %s", url, e)
-                time.sleep(3)
+                time.sleep(2)
         return (0, None) if json else Resposta(0, url, "")
 
     # ---------- navegador real (para lojas com JavaScript pesado) ----------
     def get_render(self, url: str, esperar_seletor: str | None = None) -> Resposta:
         if os.getenv("USE_PLAYWRIGHT", "true").lower() != "true":
             return self.get(url)
+        if self.estourou():
+            return Resposta(0, url, "")
         try:
             if self._browser is None:
                 from playwright.sync_api import sync_playwright
@@ -89,7 +108,7 @@ class Fetcher:
                 viewport={"width": 1366, "height": 900},
             )
             page = ctx.new_page()
-            resp = page.goto(url, wait_until="domcontentloaded", timeout=45000)
+            resp = page.goto(url, wait_until="domcontentloaded", timeout=30000)
             if esperar_seletor:
                 try:
                     page.wait_for_selector(esperar_seletor, timeout=8000)
@@ -98,10 +117,16 @@ class Fetcher:
             page.wait_for_timeout(1500)
             out = Resposta(resp.status if resp else 0, page.url, page.content(), via="browser")
             ctx.close()
+            self.falhas_seguidas = 0
             return out
         except Exception as e:
-            log.warning("Playwright falhou em %s (%s), tentando HTTP simples.", url, e)
-            return self.get(url)
+            self.falhas_seguidas += 1
+            log.warning("Playwright falhou em %s (%s).", url, e)
+            try:
+                ctx.close()
+            except Exception:
+                pass
+            return Resposta(0, url, "")
 
     def fechar(self):
         if self._browser:
