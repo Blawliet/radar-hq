@@ -5,21 +5,19 @@ name: Radar HQ
 
 on:
   schedule:
-    - cron: "30 8 * * *"    # 05h30 Brasília
-    - cron: "0 12 * * *"    # 09h00
-    - cron: "0 15 * * *"    # 12h00
-    - cron: "0 18 * * *"    # 15h00
-    - cron: "0 22 * * *"    # 19h00
-    - cron: "30 2 * * *"    # 23h30
+    # horários em UTC (Brasília = UTC-3)
+    - cron: "30 8-22/2 * * *"   # 05h30, 07h30, 09h30, 11h30, 13h30, 15h30, 17h30, 19h30
+    - cron: "30 0 * * *"        # 21h30
+    - cron: "30 2 * * *"        # 23h30: varredura + resumão do dia
   # quando alguém muda a lista de uma pessoa, o bot manda as listas atualizadas no grupo
   push:
     paths: ["config/pessoas/**"]
   workflow_dispatch:
     inputs:
       modo:
-        description: "teste = mensagem de exemplo | lista = manda o que cada um busca | seco = varre sem enviar | agora = varre e envia"
+        description: "teste = exemplo | lista = o que cada um busca | relatorio = fácil ou difícil de achar | seco = varre sem enviar | agora = varre e envia"
         type: choice
-        options: [teste, lista, seco, agora]
+        options: [teste, lista, relatorio, resumo, seco, agora]
         default: teste
 
 permissions:
@@ -40,7 +38,7 @@ jobs:
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       USE_PLAYWRIGHT: "true"
       DELAY_SEGUNDOS: "3"
-      MODO: ${{ github.event_name == 'push' && 'lista' || github.event.inputs.modo || 'agora' }}
+      MODO: ${{ github.event_name == 'push' && 'lista' || github.event.schedule == '30 2 * * *' && 'resumo' || github.event.inputs.modo || 'agora' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,14 +51,14 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Cache do navegador
-        if: env.MODO == 'seco' || env.MODO == 'agora'
+        if: env.MODO != 'teste' && env.MODO != 'lista'
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: pw-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
 
       - name: Instalar Chromium
-        if: env.MODO == 'seco' || env.MODO == 'agora'
+        if: env.MODO != 'teste' && env.MODO != 'lista'
         run: python -m playwright install --with-deps chromium
 
       - name: Testes das regras
@@ -78,4 +76,5 @@ jobs:
           git config user.email "radar-bot@users.noreply.github.com"
           git add -A data/ 2>/dev/null || true
           git diff --cached --quiet || git commit -m "radar: estado $(date +'%d/%m %H:%M')"
+          git pull --rebase -q || true
           git push || echo "nada para enviar"
