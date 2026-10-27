@@ -78,7 +78,12 @@ lojas:
     busca: "/busca/{q_slug}"
     padrao_produto: "/produto/\\d+"
     playwright: true
+    seletor_espera: "#blocoValores"
     categorias: [games]
+    # o botão "Comprar" da KaBuM! nasce desativado até a página carregar inteira;
+    # "Restam N unid." confirma o estoque e o preço válido é o do PIX
+    estoque_ok_regex: 'restam\s+\d+\s+unid'
+    preco_regex: 'r\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})[^$]{0,40}?vista no pix'
 
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam

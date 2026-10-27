@@ -564,12 +564,13 @@ def test_lista_thiago(titulo, alerta):
 @pytest.mark.parametrize("titulo,alerta", [
     ("Console PlayStation 5 Sony Edição Digital Marvel's Wolverine Pacote de Edição Limitada, 825 GB, Amarelo", True),
     ("PlayStation 5 Edição Digital - Pacote Marvel's Wolverine Limited Edition Bundle", True),
+    ("Console PS5 Slim Edição Digital Marvel's Wolverine + Controle DualSense Extra", False),
     ("Marvel's Wolverine - Edição Standard - PlayStation 5", False),
     ("Controle DualSense Marvel's Wolverine Edição Limitada", False),
     ("Tampas do Console PS5 Wolverine", False),
     ("Wolverine Omnibus Vol. 1", False),
-    ("Console PS5 Slim Edição Digital Marvel's Wolverine + Controle DualSense Extra", True),
-    ("Kit Console PlayStation 5 Pacote Wolverine com 2 Controles", True),
+    ("Console PS5 Slim Edição Limitada Marvel's Wolverine + Controle DualSense Extra", True),
+    ("Kit Console PlayStation 5 Pacote Wolverine Edição Limitada com 2 Controles", True),
     ("Kit 2 Controles DualSense Wolverine para PS5 Slim", False),
     ("DualSense Wolverine Battle Yellow para console PS5", False),
 ])
@@ -699,3 +700,53 @@ def test_telegram_corta_mensagem_grande():
     from whatsapp import TelegramClient
     p = TelegramClient("t", "1").payload("linha\n" * 2000)
     assert len(p["text"]) < 4096 and p["text"].endswith("(...)")
+
+
+# ---------------- KaBuM! e PS5 edição limitada
+def test_kabum_sinais_da_loja():
+    import yaml
+    from stores.plataformas import HtmlLoja
+    cfg = [c for c in yaml.safe_load((RAIZ / "config" / "lojas.yaml").read_text())["lojas"] if c["nome"] == "KaBuM!"][0]
+    pagina = """<html><head><script type="application/ld+json">{"@type":"Product","name":"Console PlayStation 5 Wolverine","offers":{"price":"4742.07","availability":"https://schema.org/InStock"}}</script></head><body>
+    <h1>Console PlayStation 5 Sony Edição Digital Marvel's Wolverine Pacote de Edição Limitada</h1>
+    <div id="blocoValores"><b>R$ 5.099,00</b> <h4>R$ 4.556,07</h4><span>À vista no PIX com 7% de desconto</span>
+    <span>Restam 7 Unid.</span><button class="sc-buy disabled" disabled>COMPRAR</button></div></body></html>"""
+    f = _FetcherFalso({"/produto/1065184": pagina})
+    loja = HtmlLoja(f, {**cfg, "playwright": False}, "html")
+    o = loja.validar(Oferta("KaBuM!", "x", "https://www.kabum.com.br/produto/1065184/ps5", 0))
+    assert o.disponivel and o.preco == 4556.07 and "restam 7 unid" in o.motivo_estoque
+    esgotado = pagina.replace("InStock", "OutOfStock")
+    f2 = _FetcherFalso({"/produto/1065184": esgotado})
+    o2 = HtmlLoja(f2, {**cfg, "playwright": False}, "html").validar(
+        Oferta("KaBuM!", "x", "https://www.kabum.com.br/produto/1065184/ps5", 0))
+    assert not o2.disponivel
+
+
+@pytest.mark.parametrize("titulo,alerta", [
+    ("PlayStation®5 Edição Digital – Marvel's Wolverine Pacote de Edição Limitada Amarelo", True),
+    ("PlayStation 5 Digital Edition – Marvel’s Wolverine Battle Yellow Limited Edition Bundle", True),
+    ("Console Sony PlayStation 5, Com Leitor de Discos + Jogo Marvel's Wolverine, PS5", False),
+    ("Marvel's Wolverine - Edição Limitada - PlayStation 5", True),
+])
+def test_ps5_so_edicao_limitada(titulo, alerta):
+    d = avaliar(of(titulo, preco=4556.07, lista=5099.0), _perfil("ivan"))
+    assert d.alertar is alerta, (titulo, d.motivo)
+
+
+
+def test_woo_confia_na_api_de_estoque():
+    from stores.plataformas import WooLoja
+    pagina = """<html><body><div class="product-summary"><h1>Frieren Vol. 13</h1>
+    <span class="price">R$ 39,90</span><div class="widget stock-filter">Esgotado</div>
+    <button class="single_add_to_cart_button">Comprar</button></div></body></html>"""
+    f = _FetcherFalso({"/produto/frieren": pagina})
+    loja = WooLoja(f, {"nome": "Monstra", "base": "https://lojamonstra.com.br"})
+    o = loja.validar(Oferta("Monstra", "Frieren 13", "https://lojamonstra.com.br/produto/frieren-13/", 39.9,
+                            extra={"api": "woo"}))
+    assert o.disponivel and "Woo API" in o.motivo_estoque
+    fora = pagina.replace("<body>", """<body><script type="application/ld+json">{"@type":"Product",
+    "offers":{"price":"39.90","availability":"https://schema.org/OutOfStock"}}</script>""")
+    f2 = _FetcherFalso({"/produto/frieren": fora})
+    o2 = WooLoja(f2, {"nome": "Monstra", "base": "https://lojamonstra.com.br"}).validar(
+        Oferta("Monstra", "Frieren 13", "https://lojamonstra.com.br/produto/frieren-13/", 39.9, extra={"api": "woo"}))
+    assert not o2.disponivel

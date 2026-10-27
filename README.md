@@ -1,196 +1,217 @@
 # Radar HQ
 
-Monitor de ofertas de mangás e quadrinhos com alertas no celular, 100% gratuito.
+Monitor de ofertas de mangás, HQs e games que avisa no **Telegram**. Roda sozinho no GitHub Actions, sem PC ligado e sem custo.
 
-Dois jeitos de rodar:
-
-* **Telegram sem PC (recomendado):** GitHub Actions + bot do Telegram. Nada fica ligado na sua casa, sem chip extra, sem custo. Passo a passo em `GUIA_SEM_PC.md`.
-* **WhatsApp self-hosted:** Evolution API ou Baileys num PC/servidor ligado 24h, com um número remetente separado. Descrito abaixo.
-
-> A API oficial do WhatsApp (Meta) com número de teste não funciona para destinatários no Brasil: a Meta bloqueia mensagens de números estrangeiros para o país (erro 130497).
+Cada pessoa do grupo tem a própria lista. O radar varre as lojas a cada 2 horas, confere se o produto tem estoque de verdade e só avisa quem está procurando aquele item.
 
 ```
-                ┌────────────── docker compose ──────────────┐
-  6 janelas/dia │  radar (Python)                            │
-  05:30 09:00   │   ├─ coletores por loja (paralelo)         │
-  12:00 15:00 ──┤   ├─ validação de estoque na página        │
-  19:00 23:30   │   ├─ regras A / B / C + Radar Omnibus      │
-                │   ├─ SQLite (anti-spam + preço de capa)    │
-                │   └─ cliente HTTP ──► Evolution API ───────┼──► seu WhatsApp
-                │                       (Postgres + Redis)   │
-                │   webhook opcional ◄── grupos de ofertas   │
-                └────────────────────────────────────────────┘
+GitHub Actions (a cada 2h) ──► varre as lojas ──► confere estoque ──► regras de cada pessoa ──► grupo no Telegram
+        grátis, na nuvem          12 lojas          na página           Bruno, Thiago, Ivan        "BASTA LER"
 ```
 
-## Estrutura
+---
+
+## Como chega no grupo
+
+```
+🚨 NOVA OFERTA ENCONTRADA!
+👥 Para: Bruno e Thiago
+
+📖 Título: Spawn: Origens Vol. 14
+📦 Formato: Encadernado
+🏪 Loja: Amazon Brasil
+⚡ Status: Novo Lacrado
+
+🏷️ Preço de Capa: R$ 59,90
+💰 Você Paga: R$ 39,50
+📉 Desconto: 34% OFF (Economia de R$ 20,40)
+🏆 MENOR PREÇO JÁ VISTO PELO RADAR! (antes: R$ 41,00, Comix, 22/10/2026)
+🛍️ Também em: Comix R$ 41,00 · Comic Boom R$ 44,90
+
+🔗 Link direto de compra:
+https://www.amazon.com.br/dp/...
+                                        [ 🛒 Comprar agora ]
+```
+
+* **Para:** quem tem esse item na lista.
+* **Menor preço já visto:** o radar guarda o histórico de preço de cada produto em todas as lojas.
+* **Também em:** o mesmo produto em várias lojas vira um alerta só, com a mais barata em destaque.
+
+---
+
+## Horários
+
+| Quando | O que faz |
+|---|---|
+| 05h30, 07h30, 09h30, 11h30, 13h30, 15h30, 17h30, 19h30, 21h30 | Varredura e alertas |
+| 23h30 | Varredura e **resumão do dia** (maiores descontos, recordes de preço, raros encontrados, total por pessoa) |
+| Quando alguém edita uma lista | O bot manda no grupo as listas atualizadas |
+
+O GitHub pode atrasar alguns minutos em horário de pico.
+
+---
+
+## Estrutura do projeto
 
 ```
 radar-hq/
-├─ docker-compose.yml        Evolution API + Postgres + Redis + monitor
-├─ Dockerfile                imagem do monitor (com Chromium para Playwright)
-├─ .env.example              todas as configurações
-├─ conectar_whatsapp.py      cria a instância e gera o QR Code
-├─ verificar_lojas.py        confere URL e plataforma de cada loja
+├─ .github/workflows/radar.yml   agendamento e modos de execução (GitHub Actions)
 ├─ config/
-│  ├─ catalogo.yaml          Regras A, B, C e Radar Omnibus (edite aqui)
-│  └─ lojas.yaml             lojas monitoradas
+│  ├─ catalogo.yaml              configurações gerais e radares permanentes (omnibus, boxes)
+│  ├─ lojas.yaml                 lojas monitoradas e como cada uma é lida
+│  └─ pessoas/
+│     ├─ bruno.yaml              lista do Bruno
+│     ├─ thiago.yaml             lista do Thiago
+│     └─ ivan.yaml               lista do Ivan
+├─ data/                         memória do radar (salva automaticamente a cada execução)
+│  ├─ radar.db                   alertas enviados, histórico de preços, preços de capa
+│  └─ plataformas.json           plataforma detectada de cada loja
 ├─ src/
-│  ├─ main.py                orquestrador + agendador
-│  ├─ rules.py               motor de regras
-│  ├─ stock.py               validação de estoque no HTML
-│  ├─ mensagem.py            formato obrigatório da mensagem
-│  ├─ whatsapp.py            clientes Evolution e Baileys
-│  ├─ webhook_server.py      escuta grupos de ofertas
-│  ├─ db.py                  SQLite
-│  └─ stores/                coletores (VTEX, Shopify, Woo, Nuvemshop, HTML, Amazon, ML)
-├─ whatsapp-baileys/         alternativa leve sem Docker (Node.js)
-└─ tests/                    55 testes das regras, estoque e mensagem
+│  ├─ main.py                    orquestrador: varredura, resumo, relatório, lista
+│  ├─ rules.py                   regras de cada pessoa (raros, promoções, bloqueios, radares)
+│  ├─ stock.py                   validação de estoque e de edição brasileira
+│  ├─ mensagem.py                formato dos alertas e do resumão
+│  ├─ db.py                      banco SQLite
+│  ├─ texto.py                   leitura de título, volume e tamanho de pacote
+│  ├─ whatsapp.py                envio (Telegram; WhatsApp como alternativa)
+│  └─ stores/                    coletores por loja
+│     ├─ amazon.py               Amazon (livros e games)
+│     ├─ mercadolivre.py         Mercado Livre
+│     ├─ plataformas.py          Magento, WooCommerce, VTEX, Shopify e HTML genérico
+│     └─ base.py                 acesso às páginas (com navegador quando precisa)
+├─ tests/test_regras.py          testes automáticos (rodam antes de cada varredura)
+├─ GUIA_SEM_PC.md                passo a passo de instalação no Telegram + GitHub
+└─ pegar_chat_id.py              ajuda a descobrir o ID do chat no Telegram
 ```
+
+Arquivos do modo WhatsApp self-hosted (opcional, ver no fim): `docker-compose.yml`, `Dockerfile`, `conectar_whatsapp.py`, `whatsapp-baileys/`, `src/webhook_server.py`.
 
 ---
 
-## 1. Antes de começar: duas decisões
+## As listas de cada pessoa
 
-**Onde rodar.** As janelas de 05h30 e 23h30 exigem uma máquina ligada direto.
-* Seu PC, se ele fica ligado 24h.
-* Uma VM gratuita da **Oracle Cloud (Always Free)**: a instância ARM Ampere cabe tudo com folga. Pede cartão só para verificação de identidade.
+Cada arquivo em `config/pessoas/` tem quatro partes:
 
-**Número remetente.** Evolution API e Baileys não são oficiais: o WhatsApp pode banir o número que dispara mensagens, e o risco sobe se ele também ler grupos. Use um **chip secundário** como remetente e receba os alertas no seu número pessoal. Volume baixo (poucas mensagens por dia, sempre para o mesmo contato) é o cenário de menor risco.
-
----
-
-## 2. Opção principal: Evolution API com Docker
-
-```bash
-# 1. Configure
-cp .env.example .env
-#   edite: CANAL=evolution, EVOLUTION_API_KEY, POSTGRES_PASSWORD, WHATSAPP_DESTINO (seu número pessoal)
-
-# 2. Suba os serviços
-docker compose up -d evolution postgres redis
-
-# 3. Conecte o chip remetente
-pip install -r requirements.txt
-python conectar_whatsapp.py
-#   abra data/qrcode.png e escaneie: WhatsApp > Dispositivos conectados > Conectar
-#   ao conectar, chega um "✅ Radar HQ conectado!" no seu número pessoal
-
-# 4. Confira as lojas (algumas URLs estão marcadas como CONFIRA)
-python verificar_lojas.py
-
-# 5. Teste a varredura sem enviar nada
-python src/main.py --seco
-
-# 6. Suba o monitor agendado
-docker compose up -d --build radar
-docker compose logs -f radar
-```
-
-Endpoints da Evolution usados (v2):
-
-| Ação | Método e rota |
+| Parte | Quando alerta |
 |---|---|
-| Criar instância | `POST /instance/create` |
-| QR Code | `GET /instance/connect/{instancia}` |
-| Estado | `GET /instance/connectionState/{instancia}` |
-| Enviar texto | `POST /message/sendText/{instancia}` com `{"number","text"}` |
-| Webhook | `POST /webhook/set/{instancia}` evento `MESSAGES_UPSERT` |
+| `raros` | Em **qualquer preço**, desde que tenha estoque |
+| `promocoes` | Só com **25% OFF ou mais** sobre o preço de capa |
+| `bloqueios` | **Nunca**: o que a pessoa já tem |
+| `radares` | Liga os radares gerais: `radar-omnibus` e `radar-boxes` (qualquer omnibus ou box/coleção com 25% OFF) |
 
-Todas com header `apikey: <EVOLUTION_API_KEY>`. Negrito (`*texto*`), quebras de linha e emojis funcionam direto no campo `text`.
+### Exemplo de item
 
-**Escutar grupos de ofertas:** entre com o chip remetente nos grupos, coloque `WEBHOOK_ENABLED=true` e ajuste `WEBHOOK_PALAVRAS` no `.env`. O monitor registra o webhook sozinho, aplica os bloqueios da Regra C, abre o link e só encaminha se o estoque for confirmado (`WEBHOOK_SO_VALIDADOS=true`).
-
----
-
-## 3. Alternativa leve: Baileys sem Docker
-
-```bash
-cd whatsapp-baileys
-npm install
-BAILEYS_TOKEN=um-token-qualquer node index.js     # QR aparece no terminal
+```yaml
+  - id: dylan-dog-omnibus          # identificador único, sem espaços
+    nome: "Dylan Dog Omnibus"      # como aparece nas listas do grupo
+    termos: [dylan dog, omnibus]   # TODAS essas palavras precisam estar no título
+    volumes: "4,5"                 # quais volumes interessam
+    formato: Omnibus
+    buscas: [dylan dog omnibus]    # o que o radar digita na busca das lojas
 ```
 
-No `.env`: `CANAL=baileys`, `BAILEYS_URL=http://localhost:3333`, `BAILEYS_TOKEN=...`.
-O resto do sistema não muda. A sessão fica salva em `whatsapp-baileys/auth/`.
-Rode o monitor com `python src/main.py --agendar` (ou como serviço do sistema).
+### Campos disponíveis
+
+| Campo | Para que serve |
+|---|---|
+| `termos` | Todas precisam aparecer no título (sem acento, tanto faz maiúscula) |
+| `qualquer` | Pelo menos uma precisa aparecer |
+| `excluir` | Nenhuma pode aparecer |
+| `regex` / `excluir_regex` | Casos difíceis (ex.: `superman\s+o\s+mundo`) |
+| `volumes` | `"8,14"` · `"1-9"` · `"12+"` (do 12 em diante) · `todos` · `box` |
+| `modo: pacote` | Só kits e coleções com vários volumes; o preço de capa é estimado pelo nº de volumes |
+| `categoria: games` | Busca só nas lojas de games (Amazon e KaBuM!) |
+| `so_menor_preco: true` | Só avisa quando bater o menor preço já visto |
+| `urls` | Páginas de produto conferidas em toda varredura |
+| `prioridade` | `maxima` ou `alta` sobem o alerta na fila |
+
+### Como editar pelo GitHub
+
+1. Abra `config/pessoas/<nome>.yaml` e clique no **lápis**.
+2. Copie um item parecido, mude o que precisar e salve com **Commit changes**.
+3. O bot manda no grupo a lista atualizada. Se algo estiver errado no arquivo, os testes falham e nada é enviado.
 
 ---
 
-## 4. Meta WhatsApp Cloud API: por que ficou de fora
+## Modos de execução
 
-O modelo de 1.000 conversas grátis por mês **não existe mais**. Desde 1º de julho de 2025 a Meta cobra por mensagem. Mensagens de texto livre só são permitidas e gratuitas dentro da janela de 24h aberta quando **você** manda mensagem para o número do bot. Fora dela, só templates aprovados, e templates de utilidade fora da janela são pagos.
+Em **Actions > Radar HQ > Run workflow**:
 
-Na prática: para ser grátis, você teria que mandar mensagem para o bot todo dia. Funciona como plano C, mas não é "gratuito e permanente" de verdade.
-
-## 5. pywhatkit / Selenium: contingência não implementada
-
-Abre o WhatsApp Web num navegador e "digita" a mensagem. Exige o PC ligado com tela e sessão ativa, quebra a cada mudança do WhatsApp Web e é tão não oficial quanto o Baileys, só que mais frágil. Se a Evolution e o Baileys caírem ao mesmo tempo, o problema é o WhatsApp, e o pywhatkit cai junto. Por isso não entrou.
+| Modo | O que faz |
+|---|---|
+| `teste` | Manda um alerta de exemplo no grupo |
+| `lista` | Manda o que cada pessoa está procurando |
+| `relatorio` | Varre tudo sem alertar e mostra, por pessoa, o que está **fácil** (3+ lojas), com **pouca oferta** (1 ou 2) ou **sem estoque** |
+| `resumo` | Varredura e resumão do dia |
+| `seco` | Varre e registra tudo no log, sem mandar nada |
+| `agora` | Varredura normal, com alertas |
 
 ---
 
-## Como a validação de estoque funciona
+## Como o radar decide
 
-Um anúncio só vira alerta se passar por tudo isto:
+**1. Estoque de verdade.** Um anúncio só vira alerta se a página do produto:
+* responder normalmente e não redirecionar para busca ou página inicial;
+* não estar marcada como esgotada (dados estruturados da página ou avisos como "esgotado", "avise-me", "anúncio pausado");
+* ter o botão de compra ativo, ou um sinal próprio da loja (API de estoque, "Restam N unid.").
 
-1. **URL direta**: a página precisa responder HTTP 200 e não pode ter redirecionado para home, busca, login ou carrinho.
-2. **Fonte mais confiável da loja**: API de catálogo (VTEX `AvailableQuantity`, Shopify `variant.available`, Woo `is_in_stock`, ML `status=active` + `available_quantity`) quando existe.
-3. **JSON-LD** da página: `OutOfStock`, `SoldOut` ou `Discontinued` descarta.
-4. **Avisos na área de compra**: "esgotado", "indisponível", "não há mais estoque disponível", "avise-me quando chegar", "anúncio pausado" e similares descartam. Avisos em vitrines de outros produtos são ignorados.
-5. **Botão de compra habilitado** ("Comprar", "Adicionar ao carrinho"...). Botão com `disabled` descarta.
-6. **CAPTCHA ou verificação anti-robô**: o item é pulado naquela janela. O sistema nunca tenta burlar.
+Avisos de "esgotado" em produtos relacionados, no rodapé da página, são ignorados.
 
-Tudo que é checado vai para a tabela `historico` em `data/radar.db`, com o motivo de aceite ou descarte.
+**2. Edição brasileira.** Livros com ISBN de fora do Brasil (só valem os que começam com 85 ou 65), ficha com idioma estrangeiro ou títulos como *Paperback* e *English Edition* são descartados.
 
-## Preço de capa e o corte de 25%
+**3. Preço de capa confiável.** A referência vem das lojas das editoras (Panini, Pipoca & Nanquim, Monstra). O preço "de" de outras lojas só vale se não estiver inflado, e descontos acima de 75% são tratados como erro de leitura.
 
-Desconto "real" exige saber o preço de capa. O sistema usa, nesta ordem:
+**4. Sem repetição.** O mesmo link só é reenviado se o preço cair mais 3% ou depois de 7 dias.
 
-1. **Preço da loja oficial da editora** (Loja Panini e Pipoca & Nanquim, marcadas com `oficial: true`). Elas rodam primeiro em cada varredura e alimentam a tabela `capas`.
-2. **Preço "de" da própria loja**, só se não estiver inflado (até 5% acima da referência oficial). "De R$ 200 por R$ 90" num livro de capa R$ 100 conta como 10%, não 55%.
-3. Sem nenhuma referência confiável, a Regra B **não alerta** (rigor acima de volume).
+---
 
-A Regra A alerta em qualquer valor. Se o preço estiver acima da capa, a linha de desconto mostra quanto está acima.
+## Lojas
 
-## Anti-spam
-
-O mesmo link só é reenviado se o preço cair mais 3% ou depois de `REALERTAR_DIAS` (padrão 7).
-
-## Situação de cada loja
-
-| Loja | Como coleta | Observação |
+| Loja | Como é lida | Situação |
 |---|---|---|
-| Loja Panini | auto-detecção | URL marcada CONFIRA |
-| Pipoca & Nanquim | auto-detecção | URL marcada CONFIRA |
-| Amazon Brasil | navegador real | bloqueia robôs com frequência; janelas bloqueadas são puladas |
-| Mercado Livre | API com token, ou HTML | sem token, a busca costuma cair em verificação |
-| Magalu | HTML no navegador | pode ter antirrobô |
-| Ri Happy | auto-detecção | |
-| Estante Virtual | HTML no navegador | anúncios majoritariamente usados (Status: Seminovo) |
-| Rika, Comix, Monstra, Comic Boom | auto-detecção | URLs marcadas CONFIRA |
-| Shopee | **desativada** | busca exige login e antirrobô agressivo; use o webhook de grupos |
+| Loja Panini | API da loja (Magento) | ✅ loja oficial, referência de capa |
+| Pipoca & Nanquim | API da loja (Magento) | ✅ loja oficial, referência de capa |
+| Monstra | API da loja (WooCommerce) | ✅ loja oficial, referência de capa |
+| Comix Book Shop | API da loja (Magento) | ✅ |
+| Comic Boom | API da loja (Magento) | ✅ |
+| Rika Comic Shop | API da loja (VTEX) | ✅ |
+| Ri Happy | API da loja (VTEX) | ✅ |
+| Estante Virtual | página, com navegador | ✅ muitos usados (aparecem como Seminovo) |
+| Amazon Brasil | página, com navegador | ⚠️ funciona, mas às vezes bloqueia (a janela é pulada) |
+| KaBuM! | página, com navegador | ⚠️ games; em observação |
+| Mercado Livre | API ou página | ❌ bloqueia acessos vindos da nuvem |
+| Magalu | página, com navegador | ❌ bloqueia acessos vindos da nuvem |
+| Shopee | desativada | ❌ exige login |
 
-Para o Mercado Livre: crie um app grátis em developers.mercadolivre.com.br, gere o access token e coloque em `ML_ACCESS_TOKEN`. O token expira em 6 horas; para uso contínuo, implemente o refresh token (posso fazer isso num próximo passo).
+O radar nunca tenta burlar CAPTCHA ou bloqueio: quando uma loja bloqueia, aquela janela é pulada.
 
-## Editando o catálogo
+---
 
-Tudo fica em `config/catalogo.yaml`. Formatos aceitos em `volumes`: `"8,14"`, `"1-9,11"`, `"12+"`, `todos`, `box`.
+## Configuração (Secrets do GitHub)
 
-As séries em andamento (Dandadan, Tartarugas Ninja IDW, Hunter x Hunter, Frieren, Sakamoto Days) estão **desativadas**: troque `"99+"` pelo próximo volume que você ainda não tem e mude `ativo: true`.
+Em **Settings > Secrets and variables > Actions**:
 
-Depois de editar, rode `python -m pytest -q` para garantir que nada quebrou.
+| Nome | Valor |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | token do bot, gerado no @BotFather |
+| `TELEGRAM_CHAT_ID` | ID do grupo (número negativo) |
 
-## Comandos
+Passo a passo completo em `GUIA_SEM_PC.md`.
+
+---
+
+## Rodar no próprio computador (opcional)
 
 ```bash
-python src/main.py --seco      # varre e imprime, sem enviar
-python src/main.py --agora     # varre e envia
-python src/main.py --teste     # manda uma mensagem de exemplo
-python src/main.py --agendar   # modo contínuo (padrão no Docker)
-python -m pytest -q            # testes
+pip install -r requirements.txt
+python -m playwright install chromium
+cp .env.example .env          # preencha TELEGRAM_BOT_TOKEN e TELEGRAM_CHAT_ID
+python -m pytest -q           # testes
+python src/main.py --seco     # varre e mostra na tela, sem enviar
 ```
 
-## Problemas comuns
+### Alternativa: WhatsApp self-hosted
 
-* **QR Code não aparece**: atualize a tag da imagem `evoapicloud/evolution-api` no compose para a versão mais recente e rode `docker compose pull evolution && docker compose up -d evolution`.
-* **Mensagens não chegam**: `docker compose logs evolution` e confira se `WHATSAPP_DESTINO` tem DDI 55 + DDD + número.
-* **Loja sem resultados**: veja a tabela `historico` ou rode com `LOG_LEVEL=DEBUG`. Lojas mudam o layout; ajuste `busca` e `padrao_produto` em `lojas.yaml`.
+O projeto também envia por WhatsApp via **Evolution API** (Docker) ou **Baileys** (Node.js), usando um número remetente separado e um computador ou servidor ligado 24h. Configure `CANAL=evolution` ou `CANAL=baileys` no `.env` e siga os comentários em `docker-compose.yml` e `whatsapp-baileys/index.js`.
+
+A API oficial do WhatsApp (Meta) com número de teste não funciona para quem está no Brasil: a Meta bloqueia mensagens de números estrangeiros para o país (erro 130497).

@@ -23,14 +23,19 @@ raros:
     termos: [wolverine]
     # o pacote oficial já vem com o DualSense amarelo do Wolverine;
     # kits com controle extra também valem. Controle vendido sozinho fica de fora.
-    qualquer: [console, pacote, bundle, edicao digital, slim]
-    excluir: [tampa, tampas, cover, skin, adesivo, standard, deluxe, funko, camiseta, ps4, suporte, case]
+    # Só a EDIÇÃO LIMITADA: PS5 comum "+ jogo Wolverine" fica de fora.
+    qualquer: [edicao limitada, limited edition, battle yellow, amarelo]
+    qualquer_2: [console, pacote, bundle, edicao digital, digital edition, playstation 5, playstation5]
+    excluir: [tampa, tampas, cover, skin, adesivo, standard, deluxe, funko, camiseta, ps4, suporte, case,
+              leitor de discos, jogo]
     excluir_regex: '^(controle|dualsense|kit\s+(?:\d+\s+)?controles?)\b'
     prioridade: alta
     volumes: todos
     formato: Console
     buscas: [playstation 5 wolverine edicao limitada, console ps5 wolverine]
     urls:
+      - https://www.amazon.com.br/dp/B0HF8STKLY
+      - https://www.amazon.com.br/dp/B0HFSJQNPP
       - https://www.kabum.com.br/produto/1065184/console-playstation-5-sony-edicao-digital-marvel-s-wolverine-pacote-de-edicao-limitada-825-gb-amarelo-1000056865
 
 promocoes: []

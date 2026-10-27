@@ -18,7 +18,7 @@ from urllib.parse import quote, quote_plus, urljoin, urlparse, urlunparse
 from bs4 import BeautifulSoup
 
 from models import Oferta
-from stock import validar_html
+from stock import _num, validar_html
 from stores.base import Fetcher, Loja
 from texto import normalizar
 
@@ -40,6 +40,14 @@ def limpar_url(url: str) -> str:
     """Remove rastreadores e fragmentos, mantendo a URL do produto."""
     p = urlparse(url)
     return urlunparse((p.scheme, p.netloc, p.path, "", "", ""))
+
+
+def _texto_simples(t: str) -> str:
+    """minúsculas, sem acento e com espaços normalizados, mas mantendo pontuação (R$ 4.556,07)."""
+    import unicodedata
+    t = unicodedata.normalize("NFKD", t or "")
+    t = "".join(c for c in t if not unicodedata.combining(c)).lower()
+    return re.sub(r"\s+", " ", t)
 
 
 # ----------------------------------------------------------------- detecção
@@ -209,6 +217,22 @@ class HtmlLoja(Loja):
         o.condicao = res.condicao or o.condicao
         o.disponivel, o.motivo_estoque = res.disponivel, res.motivo
 
+        # sinais próprios da loja (ex.: KaBuM! "Restam 7 unid." e preço no PIX).
+        # Só corrigem leituras fracas ("botão desabilitado", "sem botão"); avisos de
+        # esgotado e JSON-LD OutOfStock continuam valendo.
+        if r.status == 200 and r.html:
+            texto = _texto_simples(BeautifulSoup(r.html, "lxml").get_text(" "))
+            ok_rx = self.cfg.get("estoque_ok_regex")
+            fraco = res.motivo.startswith(("botão de compra desabilitado", "página renderizada sem botão",
+                                           "sem sinal confiável"))
+            if ok_rx and not o.disponivel and fraco and re.search(ok_rx, texto):
+                o.disponivel = True
+                o.motivo_estoque = f"sinal da loja: '{re.search(ok_rx, texto).group(0)}'"
+            preco_rx = self.cfg.get("preco_regex")
+            m = re.search(preco_rx, texto) if preco_rx else None
+            if m:
+                o.preco = _num(m.group(1)) or o.preco
+
         if self.plataforma == "nuvemshop" and r.status == 200:
             self._refinar_nuvemshop(o, r.html)
         if not o.preco:
@@ -360,4 +384,11 @@ class WooLoja(HtmlLoja):
         res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser", sinal_externo=True)
         o.titulo = res.titulo or o.titulo
         o.disponivel, o.motivo_estoque = res.disponivel, f"Woo is_in_stock | {res.motivo}"
+        # A Store API é o próprio estoque da loja. Um "esgotado" solto na página (selo de
+        # outro produto, filtro "ocultar esgotados", tela de verificação) não derruba o
+        # resultado; só um OutOfStock nos dados do produto ou erro na página derrubam.
+        if not res.disponivel and res.motivo.startswith(("aviso na página", "bloqueado por verificação",
+                                                          "botão de compra desabilitado")):
+            o.disponivel = True
+            o.motivo_estoque = f"Woo API: em estoque (página: {res.motivo})"
         return o
