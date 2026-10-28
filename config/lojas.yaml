@@ -38,6 +38,7 @@ lojas:
   - nome: Amazon Brasil
     adaptador: amazon
     max_resultados: 8
+    tempo_max_min: 8        # a mais lenta; bloqueia boa parte das páginas
 
   # desativado: bloqueia acessos vindos da nuvem (0 ofertas em todas as varreduras)
   - nome: Mercado Livre

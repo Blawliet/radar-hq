@@ -922,3 +922,37 @@ def test_loja_respeita_tempo_maximo(tmp_path, monkeypatch):
         def buscar(self, termo): raise AssertionError("não devia buscar depois do prazo")
     main.varrer_loja(Lerda(), Grupo(RAIZ / "config"), Banco(tmp_path / "r.db"))
     assert Banco(tmp_path / "r.db").con.execute("SELECT parada FROM diagnostico").fetchone()[0] == "tempo esgotado"
+
+
+
+def test_vtex_confia_na_api():
+    from stores.plataformas import VtexLoja
+    pagina = """<html><body><h1>Box Ajin 1-17</h1><div class="product-info"><span>Esgotado</span></div>
+    <button class="buy-button">Comprar</button></body></html>"""
+    f = _FetcherFalso({"/box-ajin": pagina})
+    loja = VtexLoja(f, {"nome": "Livrarias Curitiba", "base": "https://www.livrariascuritiba.com.br"})
+    o = loja.validar(Oferta("Livrarias Curitiba", "Box Ajin 1-17", "https://www.livrariascuritiba.com.br/box-ajin/p",
+                            442.4, extra={"qtd_api": 10}))
+    assert o.disponivel and "VTEX API" in o.motivo_estoque
+
+
+def test_titulo_do_produto_e_nao_do_carrinho():
+    html = """<html><body><h1 class="widget-title">No carrinho</h1>
+    <h1 class="product_title entry-title">Zetman Completo Lote</h1><button>Comprar</button></body></html>"""
+    assert validar_html("https://l.com/produto/x/", "https://l.com/produto/x/", 200, html, True).titulo == "Zetman Completo Lote"
+
+
+
+def test_escassez_considera_ultimos_dias(tmp_path, monkeypatch):
+    from db import Banco
+    (tmp_path / "data").mkdir()
+    import shutil; shutil.copytree(RAIZ / "config", tmp_path / "config")
+    b = Banco(tmp_path / "data" / "radar.db")
+    # o item apareceu em outras 2 lojas ontem: não é difícil de achar
+    from datetime import datetime, timedelta
+    ontem = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+    for loja in ("Comix", "Estante"):
+        b.con.execute("INSERT INTO precos VALUES ('coringa o mundo:unico', ?, ?, 70, ?)", (f"https://{loja}/x", ontem, loja))
+    b.con.commit()
+    env = _varredura_fake(tmp_path, monkeypatch, {"Mirane": [("Coringa: O Mundo", 69.9, 69.9)]})
+    assert env == []

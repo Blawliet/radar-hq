@@ -38,6 +38,7 @@ log = logging.getLogger("radar")
 JANELAS = [(5, 30), (7, 30), (9, 30), (11, 30), (13, 30), (15, 30), (17, 30), (19, 30), (21, 30), (23, 30)]
 JANELA_RESUMO = (23, 30)
 TEMPO_MAX_LOJA_MIN = float(os.getenv("TEMPO_MAX_LOJA_MIN", "15"))   # cada loja para depois disso
+DIAS_ESCASSEZ = 3                                                   # janela para contar lojas com o item
 MAX_FALHAS_SEGUIDAS = 6                                             # loja que não responde é abandonada
 _rodando = threading.Lock()
 _vistos_lock = threading.Lock()
@@ -238,9 +239,14 @@ def varredura(enviar: bool = True, imprimir: bool = True) -> int:
         # atualizam a tabela de preço de capa usada para as demais
         achados: list[tuple[Oferta, Decisao, list[str]]] = []
         # em quantas lojas cada produto apareceu com estoque nesta varredura
+        # Conta as lojas desta varredura E dos últimos 3 dias: a busca de cada loja traz só
+        # parte dos volumes de uma série, então olhar uma varredura só faz item comum
+        # parecer "difícil de achar".
         lojas_por_produto: dict[str, set] = {}
         for o in validadas:
             lojas_por_produto.setdefault(o.extra.get("chave", o.url), set()).add(o.loja)
+        for chave in lojas_por_produto:
+            lojas_por_produto[chave] |= banco.lojas_recentes(chave, DIAS_ESCASSEZ)
         for o in sorted(validadas, key=lambda x: not x.extra.get("oficial")):
             n = len(lojas_por_produto.get(o.extra.get("chave", o.url), {o.loja}))
             por_pessoa = [(p.nome, avaliar_perfil(o, p, bool(o.extra.get("oficial")), banco, n))

@@ -265,7 +265,10 @@ def validar_html(url_original: str, url_final: str, status: int, html: str,
 
     soup = BeautifulSoup(html, "lxml")
     ld = ler_jsonld(soup)
-    titulo = ld.get("titulo") or (soup.find("meta", property="og:title") or {}).get("content") \
+    h1_produto = soup.select_one("h1.product_title, h1.product-title, h1.product-name, h1[itemprop=name], "
+                                 "[itemprop=name] h1, h1.entry-title")
+    titulo = ld.get("titulo") or (h1_produto.get_text(" ", strip=True) if h1_produto else None) \
+        or (soup.find("meta", property="og:title") or {}).get("content") \
         or (soup.h1.get_text(strip=True) if soup.h1 else None)
     base = dict(preco=ld.get("preco"), titulo=titulo, vendedor=ld.get("vendedor"),
                 condicao=ld.get("condicao"), preco_lista=preco_lista_html(soup))

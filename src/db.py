@@ -126,6 +126,13 @@ class Banco:
         a, m, d = row[2].split("-")
         return row[0], row[1], f"{d}/{m}/{a}"
 
+    def lojas_recentes(self, chave: str, dias: int = 3) -> set[str]:
+        """Lojas em que o produto apareceu com estoque nos últimos dias (todas as varreduras)."""
+        desde = (datetime.now() - timedelta(days=dias)).strftime("%Y-%m-%d")
+        with self.lock:
+            return {r[0] for r in self.con.execute(
+                "SELECT DISTINCT loja FROM precos WHERE chave=? AND dia>=?", (chave, desde))}
+
     def preco_tipico_volume(self, serie: str) -> float | None:
         """Preço típico de UM volume avulso da série: mediana das capas oficiais;
         sem capas, mediana dos preços vistos (precisa de pelo menos 3)."""

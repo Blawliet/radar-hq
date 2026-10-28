@@ -48,13 +48,22 @@ def _salvar_debug(loja: str, url: str, r, motivo: str, texto: str):
     pasta = Path(__file__).resolve().parents[2] / "data" / "debug"
     pasta.mkdir(parents=True, exist_ok=True)
     nome = re.sub(r"[^a-z0-9]+", "-", normalizar(loja + " " + url.rsplit("/", 2)[-2 if url.endswith("/") else -1]))[:80]
-    trecho = texto
-    i = texto.find("comprar")
-    if i > 1500:
-        trecho = texto[:1500] + " [...] " + texto[i - 1500:i + 1500]
+    # trechos em volta das palavras que importam para estoque e preço
+    janelas = []
+    for chave in ("r$", "pix", "restam", "comprar", "indispon", "esgotad", "avise", "estoque"):
+        for m in list(re.finditer(re.escape(chave), texto))[:3]:
+            janelas.append((max(0, m.start() - 250), m.end() + 250))
+    janelas.sort()
+    juntas = []
+    for a, b in janelas:
+        if juntas and a <= juntas[-1][1]:
+            juntas[-1] = (juntas[-1][0], max(juntas[-1][1], b))
+        else:
+            juntas.append((a, b))
+    trecho = "\n[...]\n".join(texto[a:b] for a, b in juntas) or texto[:3000]
     (pasta / f"{nome}.txt").write_text(
-        f"url: {url}\nfinal: {r.url_final}\nvia: {r.via}\nstatus: {r.status}\nmotivo: {motivo}\n\n{trecho[:6000]}",
-        encoding="utf-8")
+        f"url: {url}\nfinal: {r.url_final}\nvia: {r.via}\nstatus: {r.status}\nmotivo: {motivo}\n"
+        f"tamanho do texto: {len(texto)}\n\n{trecho[:12000]}", encoding="utf-8")
 
 
 def _texto_simples(t: str) -> str:
@@ -132,6 +141,12 @@ class VtexLoja(Loja):
         r = self.f.get(o.url)
         res = validar_html(o.url, r.url_final, r.status, r.html, False, sinal_externo=True)
         o.disponivel, o.motivo_estoque = res.disponivel, f"VTEX qtd {o.extra.get('qtd_api')} | {res.motivo}"
+        # a API da VTEX é o estoque da própria loja; "esgotado" solto na página (vitrine,
+        # selo de outro produto) não derruba, só OutOfStock nos dados do produto
+        if not res.disponivel and r.status == 200 and res.motivo.startswith(
+                ("aviso na página", "botão de compra desabilitado")):
+            o.disponivel = True
+            o.motivo_estoque = f"VTEX API: {o.extra.get('qtd_api')} em estoque (página: {res.motivo})"
         return o
 
 
