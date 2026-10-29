@@ -11,23 +11,87 @@
  },
  "one piece vol 97": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "One Piece em JPN – Vol.69 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Yellow (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Red (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 98": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "One Piece em JPN – Vol.69 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Yellow (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Red (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 103": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "One Piece em JPN – Vol.69 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Yellow (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Red (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 104": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "One Piece em JPN – Vol.69 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Yellow (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece Red (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "blueberry edicao definitiva": {
   "http": 200,
@@ -66,8 +130,14 @@
  },
  "box ajin": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Ajin – Completo (Lote #362)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "box gantz parte 2": {
   "http": 200,
@@ -91,13 +161,35 @@
  },
  "dandadan kit": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "DanDaDan em JPN – Vol.18 (Sem sobre capa) (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "DanDaDan em JPN – Vol.10 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "dandadan box": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "DanDaDan em JPN – Vol.18 (Sem sobre capa) (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "DanDaDan em JPN – Vol.10 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "dandadan colecao": {
   "http": 200,
@@ -177,18 +269,56 @@
  },
  "omnibus pipoca e nanquim": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Ataque dos Titãs Omnibus em ING – Vol.1 (Festival de Importados #26)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "box manga": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Detective Conan em JPN – Animanga – Vol.1 ao 25 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Henshin Mangá! – Vol.1 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Katsugeki Touken Ranbu em JPN (Coletânea com 12 mangás) (Festival de Importados ",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "box mangá panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Detective Conan em JPN – Animanga – Vol.1 ao 25 (Festival de Importados #32)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Henshin Mangá! – Vol.1 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Katsugeki Touken Ranbu em JPN (Coletânea com 12 mangás) (Festival de Importados ",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "box manga jbc": {
   "http": 200,

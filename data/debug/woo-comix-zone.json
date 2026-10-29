@@ -331,12 +331,24 @@
  },
  "nossos melhores amigos friends": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Nossos Melhores Amigos – A Verdadeira História de Friends",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "nossos melhores amigos comix zone": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Nossos Melhores Amigos – A Verdadeira História de Friends",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  }
 }

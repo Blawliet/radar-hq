@@ -27,23 +27,87 @@
  },
  "one piece vol 97": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE: AVENTURA ESCOLAR 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE VOL. 112",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 98": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE: AVENTURA ESCOLAR 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE VOL. 112",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 103": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE: AVENTURA ESCOLAR 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE VOL. 112",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "one piece vol 104": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE: AVENTURA ESCOLAR 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ONE PIECE VOL. 112",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "blueberry edicao definitiva": {
   "http": 200,
@@ -104,8 +168,24 @@
  },
  "spawn panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "SPAWN APRESENTA: OS CONDENADOS VOL. 4",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "SPAWN APRESENTA: SAM & TWITCH VOL.3",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "REI SPAWN VOL.4",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "flash geoff johns omnibus": {
   "http": 200,
@@ -114,8 +194,19 @@
  },
  "box ajin": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "AJIN: DEMI-HUMAN • 12",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "AJIN • VOL.17",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "box gantz parte 2": {
   "http": 200,
@@ -150,18 +241,66 @@
  },
  "kit lanterna verde panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "DC DE PRATA: LANTERNA VERDE",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "A SAGA DO LANTERNA VERDE 07",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "LANTERNA VERDE (2025) 11",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "dandadan kit": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 11,
+  "exemplos": [
+   {
+    "nome": "DANDADAN • 05",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "DANDADAN • 13",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "DANDADAN • VOL. 11",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "dandadan box": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 11,
+  "exemplos": [
+   {
+    "nome": "DANDADAN • 05",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "DANDADAN • 13",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "DANDADAN • VOL. 11",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "dandadan colecao": {
   "http": 200,
@@ -175,13 +314,45 @@
  },
  "tartarugas ninja pipoca e nanquim": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 11,
+  "exemplos": [
+   {
+    "nome": "TARTARUGAS NINJA: PRETO, BRANCO E VERDE",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "TARTARUGAS NINJA (COLEÇÃO IDW) – EDIÇÃO ABSOLUTA VOL. 3",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "TARTARUGAS NINJA (COLEÇÃO IDW VOL.02) – EDIÇÃO ABSOLUTA",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "hunter x hunter vol 38": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "HUNTER X HUNTER – VOL. 03",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HUNTER X HUNTER – VOL. 02",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "HUNTER X HUNTER • VOL. 37",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "hunter x hunter": {
   "http": 200,
@@ -278,18 +449,66 @@
  },
  "omnibus pipoca e nanquim": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "JÚLIA OMNIBUS VOL. 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HELLBOY OMNIBUS VOL. 3",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "GOON OMNIBUS VOL.02",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "box manga": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "YON (MANGÁ VOL. 2 DE 4)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ALMANAQUE DAS ESTAÇÕES (MANGÁ – VOL. 2 DE 2)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HAREM END (MANGÁ – VOLUME ÚNICO)",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "box mangá panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "YON (MANGÁ VOL. 2 DE 4)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "ALMANAQUE DAS ESTAÇÕES (MANGÁ – VOL. 2 DE 2)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HAREM END (MANGÁ – VOLUME ÚNICO)",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "box manga jbc": {
   "http": 200,
@@ -298,13 +517,45 @@
  },
  "box hq": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "HQ DISNEY MICKEY ED. 86",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HQ DE FATO – LUTO É UM LUGAR QUE NÃO SE VÊ E O NOVO SEMPRE VEM",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "QUADRINHOS, DIVERSIDADE E INSURGÊNCIA: MINA DE HQ 10 ANOS",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "kit hq panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "HQ DISNEY MICKEY ED. 86",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HQ DE FATO – LUTO É UM LUGAR QUE NÃO SE VÊ E O NOVO SEMPRE VEM",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "QUADRINHOS, DIVERSIDADE E INSURGÊNCIA: MINA DE HQ 10 ANOS",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "colecao completa manga": {
   "http": 200,
@@ -313,13 +564,45 @@
  },
  "the walking dead vol 27": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "THE WALKING DEAD: RICK GRIMES 2000",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "THE WALKING DEAD: O NEGAN CHEGOU E OUTRAS HISTÓRIAS",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "THE WALKING DEAD • 10",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "walking dead 27 panini": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "THE WALKING DEAD: RICK GRIMES 2000",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "THE WALKING DEAD: O NEGAN CHEGOU E OUTRAS HISTÓRIAS",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "THE WALKING DEAD • 10",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "9788542629552": {
   "http": 200,
@@ -374,8 +657,14 @@
  },
  "superman o mundo": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "SUPERMAN MUNDOS ALTERNATIVOS",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  },
  "supergirl o mundo": {
   "http": 200,
