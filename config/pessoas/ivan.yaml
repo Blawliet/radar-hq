@@ -38,4 +38,16 @@ raros:
       - https://www.amazon.com.br/dp/B0HFSJQNPP
       - https://www.kabum.com.br/produto/1065184/console-playstation-5-sony-edicao-digital-marvel-s-wolverine-pacote-de-edicao-limitada-825-gb-amarelo-1000056865
 
+  # HQ rara: alerta em qualquer preço (com ou sem desconto, até acima da capa),
+  # desde que tenha estoque de verdade.
+  - id: the-walking-dead-27
+    nome: The Walking Dead vol. 27
+    editora: Panini
+    termos: [walking dead]
+    excluir: [deluxe, compendium, compendio, daryl, dead city, world beyond, fear the, novel, romance,
+              ascensao do governador, jogo, game, funko, dvd, blu ray, temporada, camiseta, poster]
+    volumes: "27"
+    formato: Encadernado
+    buscas: [the walking dead vol 27, walking dead 27 panini, "9788542629552"]
+
 promocoes: []
