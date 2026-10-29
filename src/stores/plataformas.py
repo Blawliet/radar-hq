@@ -250,7 +250,7 @@ class HtmlLoja(Loja):
             r = self._pegar(o.url, self.cfg.get("seletor_espera"))
             res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser")
         if res.titulo:
-            o.titulo = res.titulo
+            o.titulo = self._sem_nome_da_loja(res.titulo)
         if res.preco:
             o.preco = res.preco
         o.preco_lista = res.preco_lista or o.preco_lista
@@ -286,6 +286,14 @@ class HtmlLoja(Loja):
                 _salvar_debug(self.nome, o.url, r, "sem preço legível",
                               _texto_simples(BeautifulSoup(r.html, "lxml").get_text(" ")))
         return o
+
+    def _sem_nome_da_loja(self, titulo: str) -> str:
+        """'Frieren 9 - Amora Book Store |' -> 'Frieren 9'"""
+        partes = re.split(r"\s+[-|–]\s+", titulo.strip(" |"))
+        primeira = normalizar(self.nome).split()[0] if normalizar(self.nome) else ""
+        if len(partes) > 1 and primeira and primeira in normalizar(partes[-1]):
+            return " - ".join(partes[:-1]).strip()
+        return titulo.strip()
 
     @staticmethod
     def _refinar_nuvemshop(o: Oferta, html: str):
