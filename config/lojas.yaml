@@ -44,8 +44,9 @@ lojas:
   # (app grátis no portal de desenvolvedores); sem eles a loja é pulada sozinha.
   - nome: Mercado Livre
     adaptador: mercadolivre
-    produtos_por_busca: 6
-    tempo_max_min: 8
+    delay: 0.5              # API oficial: aguenta pausas curtas
+    produtos_por_busca: 5
+    tempo_max_min: 10
 
   # desativado: bloqueia acessos vindos da nuvem (nenhum resultado em todas as varreduras)
   - nome: Magalu

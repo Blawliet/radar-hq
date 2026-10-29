@@ -206,6 +206,8 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
         parada = "loja não responde"
     elif not parada and estourou():
         parada = "tempo esgotado"
+    if not parada and getattr(loja, "aviso", ""):
+        parada = loja.aviso          # ex.: "API bloqueada (HTTP 403), busca pelo site"
     log.info("%s: %d buscas, %d resultados, %d páginas conferidas, %d com estoque (%.0fs)%s.",
              loja.nome, n_buscas, n_result, n_valid, len(achados), time.time() - t0,
              f" | PAROU: {parada}" if parada else "")

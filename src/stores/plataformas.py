@@ -398,6 +398,7 @@ class WooLoja(HtmlLoja):
             json=True)
         if status != 200 or not isinstance(dados, list):
             log.info("%s: Store API indisponível (HTTP %s), usando busca HTML.", self.nome, status)
+            self.aviso = f"API da loja recusou (HTTP {status}), usando busca pelo site"
             self.api_ok = False
             return super().buscar(termo)
         saida = []
