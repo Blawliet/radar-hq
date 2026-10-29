@@ -30,7 +30,7 @@ bloqueios:
   - id: spawn-mensal-1-8
     nome: Spawn (mensal)
     termos: [spawn]
-    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
+    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio, batman]
     volumes: "1-8"
   - id: spawn-origens-1-9-11
     nome: Spawn Origens
@@ -123,7 +123,7 @@ promocoes:
     nome: Spawn (mensal)
     editora: Panini
     termos: [spawn]
-    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio]
+    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio, batman]
     volumes: "9+"
     formato: Encadernado
     buscas: [spawn panini]
@@ -195,7 +195,7 @@ promocoes:
     nome: Tartarugas Ninja IDW
     editora: Pipoca & Nanquim
     termos: [tartarugas ninja]
-    excluir: [omnibus, batman, power rangers, colecao classica, ultimo ronin, mutantes, mutant,
+    excluir: [omnibus, batman, power rangers, colecao classica, colecao historica, ultimo ronin, mutantes, mutant,
               x men, ghostbusters, jogos, colorir, figura, action figure]
     volumes: "1+"
     formato: Encadernado
@@ -238,7 +238,8 @@ promocoes:
     nome: Resta Um (Jordan Crane)
     editora: HQueria
     termos: [resta um]
-    excluir: [jogo, tabuleiro, brinquedo, madeira, pinos, pecas, solitario, puzzle]
+    excluir: [jogo, tabuleiro, brinquedo, madeira, pinos, pecas, solitario, puzzle,
+              noronha, companhia das letras]   # outro livro com o mesmo nome
     formato: Graphic Novel
     buscas: [resta um jordan crane, resta um hqueria]
     urls:

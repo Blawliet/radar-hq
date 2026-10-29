@@ -401,6 +401,7 @@ class WooLoja(HtmlLoja):
             self.aviso = f"API da loja recusou (HTTP {status}), usando busca pelo site"
             self.api_ok = False
             return super().buscar(termo)
+        self._registrar_api(termo, status, dados)
         saida = []
         for p in dados:
             if not (p.get("is_in_stock") and p.get("is_purchasable")):
@@ -417,6 +418,28 @@ class WooLoja(HtmlLoja):
                 preco_lista=lista if lista > preco else None, extra={"api": "woo"},
             ))
         return saida
+
+    def _registrar_api(self, termo, status, dados):
+        """Resumo do que a Store API devolveu em cada busca, em data/debug/woo-<loja>.json."""
+        import json
+        from pathlib import Path
+        try:
+            reg = getattr(self, "_reg_api", None)
+            if reg is None:
+                reg = self._reg_api = {}
+            reg[termo] = {
+                "http": status,
+                "itens": len(dados),
+                "exemplos": [{"nome": BeautifulSoup(x.get("name", ""), "lxml").get_text()[:80],
+                              "estoque": x.get("is_in_stock"), "compravel": x.get("is_purchasable")}
+                             for x in dados[:3]],
+            }
+            pasta = Path(__file__).resolve().parents[2] / "data" / "debug"
+            pasta.mkdir(parents=True, exist_ok=True)
+            nome = re.sub(r"[^a-z0-9]+", "-", normalizar(self.nome)).strip("-")
+            (pasta / f"woo-{nome}.json").write_text(json.dumps(reg, ensure_ascii=False, indent=1), encoding="utf-8")
+        except Exception:
+            pass
 
     def validar(self, o):
         if o.extra.get("api") != "woo":
