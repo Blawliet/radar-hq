@@ -422,7 +422,10 @@ class WooLoja(HtmlLoja):
     def _registrar_api(self, termo, status, dados):
         """Resumo do que a Store API devolveu em cada busca, em data/debug/woo-<loja>.json."""
         import json
+        import os
         from pathlib import Path
+        if os.getenv("PYTEST_CURRENT_TEST"):
+            return
         try:
             reg = getattr(self, "_reg_api", None)
             if reg is None:
