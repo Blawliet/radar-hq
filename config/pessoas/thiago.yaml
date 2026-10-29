@@ -169,7 +169,9 @@ promocoes:
     termos: [guerras de lucas]
     qualquer: [episodio ii, episodio 2, vol 2, volume 2, parte 2]
     volumes: todos
-    buscas: [as guerras de lucas episodio ii, guerras de lucas 2 comix zone]
+    buscas: [guerras de lucas, as guerras de lucas episodio ii]
+    urls:
+      - https://comixzone.com.br/produto/as-guerras-de-lucas-volume-2/
 
   - id: nossos-melhores-amigos-friends
     nome: "Nossos Melhores Amigos: A Verdadeira História de Friends"
@@ -177,4 +179,6 @@ promocoes:
     termos: [nossos melhores amigos]
     qualquer: [friends]
     volumes: todos
-    buscas: [nossos melhores amigos friends, nossos melhores amigos comix zone]
+    buscas: [nossos melhores amigos friends]
+    urls:
+      - https://comixzone.com.br/produto/nossos-melhores-amigos/

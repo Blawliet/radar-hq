@@ -44,7 +44,10 @@ def limpar_url(url: str) -> str:
 
 def _salvar_debug(loja: str, url: str, r, motivo: str, texto: str):
     """Para links fixos: guarda um retrato da página em data/debug/ para conferir depois."""
+    import os
     from pathlib import Path
+    if os.getenv("PYTEST_CURRENT_TEST"):
+        return
     pasta = Path(__file__).resolve().parents[2] / "data" / "debug"
     pasta.mkdir(parents=True, exist_ok=True)
     nome = re.sub(r"[^a-z0-9]+", "-", normalizar(loja + " " + url.rsplit("/", 2)[-2 if url.endswith("/") else -1]))[:80]
@@ -277,6 +280,11 @@ class HtmlLoja(Loja):
             self._refinar_nuvemshop(o, r.html)
         if not o.preco:
             o.disponivel, o.motivo_estoque = False, "não consegui ler o preço"
+            # guarda um retrato das 2 primeiras páginas sem preço, para ajustar a loja depois
+            self._sem_preco = getattr(self, "_sem_preco", 0) + 1
+            if self._sem_preco <= 2 and r.status == 200 and r.html:
+                _salvar_debug(self.nome, o.url, r, "sem preço legível",
+                              _texto_simples(BeautifulSoup(r.html, "lxml").get_text(" ")))
         return o
 
     @staticmethod
