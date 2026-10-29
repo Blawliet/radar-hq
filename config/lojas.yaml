@@ -108,6 +108,10 @@ lojas:
     delay: 1.5
     adaptador: woocommerce
     base: https://amorabookstore.com.br
+    # a busca da API é ignorada pela loja (o radar cai na busca do site sozinho), e o
+    # preço do produto vem logo antes de "em estoque" (o resto são vitrines e carrinho)
+    preco_regex: 'r\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})\.?\s+(?:em estoque|fora de estoque|esgotado|sem estoque)'
+    estoque_ok_regex: '\d,\d{2}\.?\s+em estoque'
 
   - nome: Taverna do Rei
     delay: 1.5
