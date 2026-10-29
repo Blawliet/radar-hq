@@ -222,3 +222,35 @@ promocoes:
     formato: Mangá
     buscas: [sakamoto days]
 
+
+  # Graphic novels avulsas (volume único). Se só 1 ou 2 lojas tiverem, o radar
+  # avisa mesmo sem desconto ("difícil de achar"); se estiver fácil, só com 25% OFF.
+  - id: carbono-silicio
+    nome: Carbono & Silício (Mathieu Bablet)
+    editora: QS Comics
+    termos: [carbono, silicio]
+    formato: Graphic Novel
+    buscas: [carbono e silicio bablet]
+    urls:
+      - https://www.amazon.com.br/dp/6585947134
+
+  - id: resta-um
+    nome: Resta Um (Jordan Crane)
+    editora: HQueria
+    termos: [resta um]
+    excluir: [jogo, tabuleiro, brinquedo, madeira, pinos, pecas, solitario, puzzle]
+    formato: Graphic Novel
+    buscas: [resta um jordan crane, resta um hqueria]
+    urls:
+      - https://www.amazon.com.br/dp/6560250113
+
+  # o romance da Arqueiro tem o mesmo nome: só vale a versão em quadrinhos
+  - id: ninfeias-negras-gn
+    nome: "Ninfeias Negras: Graphic Novel"
+    editora: QS Comics
+    termos: [ninfeias negras]
+    qualquer: [graphic novel, hq, quadrinhos, qs comics, cassunu, duval]
+    formato: Graphic Novel
+    buscas: [ninfeias negras graphic novel]
+    urls:
+      - https://www.amazon.com.br/dp/6585947118
