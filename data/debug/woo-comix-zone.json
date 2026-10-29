@@ -319,28 +319,28 @@
   "itens": 0,
   "exemplos": []
  },
- "as guerras de lucas episodio ii": {
+ "guerras de lucas": {
   "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "guerras de lucas 2 comix zone": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "nossos melhores amigos friends": {
-  "http": 200,
-  "itens": 1,
+  "itens": 2,
   "exemplos": [
    {
-    "nome": "Nossos Melhores Amigos – A Verdadeira História de Friends",
+    "nome": "As Guerras de Lucas – Episódio II",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "As Guerras de Lucas",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "nossos melhores amigos comix zone": {
+ "as guerras de lucas episodio ii": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "nossos melhores amigos friends": {
   "http": 200,
   "itens": 1,
   "exemplos": [
