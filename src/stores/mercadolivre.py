@@ -1,26 +1,42 @@
-"""Mercado Livre.
+"""Mercado Livre pela API oficial de CATÁLOGO.
 
-Desde 2025 a API pública de busca devolve 403 sem token. Com ML_ACCESS_TOKEN
-(app gratuito em developers.mercadolivre.com.br) usamos a API, que informa
-status do anúncio (active/paused/closed) e quantidade disponível.
-Sem token, cai para busca HTML no navegador, que pode pedir verificação.
+Desde 2026 a busca de anúncios (/sites/MLB/search) devolve 403 mesmo com token,
+e a busca pelo site bloqueia acessos vindos da nuvem. O que segue liberado é o
+catálogo:
+
+  1. POST /oauth/token (grant_type=client_credentials)  -> acesso temporário
+  2. GET  /products/search?site_id=MLB&q=...              -> produtos do catálogo
+  3. GET  /products/{id}/items                            -> ofertas ativas dos vendedores
+
+Precisa de um app grátis no portal de desenvolvedores do Mercado Livre:
+ML_CLIENT_ID e ML_CLIENT_SECRET (Secrets do GitHub). Sem eles, a loja é pulada.
+
+Limite: só aparecem produtos de catálogo (livros/mangás novos, com ISBN). Anúncios
+avulsos de usados e lotes de sebo costumam ficar de fora.
 """
 from __future__ import annotations
 
 import logging
 import os
-import re
+import time
 from urllib.parse import quote
 
-from bs4 import BeautifulSoup
+import httpx
 
 from models import Oferta
-from stock import validar_html
 from stores.base import Loja
-from stores.plataformas import limpar_url, relevante
+from stores.plataformas import relevante
 
 log = logging.getLogger("coleta")
 API = "https://api.mercadolibre.com"
+
+
+def link_anuncio(item_id: str) -> str:
+    """MLB1234567 -> https://produto.mercadolivre.com.br/MLB-1234567"""
+    item_id = str(item_id or "")
+    if item_id.upper().startswith("MLB") and "-" not in item_id:
+        return f"https://produto.mercadolivre.com.br/MLB-{item_id[3:]}"
+    return f"https://produto.mercadolivre.com.br/{item_id}"
 
 
 class MercadoLivreLoja(Loja):
@@ -30,85 +46,103 @@ class MercadoLivreLoja(Loja):
 
     def __init__(self, fetcher, cfg):
         super().__init__(fetcher, cfg)
-        self.token = os.getenv("ML_ACCESS_TOKEN", "").strip()
+        self.client_id = os.getenv("ML_CLIENT_ID", "").strip()
+        self.client_secret = os.getenv("ML_CLIENT_SECRET", "").strip()
+        self.token: str | None = None
+        self.token_expira = 0.0
+        self.desligado = False           # sem credenciais ou acesso recusado: não insiste
+        self.produtos_por_busca = int(cfg.get("produtos_por_busca", 6))
+        # o domínio dos links de anúncio, para os links fixos (urls) baterem com esta loja
+        self.dominio = "mercadolivre.com.br"
 
-    def _h(self):
-        return {"Authorization": f"Bearer {self.token}"} if self.token else None
+    # ---------------- acesso
+    def _obter_token(self) -> str | None:
+        if self.desligado:
+            return None
+        if self.token and time.time() < self.token_expira - 60:
+            return self.token
+        if not (self.client_id and self.client_secret):
+            log.info("Mercado Livre: ML_CLIENT_ID/ML_CLIENT_SECRET não configurados; loja pulada.")
+            self.desligado = True
+            return None
+        try:
+            r = self.f.http.post(f"{API}/oauth/token", data={
+                "grant_type": "client_credentials",
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+            }, headers={"Accept": "application/json"})
+        except httpx.HTTPError as e:
+            log.warning("Mercado Livre: falha ao pedir acesso (%s).", e)
+            self.desligado = True
+            return None
+        if r.status_code != 200:
+            log.warning("Mercado Livre: acesso recusado (HTTP %s): %s", r.status_code, r.text[:200])
+            self.desligado = True
+            return None
+        dados = r.json()
+        self.token = dados.get("access_token")
+        self.token_expira = time.time() + int(dados.get("expires_in") or 21600)
+        return self.token
+
+    def _get(self, caminho: str):
+        token = self._obter_token()
+        if not token:
+            return 0, None
+        status, dados = self.f.get(f"{API}{caminho}", json=True,
+                                   headers={"Authorization": f"Bearer {token}"})
+        if status in (401, 403):
+            log.warning("Mercado Livre: %s em %s; desligando a loja nesta varredura.", status, caminho)
+            self.desligado = True
+        return status, dados
 
     # ---------------- busca
     def buscar(self, termo):
-        if self.token:
-            status, dados = self.f.get(
-                f"{API}/sites/MLB/search?q={quote(termo)}&limit={self.max_resultados}",
-                json=True, headers=self._h())
-            if status == 200 and dados:
-                return self._de_api(dados.get("results", []), termo)
-            log.warning("ML API respondeu %s; usando busca HTML.", status)
-        return self._de_html(termo)
-
-    def _de_api(self, resultados, termo):
-        saida = []
-        for it in resultados:
-            if not relevante(it.get("title", ""), termo):
-                continue
-            saida.append(Oferta(
-                loja=self.nome, titulo=it["title"], url=limpar_url(it["permalink"]),
-                preco=float(it.get("price") or 0),
-                preco_lista=float(it["original_price"]) if it.get("original_price") else None,
-                condicao="usado" if it.get("condition") == "used" else "novo",
-                vendedor=(it.get("seller") or {}).get("nickname"),
-                extra={"ml_id": it["id"]},
-            ))
-        return saida
-
-    def _de_html(self, termo):
-        slug = re.sub(r"\s+", "-", termo.strip().lower())
-        r = self.f.get_render(f"https://lista.mercadolivre.com.br/{quote(slug)}", "li.ui-search-layout__item")
-        if r.status != 200 or "account-verification" in r.url_final:
-            log.warning("ML: busca HTML bloqueada (HTTP %s).", r.status)
+        if self.desligado:
             return []
-        soup = BeautifulSoup(r.html, "lxml")
-        vistos, saida = set(), []
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
-            if not re.search(r"mercadolivre\.com\.br/.*(MLB-?\d+|/p/MLB\d+)", href):
+        status, dados = self._get(f"/products/search?status=active&site_id=MLB&q={quote(termo)}"
+                                  f"&limit={self.produtos_por_busca}")
+        if status != 200 or not isinstance(dados, dict):
+            return []
+        saida = []
+        for p in dados.get("results") or []:
+            nome = p.get("name") or ""
+            pid = p.get("id")
+            if not pid or not relevante(nome, termo):
                 continue
-            texto = a.get_text(" ", strip=True)
-            if not texto or not relevante(texto, termo):
-                continue
-            url = limpar_url(href)
-            if url in vistos:
-                continue
-            vistos.add(url)
-            saida.append(Oferta(loja=self.nome, titulo=texto, url=url, preco=0))
-            if len(saida) >= self.max_resultados:
+            oferta = self._melhor_oferta(pid, nome)
+            if oferta:
+                saida.append(oferta)
+            if self.desligado:
                 break
         return saida
 
+    def _melhor_oferta(self, produto_id: str, nome: str) -> Oferta | None:
+        status, dados = self._get(f"/products/{produto_id}/items?limit=20")
+        if status != 200 or not isinstance(dados, dict):
+            return None
+        ofertas = [i for i in (dados.get("results") or [])
+                   if i.get("item_id") and float(i.get("price") or 0) > 0
+                   and (i.get("currency_id") in (None, "BRL"))]
+        if not ofertas:
+            return None
+        melhor = min(ofertas, key=lambda i: float(i["price"]))
+        preco = float(melhor["price"])
+        lista = melhor.get("original_price")
+        return Oferta(
+            loja=self.nome, titulo=nome, url=link_anuncio(melhor["item_id"]), preco=preco,
+            preco_lista=float(lista) if lista and float(lista) > preco else None,
+            condicao="usado" if melhor.get("condition") == "used" else "novo",
+            vendedor=None,
+            extra={"ml_produto": produto_id, "ml_item": melhor["item_id"], "ml_ofertas": len(ofertas)},
+        )
+
     # ---------------- validação
     def validar(self, o):
-        ml_id = o.extra.get("ml_id")
-        if ml_id and self.token:
-            status, it = self.f.get(f"{API}/items/{ml_id}", json=True, headers=self._h())
-            if status == 200 and it:
-                if it.get("status") != "active":
-                    o.disponivel, o.motivo_estoque = False, f"ML: anúncio {it.get('status')} {it.get('sub_status') or ''}".strip()
-                    return o
-                if int(it.get("available_quantity") or 0) <= 0:
-                    o.disponivel, o.motivo_estoque = False, "ML: sem estoque"
-                    return o
-                o.preco = float(it.get("price") or o.preco)
-                if it.get("original_price"):
-                    o.preco_lista = float(it["original_price"])
-                o.disponivel, o.motivo_estoque = True, "ML API: active com estoque"
-                return o
-        # sem API: valida a página
-        r = self.f.get_render(o.url, "form.ui-pdp-actions, .ui-pdp-buybox")
-        res = validar_html(o.url, r.url_final, r.status, r.html, r.via == "browser")
-        o.titulo = res.titulo or o.titulo
-        o.preco = res.preco or o.preco
-        o.preco_lista = res.preco_lista or o.preco_lista
-        o.condicao = res.condicao or o.condicao
-        o.vendedor = res.vendedor or o.vendedor
-        o.disponivel, o.motivo_estoque = res.disponivel and bool(o.preco), res.motivo
+        # /products/{id}/items só lista ofertas ATIVAS (com estoque), e a página do
+        # anúncio é bloqueada para acessos da nuvem: a API é a fonte do estoque aqui.
+        if o.extra.get("ml_item"):
+            o.disponivel = True
+            o.motivo_estoque = f"ML API: oferta ativa no catálogo ({o.extra.get('ml_ofertas')} vendedores)"
+        else:
+            o.disponivel, o.motivo_estoque = False, "ML: link sem dados da API"
         return o

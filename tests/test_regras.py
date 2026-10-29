@@ -956,3 +956,46 @@ def test_escassez_considera_ultimos_dias(tmp_path, monkeypatch):
     b.con.commit()
     env = _varredura_fake(tmp_path, monkeypatch, {"Mirane": [("Coringa: O Mundo", 69.9, 69.9)]})
     assert env == []
+
+
+
+# ---------------- Mercado Livre (API de catálogo)
+def test_mercado_livre_catalogo(monkeypatch):
+    from stores.mercadolivre import MercadoLivreLoja, link_anuncio
+    monkeypatch.setenv("ML_CLIENT_ID", "123"); monkeypatch.setenv("ML_CLIENT_SECRET", "abc")
+
+    class Resp:
+        status_code = 200
+        text = ""
+        def json(self): return {"access_token": "TOK", "expires_in": 21600}
+
+    class Http:
+        def __init__(self): self.posts = []
+        def post(self, url, data=None, headers=None):
+            self.posts.append(data); return Resp()
+
+    respostas = {
+        "/products/search": (200, {"results": [
+            {"id": "MLB111", "name": "Frieren E A Jornada Para O Além Vol. 6"},
+            {"id": "MLB222", "name": "Caneca Frieren"}]}),
+        "/products/MLB111/items": (200, {"results": [
+            {"item_id": "MLB900", "price": 41.9, "original_price": 52.9, "condition": "new", "currency_id": "BRL"},
+            {"item_id": "MLB901", "price": 37.5, "condition": "new", "currency_id": "BRL"}]}),
+    }
+    f = _FetcherFalso(respostas)
+    f.http = Http()
+    loja = MercadoLivreLoja(f, {"nome": "Mercado Livre"})
+    achados = loja.buscar("frieren vol 6")
+    assert len(achados) == 1
+    o = loja.validar(achados[0])
+    assert o.disponivel and o.preco == 37.5 and o.url == "https://produto.mercadolivre.com.br/MLB-901"
+    assert f.http.posts[0]["grant_type"] == "client_credentials"
+    assert link_anuncio("MLB12345") == "https://produto.mercadolivre.com.br/MLB-12345"
+
+
+def test_mercado_livre_sem_credenciais_e_pulado(monkeypatch):
+    from stores.mercadolivre import MercadoLivreLoja
+    monkeypatch.delenv("ML_CLIENT_ID", raising=False); monkeypatch.delenv("ML_CLIENT_SECRET", raising=False)
+    f = _FetcherFalso({})
+    loja = MercadoLivreLoja(f, {"nome": "Mercado Livre"})
+    assert loja.buscar("frieren") == [] and loja.buscar("dandadan") == [] and f.pedidos == []

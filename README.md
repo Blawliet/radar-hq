@@ -179,7 +179,7 @@ Avisos de "esgotado" em produtos relacionados, no rodapé da página, são ignor
 | Estante Virtual | página, com navegador | ✅ muitos usados (aparecem como Seminovo) |
 | Amazon Brasil | página, com navegador | ⚠️ funciona, mas às vezes bloqueia (a janela é pulada) |
 | KaBuM! | página, com navegador | ⚠️ games; em observação |
-| Mercado Livre | desativada | ❌ bloqueia acessos vindos da nuvem |
+| Mercado Livre | API oficial de catálogo | ⚙️ precisa dos Secrets `ML_CLIENT_ID` e `ML_CLIENT_SECRET`; só produtos de catálogo |
 | Magalu | desativada | ❌ bloqueia acessos vindos da nuvem |
 | Shopee | desativada | ❌ exige login |
 
@@ -195,6 +195,8 @@ Em **Settings > Secrets and variables > Actions**:
 |---|---|
 | `TELEGRAM_BOT_TOKEN` | token do bot, gerado no @BotFather |
 | `TELEGRAM_CHAT_ID` | ID do grupo (número negativo) |
+| `ML_CLIENT_ID` | App ID do app no portal de desenvolvedores do Mercado Livre (opcional) |
+| `ML_CLIENT_SECRET` | Secret Key do mesmo app (opcional) |
 
 Passo a passo completo em `GUIA_SEM_PC.md`.
 

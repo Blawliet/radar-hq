@@ -4,7 +4,7 @@
 # adaptador:
 #   auto          detecta a plataforma (VTEX, Shopify, Nuvemshop, Woo, Tray, Magento...)
 #   amazon        coletor próprio
-#   mercadolivre  coletor próprio (API com token ou HTML)
+#   mercadolivre  API oficial de catálogo (precisa de ML_CLIENT_ID e ML_CLIENT_SECRET)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
 #   vtex          API de catálogo da VTEX (Livrarias Curitiba; Rika e Ri Happy são detectadas)
 #   woocommerce   Store API do WordPress (Monstra, Capitão Onigiri, Amora, Comix Zone)
@@ -40,11 +40,12 @@ lojas:
     max_resultados: 8
     tempo_max_min: 8        # a mais lenta; bloqueia boa parte das páginas
 
-  # desativado: bloqueia acessos vindos da nuvem (0 ofertas em todas as varreduras)
+  # API oficial de catálogo. Precisa dos Secrets ML_CLIENT_ID e ML_CLIENT_SECRET
+  # (app grátis no portal de desenvolvedores); sem eles a loja é pulada sozinha.
   - nome: Mercado Livre
-    ativo: false
     adaptador: mercadolivre
-    max_resultados: 15
+    produtos_por_busca: 6
+    tempo_max_min: 8
 
   # desativado: bloqueia acessos vindos da nuvem (nenhum resultado em todas as varreduras)
   - nome: Magalu

@@ -55,9 +55,31 @@ Se aparecer `"result":[]`, mande um "oi" para o bot e recarregue a página.
 1. Aba **Actions**. Se pedir, clique em **I understand my workflows, go ahead and enable them**.
 2. **Radar HQ > Run workflow**, modo **teste**. Chega no Telegram um alerta de exemplo, com o botão **🛒 Comprar agora**.
 3. Rode de novo no modo **seco** e abra o log do passo "Rodar o radar". Ele mostra tudo que achou e por que aceitou ou descartou cada item, sem mandar nada.
-4. Pronto. A partir daí ele roda sozinho às 05h30, 09h00, 12h00, 15h00, 19h00 e 23h30.
+4. Pronto. A partir daí ele roda sozinho a cada 2 horas, das 05h30 às 23h30. Às 23h30 também chega o resumão do dia com as melhores ofertas.
 
 Dica: no Telegram, abra a conversa com o bot, toque no nome dele e ative um **som de notificação próprio**. Assim você reconhece um alerta de oferta sem nem olhar o celular.
+
+## Grupo com várias pessoas (Bruno, Thiago, Ivan)
+
+Cada pessoa tem a própria lista em `config/pessoas/<nome>.yaml`. Os alertas vão para um grupo do Telegram e mostram para quem são:
+
+```
+🚨 NOVA OFERTA ENCONTRADA!
+👥 Para: Bruno e Ivan
+```
+
+Cada um tem seus raros, promoções, bloqueios ("já tenho") e radares ligados. Um box que o Bruno já tem pode ser sugestão para o Ivan, e vice-versa.
+
+**Montar o grupo:**
+
+1. No Telegram, crie um grupo com o Thiago e o Ivan e adicione o bot **Radar HQ** como membro.
+2. Mande qualquer mensagem no grupo.
+3. Abra `https://api.telegram.org/botSEU_TOKEN/getUpdates` e procure o `"chat":{"id":-...` do grupo. O ID do grupo é **negativo**.
+4. No GitHub, edite o Secret `TELEGRAM_CHAT_ID` e troque pelo ID do grupo, com o sinal de menos.
+
+**Adicionar o que alguém quer:** edite o arquivo da pessoa no GitHub (clique no arquivo, depois no lápis) e salve. Cada arquivo tem exemplos comentados. Ao salvar, o bot manda no grupo a lista atualizada de todos.
+
+**Ver as listas a qualquer momento:** Actions > Radar HQ > Run workflow, modo **lista**.
 
 ## Se algo der errado
 

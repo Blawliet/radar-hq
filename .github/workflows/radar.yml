@@ -37,6 +37,8 @@ jobs:
       CANAL: telegram
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      ML_CLIENT_ID: ${{ secrets.ML_CLIENT_ID }}
+      ML_CLIENT_SECRET: ${{ secrets.ML_CLIENT_SECRET }}
       USE_PLAYWRIGHT: "true"
       DELAY_SEGUNDOS: "3"
       MODO: ${{ github.event_name == 'push' && 'lista' || github.event.schedule == '50 1 * * *' && 'resumo' || github.event.inputs.modo || 'agora' }}
