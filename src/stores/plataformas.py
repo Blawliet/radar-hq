@@ -389,19 +389,44 @@ class WooLoja(HtmlLoja):
         super().__init__(fetcher, cfg, "woocommerce")
         self.api_ok = True
 
+    def _api(self, consulta):
+        base = self.cfg["base"].rstrip("/")
+        return self.f.get(
+            f"{base}/wp-json/wc/store/v1/products?search={quote_plus(consulta)}&per_page={self.max_resultados}",
+            json=True)
+
     def buscar(self, termo):
         if not self.api_ok:
             return super().buscar(termo)
-        base = self.cfg["base"].rstrip("/")
-        status, dados = self.f.get(
-            f"{base}/wp-json/wc/store/v1/products?search={quote_plus(termo)}&per_page={self.max_resultados}",
-            json=True)
+        status, dados = self._api(termo)
         if status != 200 or not isinstance(dados, list):
             log.info("%s: Store API indisponível (HTTP %s), usando busca HTML.", self.nome, status)
             self.aviso = f"API da loja recusou (HTTP {status}), usando busca pelo site"
             self.api_ok = False
             return super().buscar(termo)
+        # A busca do WordPress exige TODAS as palavras: "nossos melhores amigos friends" pode
+        # voltar vazio enquanto "nossos melhores amigos" acha. Tenta de novo com as 3 primeiras.
+        if not dados:
+            curto = " ".join([x for x in normalizar(termo).split()
+                              if x not in PALAVRAS_VAZIAS and not x.isdigit()][:3])
+            if curto and curto != normalizar(termo):
+                st2, d2 = self._api(curto)
+                if st2 == 200 and isinstance(d2, list):
+                    dados = d2
         self._registrar_api(termo, status, dados)
+        # Loja que ignora a busca devolve sempre a mesma vitrine: aí a API não serve.
+        if dados and not any(relevante(BeautifulSoup(x.get("name", ""), "lxml").get_text(), termo)
+                             for x in dados):
+            assinatura = tuple(str(x.get("id")) for x in dados[:5])
+            vistas = getattr(self, "_vitrines", None)
+            if vistas is None:
+                vistas = self._vitrines = {}
+            vistas[assinatura] = vistas.get(assinatura, 0) + 1
+            if vistas[assinatura] >= 3 and len(vistas) == 1:
+                log.info("%s: Store API ignora o termo buscado, usando busca HTML.", self.nome)
+                self.aviso = "API da loja ignora a busca, usando busca pelo site"
+                self.api_ok = False
+                return super().buscar(termo)
         saida = []
         for p in dados:
             if not (p.get("is_in_stock") and p.get("is_purchasable")):

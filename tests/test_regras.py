@@ -999,3 +999,36 @@ def test_mercado_livre_sem_credenciais_e_pulado(monkeypatch):
     f = _FetcherFalso({})
     loja = MercadoLivreLoja(f, {"nome": "Mercado Livre"})
     assert loja.buscar("frieren") == [] and loja.buscar("dandadan") == [] and f.pedidos == []
+
+
+# ---------------- WooCommerce: busca curta e loja que ignora a busca
+def _woo_prod(i, nome, preco=14990, lista=14990):
+    return {"id": i, "name": nome, "permalink": f"https://loja.com.br/produto/{i}/",
+            "is_in_stock": True, "is_purchasable": True,
+            "prices": {"price": str(preco), "regular_price": str(lista), "currency_minor_unit": 2}}
+
+
+def test_woo_tenta_busca_mais_curta():
+    from stores.plataformas import WooLoja
+
+    class F(_FetcherFalso):
+        def get(self, url, json=False, headers=None):
+            self.pedidos.append(url)
+            if "search=nossos+melhores+amigos&" in url:
+                return 200, [_woo_prod(1, "Nossos Melhores Amigos – A Verdadeira História de Friends", 9095, 12990)]
+            return 200, []
+    f = F({})
+    loja = WooLoja(f, {"nome": "Comix Zone", "base": "https://comixzone.com.br"})
+    achados = loja.buscar("nossos melhores amigos friends")
+    assert len(achados) == 1 and achados[0].preco == 90.95 and achados[0].preco_lista == 129.9
+    assert len(f.pedidos) == 2
+
+
+def test_woo_loja_que_ignora_a_busca_vai_para_html():
+    from stores.plataformas import WooLoja
+    vitrine = [_woo_prod(i, f"Mirai Nikki {i}") for i in range(1, 6)]
+    f = _FetcherFalso({"wc/store": (200, vitrine)})
+    loja = WooLoja(f, {"nome": "Amora Bookstore", "base": "https://amorabookstore.com.br"})
+    for termo in ["frieren", "sakamoto days", "spawn origens"]:
+        loja.buscar(termo)
+    assert loja.api_ok is False and "ignora" in loja.aviso
