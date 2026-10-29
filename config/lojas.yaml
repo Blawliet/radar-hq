@@ -7,7 +7,7 @@
 #   mercadolivre  coletor próprio (API com token ou HTML)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
 #   vtex          API de catálogo da VTEX (Livrarias Curitiba; Rika e Ri Happy são detectadas)
-#   woocommerce   Store API do WordPress (Monstra, Capitão Onigiri, Amora Bookstore)
+#   woocommerce   Store API do WordPress (Monstra, Capitão Onigiri, Amora, Comix Zone)
 #   shopify       API pública da Shopify (Taverna do Rei)
 #   nuvemshop     busca da loja + estoque das variantes na página (Mirane Comics)
 #   html          busca HTML genérica (use "busca" e "padrao_produto")
@@ -84,6 +84,12 @@ lojas:
     adaptador: woocommerce
     base: https://lojamonstra.com.br
     oficial: true        # loja da editora Monstra (Fantasma, Dylan Dog...)
+
+  - nome: Comix Zone
+    delay: 1.5
+    adaptador: woocommerce
+    base: https://comixzone.com.br
+    oficial: true        # loja da editora Comix Zone (As Guerras de Lucas, Nossos Melhores Amigos...)
 
   - nome: Comic Boom
     delay: 1.5
