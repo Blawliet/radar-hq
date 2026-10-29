@@ -1,0 +1,466 @@
+{
+ "a saga do flash": {
+  "http": 200,
+  "itens": 10,
+  "exemplos": [
+   {
+    "nome": "A SAGA DO FLASH 19",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "A SAGA DO FLASH 18",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "A SAGA DO FLASH 15",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "quarteto fantastico hickman omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "one piece vol 97": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "one piece vol 98": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "one piece vol 103": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "one piece vol 104": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "blueberry edicao definitiva": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "supergirl peter david": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "a saga do lanterna verde": {
+  "http": 200,
+  "itens": 9,
+  "exemplos": [
+   {
+    "nome": "A SAGA DO LANTERNA VERDE 07",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "A SAGA DO LANTERNA VERDE 10",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "A SAGA DO LANTERNA VERDE 08",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "absolute batman": {
+  "http": 200,
+  "itens": 10,
+  "exemplos": [
+   {
+    "nome": "ABSOLUTE BATMAN 06",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "ABSOLUTE BATMAN 05",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "ABSOLUTE BATMAN 03",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "spawn origens": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "spawn panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "flash geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box ajin": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box gantz parte 2": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "battle royale omnibus": {
+  "http": 200,
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "BATTLE ROYALE OMNIBUS VOL. 05 DE 05 (COM 4 CARDS EXCLUSIVOS + DECKBOX)",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "BATTLE ROYALE OMNIBUS • VOL. 04",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "BATTLE ROYALE OMNIBUS VOL. 03 DE 05",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "kit a saga da mulher maravilha": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "kit lanterna verde panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dandadan kit": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dandadan box": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dandadan colecao": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dandadan volumes": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "tartarugas ninja pipoca e nanquim": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hunter x hunter vol 38": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hunter x hunter": {
+  "http": 200,
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "HUNTER X HUNTER – VOL. 03",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "HUNTER X HUNTER – VOL. 02",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "HUNTER X HUNTER • VOL. 37",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "frieren": {
+  "http": 200,
+  "itens": 8,
+  "exemplos": [
+   {
+    "nome": "FRIEREN E A JORNADA PARA O ALÉM VOL. 13",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "FRIEREN E A JORNADA PARA O ALÉM – NOVEL 01",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "FRIEREN E A JORNADA PARA O ALÉM VOL. 6",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "sakamoto days": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "SAKAMOTO DAYS • 01",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "SAKAMOTO DAYS • VOL.04",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "carbono e silicio bablet": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "resta um jordan crane": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "resta um hqueria": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ninfeias negras graphic novel": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "omnibus marvel": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "omnibus dc": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "omnibus mythos": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "omnibus pipoca e nanquim": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box manga": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box mangá panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box manga jbc": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "box hq": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "kit hq panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "colecao completa manga": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "the walking dead vol 27": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "walking dead 27 panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "9788542629552": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lanterna verde o dia mais claro": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "superman mundos em guerra": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "parcerias perseguicao ate o fim dos tempos": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "o outro lanterna verde da terra": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "O MELHOR DA DC – LANTERNA VERDE: O OUTRO LANTERNA VERDE DA TERRA",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "batman padroes sombrios": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "batman por neal adams edicao absoluta": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "sociedade da justica da america geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "superman as quatro estacoes dc de bolso": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "superman o mundo": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "supergirl o mundo": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "coringa o mundo": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "batman ano 100": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "tartarugas ninja colecao classica": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "o ultimo ronin tartarugas ninja": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "tartarugas ninja anos perdidos": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "tartarugas ninja preto branco e verde": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "o eternauta segunda parte": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dylan dog omnibus": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "DYLAN DOG OMNIBUS VOL. 5: MORGANA",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "COMBO DYLAN DOG OMNIBUS",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "o fantasma fase marvel": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "o fantasma fase dc": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "as guerras de lucas episodio ii": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "guerras de lucas 2 comix zone": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "nossos melhores amigos friends": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "nossos melhores amigos comix zone": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ }
+}
