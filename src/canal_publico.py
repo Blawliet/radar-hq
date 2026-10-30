@@ -40,7 +40,7 @@ def config() -> dict:
         cfg = yaml.safe_load(caminho.read_text(encoding="utf-8")) or {}
     except FileNotFoundError:
         cfg = {}
-    cfg["chat"] = os.getenv("NESTA_RASCUNHO_CHAT") or cfg.get("chat") or ""
+    cfg["chat"] = os.getenv("NESTA_RASCUNHO_CHAT") or cfg.get("chat") or ler_chat_salvo()
     cfg["tag"] = os.getenv("AMAZON_TAG") or cfg.get("tag") or ""
     cfg.setdefault("desconto_minimo", 30)
     cfg.setdefault("horarios_post", ["09:30", "13:30", "19:30"])
@@ -48,6 +48,66 @@ def config() -> dict:
     cfg.setdefault("repostar_dias", 7)
     cfg.setdefault("buscas_por_rodada", 3)
     return cfg
+
+
+# ------------------------------------------------------------------ conversa privada com o bot
+# O Bruno abre o link t.me/<bot>?start=nesta-<código> e o radar descobre sozinho para onde
+# mandar os rascunhos. O ID fica salvo CIFRADO com o token do bot (o repositório é público).
+ARQ_CHAT = RAIZ / "data" / "nesta-chat.bin"
+
+
+def _chave() -> bytes:
+    import hashlib
+    return hashlib.sha256(("nesta:" + os.getenv("TELEGRAM_BOT_TOKEN", "")).encode()).digest()
+
+
+def _xor(dados: bytes) -> bytes:
+    k = _chave()
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(dados))
+
+
+def ler_chat_salvo() -> str:
+    try:
+        texto = _xor(ARQ_CHAT.read_bytes()).decode()
+    except (FileNotFoundError, UnicodeDecodeError):
+        return ""
+    return texto[4:] if texto.startswith("chat") else ""
+
+
+def descobrir_chat(cfg: dict) -> str:
+    """Procura nas mensagens recebidas pelo bot o /start com o código do Nesta Estante."""
+    import hashlib
+    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    alvo = cfg.get("codigo_hash")
+    if not token or not alvo:
+        return ""
+    import httpx
+    try:
+        r = httpx.get(f"https://api.telegram.org/bot{token}/getUpdates", timeout=20,
+                      params={"allowed_updates": '["message"]'})
+        updates = r.json().get("result", []) if r.status_code == 200 else []
+    except Exception as e:
+        log.warning("Canal público: não consegui ler as mensagens do bot (%s)", e)
+        return ""
+    for u in reversed(updates):
+        msg = u.get("message") or {}
+        partes = (msg.get("text") or "").split()
+        if msg.get("chat", {}).get("type") != "private" or len(partes) < 2 or partes[0] != "/start":
+            continue
+        if hashlib.sha256(partes[1].encode()).hexdigest() != alvo:
+            continue
+        chat = str(msg["chat"]["id"])
+        ARQ_CHAT.parent.mkdir(parents=True, exist_ok=True)
+        ARQ_CHAT.write_bytes(_xor(("chat" + chat).encode()))
+        try:
+            httpx.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=20, json={
+                "chat_id": chat, "text": "✅ Pronto! Os rascunhos do Nesta Estante vão chegar aqui, "
+                                        "às 09h30, 13h30 e 19h30. É só tocar no bloco para copiar."})
+        except Exception:
+            pass
+        log.info("Canal público: conversa privada encontrada e salva.")
+        return chat
+    return ""
 
 
 def ativo(cfg: dict | None = None) -> bool:
@@ -183,6 +243,8 @@ def publicar(validadas: list, excluir_titulos: list[str], enviar: bool = True,
     if not ativo(cfg):
         return 0
     agora = agora or datetime.now()
+    if enviar and not cfg["chat"]:
+        cfg["chat"] = descobrir_chat(cfg)
     con = _con(db or RAIZ / "data" / "radar.db")
     _guardar_candidatos(con, selecionar(validadas, cfg, excluir_titulos))
     slot = horario_da_vez(cfg, agora)

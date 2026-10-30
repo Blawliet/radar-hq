@@ -4,11 +4,13 @@
 # O radar manda os posts prontos para o Bruno numa conversa privada com o bot do
 # Telegram; ele copia e cola no Canal do WhatsApp. O grupo BASTA LER não muda.
 #
-# Secrets do GitHub:
-#   NESTA_RASCUNHO_CHAT  ID do Bruno no Telegram (para onde vão os rascunhos)
-#   AMAZON_TAG           tag de Associado da Amazon (ex.: nestaestante-20)
+# Para onde vão os rascunhos: o Bruno abre o link do bot com o código de pareamento
+# (/start nesta-...) e o radar salva a conversa sozinho, cifrada com o token do bot.
+# Aqui fica só o hash do código. Opcional: Secret NESTA_RASCUNHO_CHAT com o ID direto.
+# Tag de Associado da Amazon: Secret AMAZON_TAG (quando existir).
 # =====================================================================
 ativo: true
+codigo_hash: fc3c9e9c4fe18945ada202ab86dae62a1ee1915c2facfa5d8aa8f344efcb2cf3
 desconto_minimo: 30        # % de desconto para virar post
 # começo devagar: 3 posts por dia, cada um a melhor oferta das últimas 8 horas
 horarios_post: ["09:30", "13:30", "19:30"]

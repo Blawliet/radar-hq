@@ -1253,3 +1253,14 @@ def test_canal_publico_reveza_buscas():
     cfg = {"buscas": ["a", "b", "c", "d", "e"], "buscas_por_rodada": 2}
     assert cp.buscas_da_rodada(cfg, 0) == ["a", "b"] and cp.buscas_da_rodada(cfg, 1) == ["c", "d"]
     assert cp.buscas_da_rodada(cfg, 2) == ["e", "a"]
+
+
+def test_canal_publico_chat_cifrado(tmp_path, monkeypatch):
+    import canal_publico as cp
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "123:abc")
+    monkeypatch.setattr(cp, "ARQ_CHAT", tmp_path / "c.bin")
+    cp.ARQ_CHAT.write_bytes(cp._xor(b"chat987654"))
+    assert cp.ler_chat_salvo() == "987654"
+    assert b"987654" not in cp.ARQ_CHAT.read_bytes()            # não fica legível no repositório
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "outro")
+    assert cp.ler_chat_salvo() == ""
