@@ -175,6 +175,13 @@ REDE = {
 def main():
     pedidos = set(sys.argv[1].split(",")) if len(sys.argv) > 1 and sys.argv[1] else set(ALVOS)
     PASTA.mkdir(parents=True, exist_ok=True)
+    if "nesta" in pedidos:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+        import canal_publico as cp
+        cfg = cp.config()
+        achou = bool(cfg["chat"]) or bool(cp.descobrir_chat(cfg))
+        (PASTA / "nesta.txt").write_text(f"pareado: {achou}\n", encoding="utf-8")
+        print("nesta", achou)
     if "colecao" in pedidos:
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
         import yaml

@@ -21,6 +21,7 @@ jobs:
     timeout-minutes: 20
     env:
       TZ: America/Sao_Paulo
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,7 +41,7 @@ jobs:
         run: |
           git config user.name "radar-bot"
           git config user.email "radar-bot@users.noreply.github.com"
-          git add data/sonda data/colecao 2>/dev/null || git add data/sonda
+          git add data/sonda data/colecao data/nesta-chat.bin 2>/dev/null || git add data/sonda
           git diff --cached --quiet || git commit -m "sonda: $(date +'%d/%m %H:%M')"
           git pull --rebase -X theirs -q || true
           git push || echo "nada para enviar"
