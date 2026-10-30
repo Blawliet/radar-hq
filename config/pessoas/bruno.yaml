@@ -141,6 +141,14 @@ promocoes:
     formato: Omnibus
     buscas: [flash geoff johns omnibus]
 
+  - id: sja-geoff-johns
+    nome: "Sociedade da Justiça da América por Geoff Johns (Omnibus)"
+    editora: Panini
+    termos: [sociedade da justica, geoff johns]
+    volumes: "1,2"
+    formato: Omnibus
+    buscas: [sociedade da justica da america geoff johns omnibus, sociedade da justica geoff johns vol 1]
+
   - id: box-ajin
     nome: Box Ajin (vols. 1 ao 17)
     editora: Panini
