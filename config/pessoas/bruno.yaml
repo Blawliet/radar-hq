@@ -247,6 +247,14 @@ promocoes:
 
   # Graphic novels avulsas (volume único). Se só 1 ou 2 lojas tiverem, o radar
   # avisa mesmo sem desconto ("difícil de achar"); se estiver fácil, só com 25% OFF.
+  - id: sociedade-do-cansaco
+    nome: "Sociedade do Cansaço (Byung-Chul Han)"
+    editora: Vozes
+    termos: [sociedade do cansaco]
+    excluir: [kindle, ebook, e book, audiolivro]
+    formato: Livro
+    buscas: [sociedade do cansaco byung chul han]
+
   - id: carbono-silicio
     nome: Carbono & Silício (Mathieu Bablet)
     editora: QS Comics
