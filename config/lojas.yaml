@@ -4,6 +4,7 @@
 # adaptador:
 #   auto          detecta a plataforma (VTEX, Shopify, Nuvemshop, Woo, Tray, Magento...)
 #   amazon        coletor próprio
+#   kabum         API do catálogo da KaBuM!
 #   mercadolivre  API oficial de catálogo (precisa de ML_CLIENT_ID e ML_CLIENT_SECRET)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
 #   vtex          API de catálogo da VTEX (Livrarias Curitiba; Rika e Ri Happy são detectadas)
@@ -140,18 +141,12 @@ lojas:
     adaptador: nuvemshop
     base: https://miranecomics.com.br
 
+  # API pública do catálogo da KaBuM!: preço no PIX, oferta relâmpago e estoque,
+  # sem abrir navegador
   - nome: KaBuM!
-    adaptador: html
-    base: https://www.kabum.com.br
-    busca: "/busca/{q_slug}"
-    padrao_produto: "/produto/\\d+"
-    playwright: true
-    seletor_espera: "#blocoValores"
+    adaptador: kabum
+    delay: 1.5
     categorias: [games]
-    # o botão "Comprar" da KaBuM! nasce desativado até a página carregar inteira;
-    # "Restam N unid." confirma o estoque e o preço válido é o do PIX
-    estoque_ok_regex: 'restam\s+\d+\s+unid'
-    preco_regex: 'r\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})[^$]{0,40}?vista no pix'
 
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam

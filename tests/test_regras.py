@@ -706,7 +706,9 @@ def test_telegram_corta_mensagem_grande():
 def test_kabum_sinais_da_loja():
     import yaml
     from stores.plataformas import HtmlLoja
-    cfg = [c for c in yaml.safe_load((RAIZ / "config" / "lojas.yaml").read_text())["lojas"] if c["nome"] == "KaBuM!"][0]
+    # sinais próprios de uma loja HTML (era a KaBuM!, que agora usa a API)
+    cfg = {"nome": "KaBuM!", "base": "https://www.kabum.com.br", "estoque_ok_regex": r'restam\s+\d+\s+unid',
+           "preco_regex": r'r\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})[^$]{0,40}?vista no pix'}
     pagina = """<html><head><script type="application/ld+json">{"@type":"Product","name":"Console PlayStation 5 Wolverine","offers":{"price":"4742.07","availability":"https://schema.org/InStock"}}</script></head><body>
     <h1>Console PlayStation 5 Sony Edição Digital Marvel's Wolverine Pacote de Edição Limitada</h1>
     <div id="blocoValores"><b>R$ 5.099,00</b> <h4>R$ 4.556,07</h4><span>À vista no PIX com 7% de desconto</span>
@@ -1032,3 +1034,30 @@ def test_woo_loja_que_ignora_a_busca_vai_para_html():
     for termo in ["frieren", "sakamoto days", "spawn origens"]:
         loja.buscar(termo)
     assert loja.api_ok is False and "ignora" in loja.aviso
+
+
+# ---------------- KaBuM! pela API do catálogo
+def test_kabum_api():
+    from stores.kabum import KabumLoja
+    item = {"type": "product", "id": 1065184, "attributes": {
+        "title": "Console PlayStation 5 Edição Digital Marvel's Wolverine Edição Limitada",
+        "price": 5099.0, "old_price": 0.0, "price_with_discount": 4742.07, "offer": None,
+        "available": True, "stock": 3, "is_openbox": False, "is_marketplace": False}}
+    jogo = {"type": "product", "id": 1, "attributes": {
+        "title": "Jogo Marvel's Wolverine, PS5", "price": 399.0, "old_price": 0.0, "price_with_discount": 371.07,
+        "offer": {"quantity_available": 493, "price": 339.0, "price_with_discount": 315.27},
+        "available": True, "stock": 10}}
+    f = _FetcherFalso({"products?query=": (200, {"data": [item, jogo]}),
+                       "products/1065184": (200, {"data": dict(item, attributes=dict(item["attributes"], available=False, stock=0))})})
+    loja = KabumLoja(f, {"nome": "KaBuM!"})
+    achados = loja.buscar("wolverine")
+    ps5 = loja.validar(achados[0])
+    assert ps5.disponivel and ps5.preco == 4742.07 and ps5.preco_lista is None
+    assert ps5.url == "https://www.kabum.com.br/produto/1065184"
+    j = loja.validar(achados[1])
+    assert j.preco == 315.27 and j.preco_lista == 371.07
+    # link fixo: confere pelo número do produto
+    from models import Oferta
+    fixa = Oferta("KaBuM!", "PS5", "https://www.kabum.com.br/produto/1065184/console-ps5", 0, extra={"fixa": True})
+    r = loja.validar(fixa)
+    assert r.disponivel is False and r.extra.get("fixa")
