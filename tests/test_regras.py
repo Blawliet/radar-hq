@@ -1214,3 +1214,37 @@ def test_telegram_formatos_de_outros_canais():
     assert a[0].preco == 118.69 and a[0].preco_lista == 249.9 and a[0].url == "https://link.amazon/xyz"
     b = post_para_ofertas(posts[1], "grupo2quadrinhos")
     assert [o.titulo for o in b] == ["Extremity"] and b[0].preco == 49 and b[0].loja.startswith("Amazon")
+
+
+# ---------------- canal público Nesta Estante (rascunhos para o WhatsApp)
+def test_canal_publico_seleciona_e_monta(tmp_path, monkeypatch):
+    import canal_publico as cp
+    monkeypatch.setenv("AMAZON_TAG", "nestaestante-20")
+    monkeypatch.delenv("NESTA_RASCUNHO_CHAT", raising=False)
+    cfg = cp.config()
+    ofertas = [
+        Oferta("Amazon Brasil", "Gyo - Junji Ito", "https://www.amazon.com.br/dp/6555940000", 63.72,
+               preco_lista=99.9, disponivel=True, extra={"asin": "6555940000"}),
+        Oferta("Amazon Brasil", "Frieren 2", "https://www.amazon.com.br/dp/6525900000", 39.9,
+               preco_lista=45.9, disponivel=True, extra={"asin": "6525900000"}),          # 13%: fica de fora
+        Oferta("Amazon (via @hqbarata)", "Batman", "https://link.amazon/x", 50, preco_lista=200, disponivel=True),
+        Oferta("Loja Panini", "Spawn 10", "https://panini.com.br/x", 20, preco_lista=40, disponivel=True),
+        Oferta("Amazon Brasil", "One Piece Vol. 3 Paperback English", "https://www.amazon.com.br/dp/B000000001", 20,
+               preco_lista=60, disponivel=True, extra={"asin": "B000000001"}),
+    ]
+    sel = cp.selecionar(ofertas, cfg, ["english", "paperback"])
+    assert [o.titulo for o in sel] == ["Gyo - Junji Ito"]
+    post = cp.montar_post(sel[0], cfg["tag"])
+    assert "*Gyo - Junji Ito*" in post and "~R$ 99,90~" in post and "*R$ 63,72*" in post and "(36% OFF)" in post
+    assert "https://www.amazon.com.br/dp/6555940000?tag=nestaestante-20" in post and "Associado da Amazon" in post
+    assert "<pre>" in cp.mensagem_rascunho(post, 1, 1)
+    # sem o Secret do chat: não envia, só mostra; e lembra o que já foi postado
+    n = cp.publicar(ofertas, ["english"], enviar=False, db=tmp_path / "r.db")
+    assert n == 1
+
+
+def test_canal_publico_reveza_buscas():
+    import canal_publico as cp
+    cfg = {"buscas": ["a", "b", "c", "d", "e"], "buscas_por_rodada": 2}
+    assert cp.buscas_da_rodada(cfg, 0) == ["a", "b"] and cp.buscas_da_rodada(cfg, 1) == ["c", "d"]
+    assert cp.buscas_da_rodada(cfg, 2) == ["e", "a"]

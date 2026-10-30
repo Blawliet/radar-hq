@@ -49,6 +49,9 @@ class AmazonLoja(Loja):
     def buscar(self, termo):
         depto = DEPARTAMENTO.get(self.categoria_atual, "stripbooks")
         url = f"{BASE}/s?k={quote_plus(termo)}&i={depto}"
+        canal = self.categoria_atual == "canal"
+        if canal:
+            url += "&rh=p_8%3A30-99"           # filtro da própria Amazon: 30% de desconto ou mais
         r = self.f.get_render(url, 'div[data-component-type="s-search-result"]')
         if r.status != 200 or _bloqueado(r.html, r.url_final):
             log.warning("Amazon: busca bloqueada ou falhou (HTTP %s).", r.status)
@@ -61,15 +64,18 @@ class AmazonLoja(Loja):
             if not asin or not h2:
                 continue
             titulo = h2.get_text(" ", strip=True)
-            if not relevante(titulo, termo):
+            if not canal and not relevante(titulo, termo):
                 continue
             if re.fullmatch(r"[0-9]{9}[0-9X]", asin) and isbn_estrangeiro(asin):
                 continue        # ISBN de fora do Brasil: nem abre a página
-            preco = div.select_one(".a-price .a-offscreen")
+            preco = div.select_one(".a-price:not(.a-text-price) .a-offscreen")
+            lista = div.select_one(".a-price.a-text-price .a-offscreen")
             saida.append(Oferta(
                 loja=self.nome, titulo=titulo, url=f"{BASE}/dp/{asin}",
                 preco=_num(preco.get_text()) if preco else 0,
-                extra={"asin": asin, "categoria": self.categoria_atual},
+                preco_lista=_num(lista.get_text()) if lista else None,
+                extra={"asin": asin, "categoria": "livros" if canal else self.categoria_atual,
+                       "canal": canal},
             ))
             if len(saida) >= self.max_resultados:
                 break

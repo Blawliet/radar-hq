@@ -40,7 +40,8 @@ lojas:
   - nome: Amazon Brasil
     adaptador: amazon
     max_resultados: 8
-    tempo_max_min: 8        # a mais lenta; bloqueia boa parte das páginas
+    tempo_max_min: 10       # a mais lenta; bloqueia boa parte das páginas
+    categorias: [livros, games, canal]   # canal = buscas do Nesta Estante
 
   # API oficial de catálogo. Precisa dos Secrets ML_CLIENT_ID e ML_CLIENT_SECRET
   # (app grátis no portal de desenvolvedores); sem eles a loja é pulada sozinha.

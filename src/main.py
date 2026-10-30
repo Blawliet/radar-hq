@@ -156,6 +156,12 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
     for _, termo, categoria in grupo.todas_buscas():
         if categoria in loja.categorias:
             lotes.append((categoria, termo))
+    # buscas próprias do canal público Nesta Estante (só nas lojas com a categoria "canal")
+    import canal_publico
+    cfg_canal = canal_publico.config()
+    if "canal" in loja.categorias and canal_publico.ativo(cfg_canal):
+        lotes += [("canal", t) for t in canal_publico.buscas_da_rodada(cfg_canal)]
+    canal_validadas = 0
     for categoria, item in lotes:
         if estourou():
             parada = "tempo esgotado"
@@ -183,7 +189,14 @@ def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:
             vistos.add(o.url)
 
             # filtro barato pelo título da busca: só abre a página se interessar a alguém
-            if not o.extra.get("fixa") and all(descartavel(avaliar(o, p)) for p in grupo.perfis):
+            if o.extra.get("canal"):
+                # busca do canal público: só abre a página se o cartão da busca já mostra
+                # o desconto mínimo, e no máximo 8 páginas por rodada
+                d_card = canal_publico.desconto(o)
+                if not d_card or d_card < float(cfg_canal["desconto_minimo"]) or canal_validadas >= 8:
+                    continue
+                canal_validadas += 1
+            elif not o.extra.get("fixa") and all(descartavel(avaliar(o, p)) for p in grupo.perfis):
                 continue
 
             n_valid += 1
@@ -306,6 +319,13 @@ def varredura(enviar: bool = True, imprimir: bool = True) -> int:
                                        juntar_nomes(nomes) if nomes and any(nomes) else None, recorde)
                 enviados += 1
                 time.sleep(2.5)
+        # canal público Nesta Estante: rascunhos dos posts para o WhatsApp
+        try:
+            import canal_publico
+            excl = grupo.perfis[0].excluir_global if grupo.perfis else []
+            canal_publico.publicar(validadas, excl, enviar=enviar)
+        except Exception as e:
+            log.warning("Canal público: erro (%s)", e)
         log.info("Fim: %d achados, %d enviados, %.0fs.", len(achados), enviados, time.time() - inicio)
         return enviados
     finally:

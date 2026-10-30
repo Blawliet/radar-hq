@@ -1,0 +1,30 @@
+# =====================================================================
+# CANAL PÚBLICO "NESTA ESTANTE" (Canal do WhatsApp)
+# =====================================================================
+# O radar manda os posts prontos para o Bruno numa conversa privada com o bot do
+# Telegram; ele copia e cola no Canal do WhatsApp. O grupo BASTA LER não muda.
+#
+# Secrets do GitHub:
+#   NESTA_RASCUNHO_CHAT  ID do Bruno no Telegram (para onde vão os rascunhos)
+#   AMAZON_TAG           tag de Associado da Amazon (ex.: nestaestante-20)
+# =====================================================================
+ativo: true
+desconto_minimo: 30        # % de desconto para virar post
+max_posts_rodada: 5        # no máximo N posts por rodada (a cada 2 h)
+repostar_dias: 7           # o mesmo produto só volta se o preço cair de novo
+
+# buscas próprias do canal na Amazon (3 por rodada, revezando), além das buscas das listas
+buscas_por_rodada: 3
+buscas:
+  - manga panini
+  - manga jbc
+  - manga newpop
+  - hq panini capa dura
+  - omnibus marvel
+  - omnibus dc
+  - graphic novel
+  - box manga
+  - pipoca e nanquim
+  - hq dc comics
+  - manga devir
+  - quadrinhos nacionais
