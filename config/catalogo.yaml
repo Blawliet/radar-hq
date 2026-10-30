@@ -28,7 +28,8 @@ config:
   excluir_titulos: [paperback, hardcover, english, english edition, by, edition, book one, book two,
                     book three, deluxe edition, tpb, comic book, kodansha, viz media,
                     yen press, shueisha, japanese, japones, ingles, espanol, edicion,
-                    las, los, volumen, box set, importado,
+                    las, los, volumen, box set, importado, importados, ing, em ing, em esp, em jap, em jpn, jpn,
+                    festival de importados, english version, us edition, uk edition,
                     # produtos que não são livro (o Mercado Livre devolve de tudo)
                     boneco, funko, action figure, figure, figuarts, luminasta, estatueta, pelucia,
                     mochila, camiseta, caneca, chaveiro, lancheira, estojo, fantasia, quebra cabeca]   # preço "de" acima da capa x 1.05 é tratado como inflado
