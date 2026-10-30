@@ -1,0 +1,254 @@
+[
+ {
+  "type": "product",
+  "id": 1039702,
+  "links": {
+   "self": "/catalog/v2/products/1039702"
+  },
+  "relationships": {},
+  "attributes": {
+   "menu": "Geek/Colecionáveis/Funko Pop",
+   "title": "Blokees Wolverine Champion Class Model Kit Articulado Deadpool E Wolverine",
+   "description": "O boneco do Wolverine da marca Blokees, modelo Champion Class, é um colecionável premium oficialmente licenciado pela Marvel, desenvolvido para oferecer alto nível de detalhamento, montagem precisa e excelente mobilidade.<br />  <br /> Este modelo faz parte da linha Champion Class, conhecida por seus kits mais completos, com maior quantidade de peças, melhor acabamento e sistema avançado de articulação, sendo ideal para colecionadores e fãs exigentes.<br />  <br /> Especificações do Produto<br />  <br /> Marca: Blokeesn Linha: Champion Classn Modelo: 81117n Personagem: Wolverinen Licença: Marvel oficialn Tipo: Model kit montáveln Material: ABS e PVC de alta resistência<br />  <br /> Altura do boneco: 13,4 cm<br />  <br /> Estrutura e Montagem<br />  <br /> Quantidade total de peças: 101 peçasn Sistema de montagem por encaixen Não necessita cola ou ferramentasn Produto já pré-pintado de fábrica<br />  <br /> Articulação<br />  <br /> Total de pontos de articulação: 37 pontosn Movimentos completos em cabeça, tronco, braços e pernasn Permite poses de ação com estabilidaden Boa amplitude para exposição em diferentes posições<br />  <br /> Conteúdo da Embalagem<br />  <br /> 1 boneco Wolverine (desmontado)n Conjunto de garrasn Mãos intercambiáveisn Peças estruturais do corpon Manual de montagem<br />  <br /> Características Técnicas<br />  <br /> Alto nível de detalhamento fiel ao personagemn Acabamento com separação de coresn Estrutura firme após montagemn Peças com encaixe precison Design voltado para colecionismo<br />  <br /> Indicação de Uso<br /> Produto indicado para maiores de 14 anosn Recomendado para colecionadores e fãs da Marveln Ideal para exposição em estantes, vitrines e cenários<br />  <br /> Cuidados<br />  <br /> Contém peças pequenas, não indicado para crianças pequenasn Evitar quedas e impactos para preservar articulaçõesn Não expor ao calor excessivo ou luz solar diretan Limpeza com pano seco ou levemente úmidon Armazenar em local seco e protegido de poeira<br />  <br /> O Wolverine Blokees Champion Class 81117 é um model kit completo com 101 peças, 37 pontos de articulação e 13,4 cm de altura, oferecendo excelente nível de detalhe, montagem precisa e alta capacidade de pose, sendo uma escolha ideal para quem busca um colecionável mais técnico e de padrão elevado.",
+   "weight": 500.0,
+   "price": 219.99,
+   "old_price": 0.0,
+   "discount_percentage": 0,
+   "price_with_discount": 219.99,
+   "offer": null,
+   "prime": null,
+   "origin": null,
+   "is_prime": false,
+   "is_openbox": false,
+   "has_free_shipping": false,
+   "has_free_shipping_for_prime_user": false,
+   "is_pre_order": false,
+   "date_pre_order": 0,
+   "available": true,
+   "species": 5,
+   "stock": 2,
+   "limit_buy": 0,
+   "type": 0,
+   "external_url": "",
+   "warranty": "Sem Garantia",
+   "score_of_ratings": 0,
+   "number_of_ratings": 0,
+   "is_marketplace": true,
+   "marketplace": {
+    "seller_id": 16840,
+    "seller_name": "Yellow World Santos",
+    "seller_sale_pj": true,
+    "price": 219.99,
+    "price_origin": 0.0,
+    "product_id": 3110065,
+    "code_product_kabum_1P": null,
+    "company": "22.363.125 BIANCA LOBO DA SILVA",
+    "cnpj": "22.363.125/0001-19",
+    "state": "SP"
+   },
+   "manufacturer": {
+    "id": 1583,
+    "name": "Funko",
+    "img": "https://images4.kabum.com.br/produtos/fabricantes/logo-funko.jpg"
+   },
+   "photos": {
+    "p": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/small/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201550.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/small/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201551.png",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/small/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201552.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/small/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201553.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/small/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201555.jpg"
+    ],
+    "m": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/medium/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201550.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/medium/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201551.png",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/medium/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201552.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/medium/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201553.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/medium/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201555.jpg"
+    ],
+    "g": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/large/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201550.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/large/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201551.png",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/large/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201552.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/large/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201553.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/large/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201555.jpg"
+    ],
+    "gg": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201550.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201551.png",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201552.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201553.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201555.jpg"
+    ]
+   },
+   "images": [
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201550.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201551.png",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201552.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201553.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1039702/xlarge/Blokees-Wolverine-Champion-Class-Model-Kit-Articulado-Deadpool-E-Wolverine_1779201555.jpg"
+   ],
+   "tag_description": "As melhores ofertas com ótimas condições de pagamento Descubra a melhor forma de comprar online",
+   "ufs_flash": [],
+   "featured_product": false,
+   "stamps": null,
+   "max_installment": "8x de R$ 27,49",
+   "max_installment_prime": null,
+   "product_link": "blokees-wolverine-champion-class-model-kit-articulado-deadpool-e-wolverine",
+   "age_rating": 0,
+   "average_of_ratings": 0.0
+  }
+ },
+ {
+  "type": "product",
+  "id": 1002323,
+  "links": {
+   "self": "/catalog/v2/products/1002323"
+  },
+  "relationships": {},
+  "attributes": {
+   "menu": "Geek/Casa e Decoração/Canecas",
+   "title": "Caneca Wolverine Quadrinhos",
+   "description": "A <strong>caneca Wolverine Quadrinhos</strong> é o presente perfeito para fãs da marvel e do estilo clássico das HQs.  <br />Com estampa inspirada nos quadrinhos do wolverine, ela traz toda a atitude, força e personalidade do mutante mais famoso dos x-men, sendo ideal para colecionadores, geeks e apaixonados por super-heróis. <br />Produzida em <strong>cerâmica de alta qualidade</strong>, a caneca possui excelente acabamento, alta resistência e impressão nítida com cores vibrantes.  <br />Com <strong>capacidade de 325ml</strong>, é perfeita para café, chá, chocolate quente ou qualquer bebida favorita.  <br />Além disso, pode ir tranquilamente ao <strong>micro-ondas e ao lava-louças</strong>, garantindo praticidade e durabilidade no uso diário. <br />A caneca Wolverine Quadrinhos vai embalada em uma <strong>linda caixinha estampada para presente</strong>, pronta para surpreender em aniversários, datas especiais ou para completar a coleção de qualquer fã da marvel. <br /><strong>Garras, atitude e energia em cada gole — porque todo dia começa melhor no modo wolverine.</strong><br><br><strong>Especificações Técnicas</strong><br><br><strong>Cor:</strong> Amarelo<br><strong>Fabricante:</strong> Amo Canecas<br><strong>Material:</strong> Cerâmica",
+   "weight": 500.0,
+   "price": 39.9,
+   "old_price": 0.0,
+   "discount_percentage": 0,
+   "price_with_discount": 39.9,
+   "offer": null,
+   "prime": null,
+   "origin": null,
+   "is_prime": false,
+   "is_openbox": false,
+   "has_free_shipping": false,
+   "has_free_shipping_for_prime_user": false,
+   "is_pre_order": false,
+   "date_pre_order": 0,
+   "available": true,
+   "species": 5,
+   "stock": 996,
+   "limit_buy": 0,
+   "type": 0,
+   "external_url": "",
+   "warranty": "Sem Garantia",
+   "score_of_ratings": 0,
+   "number_of_ratings": 0,
+   "is_marketplace": true,
+   "marketplace": {
+    "seller_id": 16314,
+    "seller_name": "AMO CANECAS",
+    "seller_sale_pj": true,
+    "price": 39.9,
+    "price_origin": 39.9,
+    "product_id": 3016984,
+    "code_product_kabum_1P": null,
+    "company": "AMO CANECAS LTDA",
+    "cnpj": "14.405.276/0001-64",
+    "state": "SP"
+   },
+   "manufacturer": {
+    "id": 4732,
+    "name": "Outros",
+    "img": "https://images4.kabum.com.br/produtos/fabricantes/logo-nulo.jpg"
+   },
+   "photos": {
+    "p": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/small/Caneca-Wolverine-Quadrinhos_1773071022.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/small/Caneca-Wolverine-Quadrinhos_1773071023.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/small/Caneca-Wolverine-Quadrinhos_1773071025.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/small/Caneca-Wolverine-Quadrinhos_1773071026.jpg"
+    ],
+    "m": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/medium/Caneca-Wolverine-Quadrinhos_1773071022.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/medium/Caneca-Wolverine-Quadrinhos_1773071023.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/medium/Caneca-Wolverine-Quadrinhos_1773071025.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/medium/Caneca-Wolverine-Quadrinhos_1773071026.jpg"
+    ],
+    "g": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/large/Caneca-Wolverine-Quadrinhos_1773071022.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/large/Caneca-Wolverine-Quadrinhos_1773071023.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/large/Caneca-Wolverine-Quadrinhos_1773071025.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/large/Caneca-Wolverine-Quadrinhos_1773071026.jpg"
+    ],
+    "gg": [
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071022.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071023.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071025.jpg",
+     "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071026.jpg"
+    ]
+   },
+   "images": [
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071022.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071023.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071025.jpg",
+    "https://images.kabum.com.br/produtos/fotos/sync_mirakl/1002323/xlarge/Caneca-Wolverine-Quadrinhos_1773071026.jpg"
+   ],
+   "tag_description": "As melhores ofertas com ótimas condições de pagamento Descubra a melhor forma de comprar online",
+   "ufs_flash": [],
+   "featured_product": false,
+   "stamps": null,
+   "max_installment": "1x de R$ 39,90",
+   "max_installment_prime": null,
+   "product_link": "caneca-nasa-100-preta-",
+   "age_rating": 0,
+   "average_of_ratings": 0.0
+  }
+ },
+ {
+  "type": "product",
+  "id": 1028028,
+  "links": {
+   "self": "/catalog/v2/products/1028028"
+  },
+  "relationships": {},
+  "attributes": {
+   "menu": "Games/Playstation/Jogos Playstation/Playstation 5",
+   "title": "Jogo Marvel's Wolverine, PS5 - 1000052329",
+   "description": "<h2>Jogo Marvel's Wolverine para PS5</h2>\n<p>&nbsp;</p>\n<p><strong>Marvel's Wolverine</strong> &eacute; um jogo de a&ccedil;&atilde;o e aventura em terceira pessoa focado em entregar uma experi&ecirc;ncia visceral, adulta e brutal na pele de Logan. Desenvolvido pela Insomniac Games para <strong>PlayStation 5</strong>, o t&iacute;tulo traz uma hist&oacute;ria original e emocionante onde o mutante embarca em uma jornada global &mdash; passando por locais ic&ocirc;nicos como o Canad&aacute; e Madripoor &mdash; para desvendar mist&eacute;rios do seu passado e lutar pela sobreviv&ecirc;ncia da esp&eacute;cie mutante. Com combate fluido movido a F&uacute;ria, garras afiadas de adamantium e uso total das tecnologias do PS5, o jogo combina uma narrativa profunda sobre lealdade e identidade com a viol&ecirc;ncia crua caracter&iacute;stica do personagem.</p>\n<p>&nbsp;</p>\n<h3>Jogabilidade Brutal e A&ccedil;&atilde;o com Garras de Adamantium</h3>\n<p>Neste jogo, voc&ecirc; vai jogar como o <strong>Wolverine</strong>. Atacando inimigos de maneira brutal e utilizando as suas garras de adamantium extremamente afiadas, voc&ecirc; vai poder fazer <strong>investidas r&aacute;pidas e fluidas e superar o imposs&iacute;vel.</strong> Com t&eacute;cnicas e adapta&ccedil;&otilde;es exclusivas e intercambi&aacute;veis para perseguir, emboscar ou subjugar inimigos, voc&ecirc; pode evoluir em um ritmo agressivo para <strong>ganhar F&uacute;ria</strong> e tirar as v&iacute;sceras da oposi&ccedil;&atilde;o, desde os capangas Reavers de Bolivar Trask at&eacute; os vil&otilde;es ic&ocirc;nicos, como o grosseiro Omega Red, porque o Wolverine n&atilde;o &eacute; bonzinho.&nbsp;</p>\n<p>&nbsp;</p>\n<h3>Uma Jornada Global Destrutiva e Emocionante</h3>\n<p>Com uma hist&oacute;ria original e emocionante, voc&ecirc; vai vivenciar o exterior r&uacute;stico e temperamento violento do Wolverine, mas ainda assim, entender que por tr&aacute;s de tudo isso, existe um homem que luta por uma grande causa. Os mutantes est&atilde;o para ser aniquilados e ele &eacute; a melhor chance deles no momento. Al&eacute;m disso, voc&ecirc; vai enfrentar um momento sombrio e vivenciar uma hist&oacute;ria emocionante e movida por identidade, lealdade e uma luta interna para descobrir a verdade sobre o passado esquecido do Wolverine.</p>\n<p>&nbsp;</p>\n<h3>Explore Locais Ic&ocirc;nicos no Universo Marvel&nbsp;</h3>\n<p>Imerso em uma jornada global e cheia de adrenalina, voc&ecirc; vai passar por diversos locais incr&iacute;veis pelo mundo, como Canad&aacute;, Jap&atilde;o e em Madripoor, no Estreito de Malaca, uma ilha e cidade-estado fict&iacute;cia do sudeste asi&aacute;tico no Universo Marvel, famosa pelas hist&oacute;rias de Wolverine e dos X-Men. Por todos esses lugares, voc&ecirc; vai enfrentar inimigos em locais cheios de detalhes e vivenciar&nbsp; momentos de tirar o f&ocirc;lego durante a jornada do Wolverine nessa luta global pela sobreviv&ecirc;ncia dos mutantes.&nbsp;</p>\n<p>&nbsp;</p>\n<h3>Imers&atilde;o Visual Impressionante com Ray Tracing no PS5</h3>\n<p>Desfrute de gr&aacute;ficos deslumbrantes com a tecnologia Ray Tracing e veja o poder bruto da f&uacute;ria do Wolverine no PS5. Crave suas garras nos inimigos e no ambiente com detalhes espetaculares, enquanto a jornada acontece por meio de cenas imersivas que capturam a fidelidade vibrante do mundo do jogo.</p>\n<p>&nbsp;</p>\n<h3>Sinta o Combate com a Resposta T&aacute;til do DualSense&nbsp;</h3>\n<p>Sinta a brutalidade do combate com as garras de adamantium do Wolverine por meio da resposta t&aacute;til e dos gatilhos adapt&aacute;veis do controle sem fio DualSense, fazendo com que as suas pr&oacute;prias m&atilde;os se tornem as garras do her&oacute;i.&nbsp;</p>\n<p>&nbsp;</p>\n<h3>A&ccedil;&atilde;o Cont&iacute;nua com Carregamento Ultrarr&aacute;pido no SSD</h3>\n<p>Com o poder do carregamento ultrarr&aacute;pido, voc&ecirc; vai sempre continuar afiado durante a aventura global do Wolverine.&nbsp;</p>\n<p>&nbsp;</p>\n<h3>&nbsp;Percep&ccedil;&atilde;o Situacional Imersiva com &Aacute;udio 3D Tempest&nbsp;</h3>\n<p>Mergulhe no jogo com precis&atilde;o aprimorada e percep&ccedil;&atilde;o situacional conforme o &aacute;udio espacial 3D1 cria efeitos sonoros impressionantes. Preste aten&ccedil;&atilde;o aos ataques que podem vir de qualquer dire&ccedil;&atilde;o e escute cada detalhe do combate brutal com garras &agrave; medida que o Wolverine enfrenta hordas de inimigos.</p>\n<p>&nbsp;</p>\n",
+   "weight": 80.0,
+   "price": 399.0,
+   "old_price": 0.0,
+   "discount_percentage": 7,
+   "price_with_discount": 371.07,
+   "offer": {
+    "id": "1041135",
+    "name": "OFERTAS KABUM",
+    "reference_banner": "ofertaskabum",
+    "starts_at": 1793014320,
+    "ends_at": 1793365200,
+    "quantity_available": 493,
+    "price": 339.0,
+    "price_with_discount": 315.27,
+    "discount_percentage": 15,
+    "is_logged_user_exclusive": false,
+    "hash_code": "cae6b1ae974bea1137a3b51a7a4748508ee6e0db"
+   },
+   "prime": null,
+   "origin": null,
+   "is_prime": false,
+   "is_openbox": false,
+   "has_free_shipping": false,
+   "has_free_shipping_for_prime_user": false,
+   "is_pre_order": false,
+   "date_pre_order": 0,
+   "available": true,
+   "species": 0,
+   "stock": 3909,
+   "limit_buy": 10,
+   "type": 0,
+   "external_url": "",
+   "warranty": "3 meses de garantia legal",
+   "score_of_ratings": 0,
+   "number_of_ratings": 0,
+   "is_marketplace": false,
+   "marketplace": {},
+   "manufacturer": {
+    "id": 2943,
+    "name": "Playstation",
+    "img": "https://images4.kabum.com.br/produtos/fabricantes/logo-nulo.jpg"
+   },
+   "photos": {
+    "p": [
+     "https://images.kabum.com.br/produtos/fotos/1028028/jogo-marvel-s-wolverine-para-ps5-1000052329_1779815663_p.jpg",
+     "https://images.kabum.com.br/produtos/fotos/1028028/jogo-marvel-s-wolverine-para-ps5-1000052329_1779815662_p.jpg",
+     "https://images.kabum.com.br/produtos/fotos/
