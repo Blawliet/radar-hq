@@ -113,6 +113,17 @@ raros:
     urls:
       - https://www.mercadolivre.com.br/questao-por-dennis-oneil-e-denys-cowan-vol-1-ominbus-oneil-dennis-panini-capa-dura/p/MLB54797458
 
+  - id: lobo-omnibus-1
+    nome: "Lobo (DC Omnibus) vol. 1"
+    editora: Panini
+    termos: [lobo, omnibus]
+    excluir: [lobo solitario, lobo mau, lobos, lobo do mar, kozure, wolf]
+    volumes: "1"
+    formato: Omnibus
+    buscas: [lobo omnibus vol 1]
+    urls:
+      - https://panini.com.br/lobo-omnibus-vol-1
+
   # vols. 2 a 4, todos esgotados na Panini: alerta em qualquer loja que tiver, em qualquer preço
   - id: homem-aranha-definitiva
     nome: "O Espetacular Homem-Aranha: Edição Definitiva"
@@ -170,17 +181,27 @@ promocoes:
     formato: Omnibus
     buscas: [vingadores busiek perez omnibus vol 2]
 
-  - id: lobo-omnibus
-    nome: "Lobo (DC Omnibus)"
+  - id: lobo-omnibus-2
+    nome: "Lobo (DC Omnibus) vol. 2"
     editora: Panini
     termos: [lobo, omnibus]
     excluir: [lobo solitario, lobo mau, lobos, lobo do mar, kozure, wolf]
-    volumes: "1,2"
+    volumes: "2"
     formato: Omnibus
-    buscas: [lobo omnibus panini, lobo omnibus vol 1]
+    buscas: [lobo omnibus panini]
     urls:
-      - https://panini.com.br/lobo-omnibus-vol-1
       - https://panini.com.br/lobo-omnibus-vol-2
+
+  - id: thorgal-serie-classica
+    nome: "Thorgal: Série Clássica"
+    editora: Pipoca & Nanquim
+    termos: [thorgal]
+    qualquer: [serie classica, classica]
+    volumes: "1-4"
+    formato: Capa Dura
+    buscas: [thorgal serie classica, thorgal serie classica vol 1]
+    urls:
+      - https://www.amazon.com.br/dp/6554481842
 
   - id: box-ajin
     nome: Box Ajin (vols. 1 ao 17)
