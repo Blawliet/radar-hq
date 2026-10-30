@@ -44,6 +44,13 @@ ALVOS: dict[str, list[tuple[str, str]]] = {
         ("busca", "https://mundosinfinitos.com.br/geek/solucoes/busca.aspx?t=frieren"),
         ("busca-www", "https://www.mundosinfinitos.com.br/geek/solucoes/busca.aspx?t=frieren"),
     ],
+    "mundos-busca": [
+        ("t", "https://mundosinfinitos.com.br/geek/solucoes/Busca.aspx?t=frieren"),
+        ("q", "https://mundosinfinitos.com.br/geek/solucoes/busca.aspx?q=frieren"),
+        ("busca", "https://mundosinfinitos.com.br/geek/solucoes/busca.aspx?busca=frieren"),
+        ("termo", "https://mundosinfinitos.com.br/geek/solucoes/busca.aspx?termo=frieren"),
+        ("produto", "https://mundosinfinitos.com.br/geek/solucoes/Busca.aspx?a=374&o=0"),
+    ],
     "mirane": [
         ("produto", "https://miranecomics.com.br/produtos/sakamoto-days-16/"),
     ],
@@ -141,6 +148,9 @@ def rede(url: str, espera_ms: int = 12000) -> str:
             linhas.append(f"status: {r.status if r else 0} final: {pg.url} titulo: {pg.title()}")
             html = pg.content()
             linhas.append("forms: " + json.dumps(re.findall(r"<form[^>]*>", html)[:10], ensure_ascii=False))
+            linhas.append("inputs: " + json.dumps(re.findall(r"<input[^>]*(?:busca|search|pesq|termo|q\b)[^>]*>", html, re.I)[:10], ensure_ascii=False))
+            linhas.append("scripts busca: " + json.dumps(re.findall(r".{0,120}(?:busca\.aspx|Busca\.aspx)\?[^\"']{0,80}.{0,40}", html)[:8], ensure_ascii=False))
+            linhas.append("ld+json: " + json.dumps(re.findall(r'application/ld\+json[^>]*>(.{0,1500})', html, re.S)[:3], ensure_ascii=False))
             linhas.append("links busca: " + json.dumps(sorted(set(re.findall(
                 r'href="([^"]*(?:busca|pesquisa|search|catalogo)[^"]*)"', html, re.I)))[:20], ensure_ascii=False))
             texto = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(
@@ -157,6 +167,7 @@ def rede(url: str, espera_ms: int = 12000) -> str:
 REDE = {
     "leitura-rede": ["https://leitura.com.br/catalogo?q=frieren"],
     "mundos-rede": ["https://www.mundosinfinitos.com.br/"],
+    "leitura-produto": ["https://leitura.com.br/produto/frieren-e-a-jornada-para-o-alem-01-kanehito-yamada-9786525903712"],
     "kabum-json": [],
 }
 
@@ -172,7 +183,7 @@ def main():
         r = httpx.get(ALVOS["kabum"][0][1], headers=CAB, timeout=20)
         d = r.json()["data"]
         (PASTA / "kabum-json.txt").write_text(json.dumps(d[:3], ensure_ascii=False, indent=1)[:20000], encoding="utf-8")
-    with httpx.Client(headers=CAB, follow_redirects=True, timeout=20) as c:
+    with httpx.Client(headers=CAB, follow_redirects=True, timeout=60) as c:
         for alvo, urls in ALVOS.items():
             if alvo not in pedidos:
                 continue
