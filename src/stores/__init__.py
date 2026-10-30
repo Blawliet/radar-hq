@@ -10,6 +10,7 @@ import yaml
 from stores.amazon import AmazonLoja
 from stores.base import Fetcher, Loja
 from stores.kabum import KabumLoja
+from stores.telegram_canal import TelegramCanalLoja
 from stores.mercadolivre import MercadoLivreLoja
 from stores.plataformas import (HtmlLoja, MagentoLoja, ShopifyLoja, VtexLoja, WooLoja,
                                  detectar_plataforma)
@@ -37,6 +38,9 @@ def montar_lojas(caminho: str | Path) -> list[Loja]:
         adapt = c.get("adaptador", "auto")
         if adapt == "amazon":
             lojas.append(AmazonLoja(fetcher, c))
+            continue
+        if adapt == "telegram":
+            lojas.append(TelegramCanalLoja(fetcher, c))
             continue
         if adapt == "kabum":
             lojas.append(KabumLoja(fetcher, c))

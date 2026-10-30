@@ -1164,3 +1164,32 @@ def test_colecao_palavras_alternativas():
     assert not e.casa(normalizar("The Lost Canvas - Saga de Hades 6"))
     assert not e.casa(normalizar("The Lost Canvas Gaiden Especial 6"))
     assert d["buscas"] == ["lost canvas especial"]
+
+
+# ---------------- canal público de ofertas do Telegram
+PAGINA_TG = """<html><body>
+<div class="tgme_widget_message" data-post="mangasluofertas/115598"><div class="tgme_widget_message_text">
+Elden Ring: o caminho para Térvore 06 | Amazon<br/><br/>R$13,54 (69%)<br/><a href="https://link.amazon/abc">https://link.amazon/abc</a><br/>
+Entre no grupo: <a href="https://t.me/cupons">https://t.me/cupons</a></div>
+<time datetime="2099-10-30T14:42:00+00:00"></time></div>
+<div class="tgme_widget_message" data-post="mangasluofertas/115599"><div class="tgme_widget_message_text">
+Cupom da loja | Shopee<br/>R$10 OFF acima de R$59<br/><a href="https://s.shopee.com.br/x">link</a></div>
+<time datetime="2099-10-30T14:47:00+00:00"></time></div>
+<div class="tgme_widget_message" data-post="mangasluofertas/100"><div class="tgme_widget_message_text">
+Frieren 02 | Amazon<br/>R$20,00 (50%)<br/><a href="https://link.amazon/velho">x</a></div>
+<time datetime="2001-01-01T10:00:00+00:00"></time></div>
+</body></html>"""
+
+
+def test_telegram_canal_le_posts_com_preco():
+    from stores.telegram_canal import TelegramCanalLoja
+    f = _FetcherFalso({"t.me/s/mangasluofertas": PAGINA_TG})
+    loja = TelegramCanalLoja(f, {"nome": "Telegram @mangasluofertas", "canal": "mangasluofertas", "horas": 6})
+    achados = loja.buscar("qualquer")
+    assert len(achados) == 1                                   # cupom e post antigo ficam de fora
+    o = achados[0]
+    assert o.titulo == "Elden Ring: o caminho para Térvore 06" and o.preco == 13.54
+    assert o.url == "https://link.amazon/abc" and o.loja == "Amazon (via @mangasluofertas)"
+    assert round(o.preco_lista, 2) == 43.68                     # 69% de desconto
+    assert loja.buscar("outra") == []                          # lê o canal uma vez por varredura
+    assert loja.validar(o).disponivel

@@ -118,6 +118,7 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco,
     # difícil de achar: item da lista de promoções que só apareceu em poucas lojas
     # vale mesmo sem desconto (o mais barato entre elas é o que vai no alerta)
     if (not d.alertar and d.regra == "B" and not d.pacote and n_lojas and cat.escasso_max_lojas
+            and not o.extra.get("telegram")          # post de canal não prova que o item é raro
             and n_lojas <= cat.escasso_max_lojas
             and d.motivo.startswith(("desconto", "sem preço de capa"))):
         d.alertar, d.regra = True, "ESCASSO"

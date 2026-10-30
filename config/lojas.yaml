@@ -5,6 +5,7 @@
 #   auto          detecta a plataforma (VTEX, Shopify, Nuvemshop, Woo, Tray, Magento...)
 #   amazon        coletor próprio
 #   kabum         API do catálogo da KaBuM!
+#   telegram      canal público de ofertas do Telegram (canal: nome)
 #   mercadolivre  API oficial de catálogo (precisa de ML_CLIENT_ID e ML_CLIENT_SECRET)
 #   magento       API GraphQL da loja (Panini, Pipoca & Nanquim, Comix, Comic Boom)
 #   vtex          API de catálogo da VTEX (Livrarias Curitiba; Rika e Ri Happy são detectadas)
@@ -157,6 +158,14 @@ lojas:
     adaptador: kabum
     delay: 1.5
     categorias: [games]
+
+  # Canais PÚBLICOS de ofertas do Telegram (só leitura, em t.me/s/<canal>). Cada post
+  # com preço passa pelas regras de todo mundo; o link vai como veio no post.
+  - nome: "Telegram @mangasluofertas"
+    adaptador: telegram
+    canal: mangasluofertas
+    horas: 6
+    delay: 1
 
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam
