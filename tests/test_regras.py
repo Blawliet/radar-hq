@@ -1085,7 +1085,7 @@ def test_colecao_vira_entradas_do_radar():
                '"Berserk","Panini","1-40","41","raro","41","",""\n'
                '"Akira","JBC","1-6","6","promoção","completa","",""\n'
                '"Gibis","","1-3","","não buscar","","",""\n')
-    e = entradas(ler_csv(csv_txt))
+    e = entradas(ler_csv(csv_txt), janela=0)
     promo = {d["id"]: d for d in e["promocoes"]}
     raro = {d["id"]: d for d in e["raros"]}
     assert promo["colecao-spawn-origens"]["volumes"] == "10,12+"
@@ -1098,3 +1098,14 @@ def test_colecao_vira_entradas_do_radar():
     assert sv.aceita(10) and sv.aceita(12) and sv.aceita(20) and not sv.aceita(11) and not sv.aceita(5)
     ent = Entrada.de_dict(promo["colecao-spawn-origens"])
     assert ent.casa("spawn origens vol 10")
+
+
+def test_colecao_reveza_as_buscas():
+    from colecao import ler_csv, entradas
+    csv_txt = '"Série","Volumes que tenho","Alerta"\n' + "".join(f'"Serie {i}","1-3","promoção"\n' for i in range(6))
+    linhas = ler_csv(csv_txt)
+    por_janela = [sum(len(d["buscas"]) for d in entradas(linhas, janela=j)["promocoes"]) for j in range(4)]
+    assert por_janela == [3, 3, 3, 3]                     # metade das séries, uma busca cada
+    b0 = {d["id"]: d["buscas"] for d in entradas(linhas, janela=0)["promocoes"]}
+    b2 = {d["id"]: d["buscas"] for d in entradas(linhas, janela=2)["promocoes"]}
+    assert b0["colecao-serie-0"] != b2["colecao-serie-0"]   # alterna entre busca geral e por volume

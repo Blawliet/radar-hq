@@ -149,10 +149,19 @@ def _lista(texto: str) -> list[str]:
     return [normalizar(x) for x in re.split(r"[,;]", texto or "") if normalizar(x)]
 
 
-def entradas(linhas: list[dict]) -> dict[str, list[dict]]:
-    """Linhas da planilha -> {'bloqueios': [...], 'raros': [...], 'promocoes': [...]} no formato do YAML."""
+def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[dict]]:
+    """Linhas da planilha -> {'bloqueios': [...], 'raros': [...], 'promocoes': [...]} no formato do YAML.
+
+    Para a varredura não dobrar de tamanho, cada série faz UMA busca a cada duas
+    janelas (metade das séries em cada rodada de 2 h), alternando entre a busca
+    geral e as buscas por volume. As regras continuam valendo em todas as rodadas:
+    um volume que falta achado por outra busca também gera alerta.
+    """
+    import time
+    if janela is None:
+        janela = int(time.time() // 7200)
     out = {"bloqueios": [], "raros": [], "promocoes": []}
-    for ln in linhas:
+    for i, ln in enumerate(linhas):
         nome = ln["serie"]
         slug = re.sub(r"[^a-z0-9]+", "-", normalizar(nome)).strip("-")
         termos = _lista(ln["termos"]) or [normalizar(re.sub(r"\(.*?\)", "", nome))]
@@ -174,7 +183,8 @@ def entradas(linhas: list[dict]) -> dict[str, list[dict]]:
             spec = f"{spec},{seguinte}+" if spec else f"{seguinte}+"
         termo_busca = " ".join(termos)
         alvo = (buracos + ([seguinte] if seguinte else []))[:3]
-        buscas = [f"{termo_busca} {v}" for v in alvo] + [termo_busca]
+        todas = [termo_busca] + [f"{termo_busca} {v}" for v in alvo]
+        buscas = [todas[(janela // 2) % len(todas)]] if (i + janela) % 2 == 0 else []
         destino = "raros" if alerta.startswith("raro") else "promocoes"
         out[destino].append({**base, "id": f"colecao-{slug}", "volumes": spec, "buscas": buscas,
                              "origem": "planilha"})
