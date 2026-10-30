@@ -161,6 +161,16 @@
    }
   ]
  },
+ "questao dennis o neil denys cowan omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "questao omnibus panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
  "espetacular homem aranha edicao definitiva vol 2": {
   "http": 200,
   "itens": 7,
@@ -229,7 +239,69 @@
   "itens": 0,
   "exemplos": []
  },
+ "citrus": {
+  "http": 200,
+  "itens": 7,
+  "exemplos": [
+   {
+    "nome": "CITRUS • 2",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "CITRUS • 4",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "CITRUS • 5",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "citrus 6": {
+  "http": 200,
+  "itens": 7,
+  "exemplos": [
+   {
+    "nome": "CITRUS • 2",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "CITRUS • 4",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "CITRUS • 5",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
  "flash geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "sociedade da justica da america geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "sociedade da justica geoff johns vol 1": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "vingadores kurt busiek george perez omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "vingadores busiek perez omnibus vol 2": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -354,6 +426,53 @@
   "itens": 0,
   "exemplos": []
  },
+ "gigant colecao completa": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "gigant kit": {
+  "http": 200,
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "DETETIVE BUNDINHA – O GIGANTE QUE DESAPARECE NA NOITE",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "BATMAN EDIÇÃO GIGANTE ESPECIAL",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "MARTIN MYSTÈRE – GIGANTE • VOL.01",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "gigant box": {
+  "http": 200,
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "DETETIVE BUNDINHA – O GIGANTE QUE DESAPARECE NA NOITE",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "BATMAN EDIÇÃO GIGANTE ESPECIAL",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "MARTIN MYSTÈRE – GIGANTE • VOL.01",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
  "tartarugas ninja pipoca e nanquim": {
   "http": 200,
   "itens": 11,
@@ -395,7 +514,7 @@
   "itens": 0,
   "exemplos": []
  },
- "frieren": {
+ "frieren 2": {
   "http": 200,
   "itens": 8,
   "exemplos": [
@@ -416,7 +535,7 @@
    }
   ]
  },
- "hunter x hunter": {
+ "hunter x hunter 38": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -437,7 +556,7 @@
    }
   ]
  },
- "spawn": {
+ "spawn 9": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -458,7 +577,7 @@
    }
   ]
  },
- "soul eater perfect": {
+ "soul eater perfect 7": {
   "http": 200,
   "itens": 1,
   "exemplos": [
@@ -469,7 +588,7 @@
    }
   ]
  },
- "black clover": {
+ "black clover 13": {
   "http": 200,
   "itens": 7,
   "exemplos": [
@@ -490,12 +609,12 @@
    }
   ]
  },
- "golden kamui": {
+ "golden kamui 4": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "jujutsu kaisen 6": {
+ "jujutsu kaisen 7": {
   "http": 200,
   "itens": 9,
   "exemplos": [
@@ -516,59 +635,12 @@
    }
   ]
  },
- "jagaaaaaan": {
+ "jagaaaaaan 6": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "gigant": {
-  "http": 200,
-  "itens": 12,
-  "exemplos": [
-   {
-    "nome": "DETETIVE BUNDINHA – O GIGANTE QUE DESAPARECE NA NOITE",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "BATMAN EDIÇÃO GIGANTE ESPECIAL",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "MARTIN MYSTÈRE – GIGANTE • VOL.01",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "jojo stardust crusaders": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "dragon ball super": {
-  "http": 200,
-  "itens": 5,
-  "exemplos": [
-   {
-    "nome": "DRAGON BALL SUPER • VOL. 23",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "DRAGON BALL SUPER N. 22",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "DRAGON BALL SUPER • VOL. 21",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "lost canvas especial": {
+ "lost canvas especial 4": {
   "http": 200,
   "itens": 4,
   "exemplos": [
@@ -589,12 +661,12 @@
    }
   ]
  },
- "ao no exorcist": {
+ "ao no exorcist 17": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "hokuto no ken": {
+ "hokuto no ken 4": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -615,28 +687,23 @@
    }
   ]
  },
- "inuyasha": {
+ "inuyasha wideban 4": {
   "http": 200,
-  "itens": 5,
+  "itens": 2,
   "exemplos": [
-   {
-    "nome": "INUYASHA VOL. 01 – WIDEBAN",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "INUYASHA VOL. 08 – WIDEBAN",
-    "estoque": true,
-    "compravel": true
-   },
    {
     "nome": "INUYASHA WIDEBAN • VOL 7",
     "estoque": true,
     "compravel": true
+   },
+   {
+    "nome": "INUYASHA WIDEBAN • VOL.02",
+    "estoque": false,
+    "compravel": true
    }
   ]
  },
- "ancient magus": {
+ "ancient magus 3": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -850,11 +917,6 @@
   "exemplos": []
  },
  "batman por neal adams edicao absoluta": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "sociedade da justica da america geoff johns omnibus": {
   "http": 200,
   "itens": 0,
   "exemplos": []

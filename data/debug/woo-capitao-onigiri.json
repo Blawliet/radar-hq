@@ -113,6 +113,16 @@
   "itens": 0,
   "exemplos": []
  },
+ "questao dennis o neil denys cowan omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "questao omnibus panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
  "espetacular homem aranha edicao definitiva vol 2": {
   "http": 200,
   "itens": 0,
@@ -133,7 +143,59 @@
   "itens": 0,
   "exemplos": []
  },
+ "citrus": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "Citrus Fruits Continuous Action em JPN – Vol.1 ao 8 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Citrus em ING – Vol.1 e 2 (Festival de Importados #28)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "citrus 6": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "Citrus Fruits Continuous Action em JPN – Vol.1 ao 8 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Citrus em ING – Vol.1 e 2 (Festival de Importados #28)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
  "flash geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "sociedade da justica da america geoff johns omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "sociedade da justica geoff johns vol 1": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "vingadores kurt busiek george perez omnibus": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "vingadores busiek perez omnibus vol 2": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -211,6 +273,53 @@
   "itens": 0,
   "exemplos": []
  },
+ "gigant colecao completa": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "gigant kit": {
+  "http": 200,
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Gigant – Vol.6 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.4 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.3 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "gigant box": {
+  "http": 200,
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Gigant – Vol.6 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.4 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.3 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
  "tartarugas ninja pipoca e nanquim": {
   "http": 200,
   "itens": 0,
@@ -236,136 +345,94 @@
   "itens": 0,
   "exemplos": []
  },
- "sakamoto days": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "spawn origens 12": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "shaman king big": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "one punch": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "dr stone 13": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "we never learn": {
-  "http": 200,
-  "itens": 2,
-  "exemplos": [
-   {
-    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "naruto gold": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "yuuna pensao assombrada": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "jojo battle tendency 2": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "food wars": {
-  "http": 200,
-  "itens": 4,
-  "exemplos": [
-   {
-    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! em JPN – Vol.1 ao 15 (Festival de Importados #30)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "spy x family": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "terra formars 22": {
+ "frieren 2": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
+    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "boku no hero": {
+ "hunter x hunter 38": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "fruits basket": {
+ "spawn 9": {
   "http": 200,
-  "itens": 12,
+  "itens": 0,
+  "exemplos": []
+ },
+ "soul eater perfect 7": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "black clover 13": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "golden kamui 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jujutsu kaisen 7": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jagaaaaaan 6": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lost canvas especial 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ao no exorcist 17": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hokuto no ken 4": {
+  "http": 200,
+  "itens": 4,
   "exemplos": [
    {
-    "nome": "Fruits Basket – Primeira Edição – Vol.7 (Festival de Avulsos #123)",
+    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Fruits Basket – Primeira Edição – Vol.6 (Festival de Avulsos #123)",
+    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Fruits Basket – Primeira Edição – Vol.5 (Festival de Avulsos #123)",
+    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "citrus": {
+ "inuyasha wideban 4": {
   "http": 200,
-  "itens": 2,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ancient magus 3": {
+  "http": 200,
+  "itens": 1,
   "exemplos": [
    {
-    "nome": "Citrus Fruits Continuous Action em JPN – Vol.1 ao 8 (Festival de Importados #29)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Citrus em ING – Vol.1 e 2 (Festival de Importados #28)",
+    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
     "estoque": true,
     "compravel": true
    }
@@ -500,11 +567,6 @@
   "exemplos": []
  },
  "batman por neal adams edicao absoluta": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "sociedade da justica da america geoff johns omnibus": {
   "http": 200,
   "itens": 0,
   "exemplos": []

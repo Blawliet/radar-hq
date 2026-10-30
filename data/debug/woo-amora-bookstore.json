@@ -5,17 +5,17 @@
   "exemplos": [
    {
     "nome": "Diário do Futuro / Mirai Nikki Mosaic",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki Paradox",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki 12",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -26,17 +26,17 @@
   "exemplos": [
    {
     "nome": "Diário do Futuro / Mirai Nikki Mosaic",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki Paradox",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki 12",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -47,17 +47,17 @@
   "exemplos": [
    {
     "nome": "Diário do Futuro / Mirai Nikki Mosaic",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki Paradox",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
     "nome": "Diário do Futuro / Mirai Nikki 12",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    }
   ]
