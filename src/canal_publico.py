@@ -144,7 +144,34 @@ def _brl(v: float) -> str:
     return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-def montar_post(o, tag: str) -> str:
+def historico_preco(con, o) -> dict | None:
+    """Menor preço que o radar já viu deste produto na Amazon, sem contar hoje.
+    Devolve {'menor': float, 'dia': 'dd/mm', 'desde': 'dd/mm'} ou None se não há histórico."""
+    hoje = datetime.now().strftime("%Y-%m-%d")
+    try:
+        row = con.execute("SELECT MIN(preco), MIN(dia) FROM precos WHERE url=? AND dia<? AND preco>0",
+                          (o.url, hoje)).fetchone()
+    except sqlite3.OperationalError:
+        return None
+    if not row or row[0] is None:
+        return None
+    dia = con.execute("SELECT dia FROM precos WHERE url=? AND dia<? AND preco=? ORDER BY dia DESC LIMIT 1",
+                      (o.url, hoje, row[0])).fetchone()
+    fmt = lambda d: f"{d[8:10]}/{d[5:7]}"
+    return {"menor": row[0], "dia": fmt(dia[0]) if dia else "", "desde": fmt(row[1])}
+
+
+def linha_historico(o, hist: dict | None) -> str | None:
+    if not hist:
+        return None
+    if o.preco < hist["menor"] - 0.005:
+        return f"📉 *Menor preço que já vi* (antes, o menor era {_brl(hist['menor'])})"
+    if o.preco <= hist["menor"] * 1.01:
+        return "✅ Igual ao menor preço que já vi"
+    return f"ℹ️ Já esteve por {_brl(hist['menor'])} em {hist['dia']}"
+
+
+def montar_post(o, tag: str, hist: dict | None = None) -> str:
     """Texto do post no formato do WhatsApp."""
     d = desconto(o)
     linhas = [f"📚 *{o.titulo[:180].replace('*', '')}*", ""]
@@ -152,6 +179,9 @@ def montar_post(o, tag: str) -> str:
         linhas.append(f"De ~{_brl(o.preco_lista)}~ por *{_brl(o.preco)}* ({d:.0f}% OFF)")
     else:
         linhas.append(f"Por *{_brl(o.preco)}*")
+    extra = linha_historico(o, hist)
+    if extra:
+        linhas.append(extra)
     if o.vendedor and "amazon" not in o.vendedor.lower():
         linhas.append(f"Vendido por {o.vendedor[:60]}")
     linhas += ["", f"🛒 {link_afiliado(o, tag)}", "", "_Preço e estoque podem mudar a qualquer momento._"]
@@ -214,7 +244,7 @@ def _guardar_candidatos(con, cands: list):
     with _lock:
         for o in cands:
             dados = {"titulo": o.titulo, "url": o.url, "preco": o.preco, "preco_lista": o.preco_lista,
-                     "vendedor": o.vendedor, "asin": o.extra.get("asin")}
+                     "vendedor": o.vendedor, "asin": o.extra.get("asin"), "imagem": o.extra.get("imagem")}
             con.execute("INSERT OR REPLACE INTO canal_candidatos VALUES (?,?,?,?)",
                         (o.extra.get("asin") or o.url, desconto(o) or 0, agora, json.dumps(dados, ensure_ascii=False)))
         con.execute("DELETE FROM canal_candidatos WHERE visto < ?",
@@ -257,24 +287,27 @@ def publicar(validadas: list, excluir_titulos: list[str], enviar: bool = True,
         desde = (agora - timedelta(hours=float(cfg.get("janela_horas", 8)))).isoformat(timespec="seconds")
         linhas = con.execute("SELECT chave, dados FROM canal_candidatos WHERE visto >= ? ORDER BY desconto DESC",
                              (desde,)).fetchall()
-    escolhidos = []
+    candidatos = []
     for chave, dados in linhas:
         d = json.loads(dados)
         o = Oferta("Amazon Brasil", d["titulo"], d["url"], d["preco"], preco_lista=d["preco_lista"],
-                   vendedor=d.get("vendedor"), disponivel=True, extra={"asin": d.get("asin")})
+                   vendedor=d.get("vendedor"), disponivel=True,
+                   extra={"asin": d.get("asin"), "imagem": d.get("imagem")})
         with _lock:
             if ja_postado(con, chave, o.preco, int(cfg["repostar_dias"])):
                 continue
-        escolhidos.append((chave, o))
-        if len(escolhidos) >= int(cfg.get("posts_por_horario", 1)):
-            break
+            hist = historico_preco(con, o)
+        recorde = bool(hist and o.preco < hist["menor"] - 0.005)
+        candidatos.append((not recorde, -(desconto(o) or 0), chave, o, hist))
+    candidatos.sort(key=lambda x: (x[0], x[1]))           # recorde de preço primeiro, depois o maior desconto
+    escolhidos = [(c[2], c[3], c[4]) for c in candidatos[:int(cfg.get("posts_por_horario", 1))]]
     if not escolhidos:
         log.info("Canal público: horário %s sem oferta nova com %s%%+.", slot, cfg["desconto_minimo"])
         return 0
     token = os.getenv("TELEGRAM_BOT_TOKEN", "")
     postados = 0
-    for chave, o in escolhidos:
-        post = montar_post(o, cfg["tag"])
+    for chave, o, hist in escolhidos:
+        post = montar_post(o, cfg["tag"], hist)
         if not enviar or not cfg["chat"] or not token:
             if not cfg["chat"] and enviar:
                 log.warning("Canal público: falta o Secret NESTA_RASCUNHO_CHAT; só mostrando no log.")
@@ -283,12 +316,17 @@ def publicar(validadas: list, excluir_titulos: list[str], enviar: bool = True,
                 arq = RAIZ / "data" / "debug" / "nesta-estante-rascunhos.txt"
                 arq.parent.mkdir(parents=True, exist_ok=True)
                 with arq.open("a", encoding="utf-8") as fh:
-                    fh.write(f"[{agora:%d/%m %H:%M}] horário {slot}\n{post}\n" + "-" * 40 + "\n")
+                    fh.write(f"[{agora:%d/%m %H:%M}] horário {slot} | capa: {o.extra.get('imagem')}\n{post}\n" + "-" * 40 + "\n")
             postados += 1
             continue
         import httpx
         r = None
         try:
+            if o.extra.get("imagem"):
+                # a capa vem antes, para salvar e anexar no post do WhatsApp
+                httpx.post(f"https://api.telegram.org/bot{token}/sendPhoto", timeout=30, json={
+                    "chat_id": cfg["chat"], "photo": o.extra["imagem"],
+                    "caption": "🖼️ Capa: segure a imagem e salve (ou compartilhe direto no WhatsApp)."})
             r = httpx.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=20, json={
                 "chat_id": cfg["chat"], "text": mensagem_rascunho(post, postados + 1, len(escolhidos)),
                 "parse_mode": "HTML", "link_preview_options": {"is_disabled": True}})

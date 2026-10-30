@@ -1264,3 +1264,20 @@ def test_canal_publico_chat_cifrado(tmp_path, monkeypatch):
     assert b"987654" not in cp.ARQ_CHAT.read_bytes()            # não fica legível no repositório
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "outro")
     assert cp.ler_chat_salvo() == ""
+
+
+def test_canal_publico_historico_de_preco(tmp_path):
+    import sqlite3
+    import canal_publico as cp
+    con = sqlite3.connect(tmp_path / "r.db")
+    con.execute("CREATE TABLE precos (chave TEXT, url TEXT, dia TEXT, preco REAL, loja TEXT)")
+    url = "https://www.amazon.com.br/dp/6525917883"
+    con.executemany("INSERT INTO precos VALUES (?,?,?,?,?)",
+                    [("k", url, "2026-10-26", 310.0, "Amazon"), ("k", url, "2026-10-28", 299.9, "Amazon")])
+    o = Oferta("Amazon Brasil", "Vingadores", url, 277.87, preco_lista=459.9)
+    h = cp.historico_preco(con, o)
+    assert h["menor"] == 299.9 and h["dia"] == "28/10"
+    assert "Menor preço que já vi" in cp.montar_post(o, "", h)
+    o2 = Oferta("Amazon Brasil", "Vingadores", url, 320.0, preco_lista=459.9)
+    assert "Já esteve por R$ 299,90 em 28/10" in cp.montar_post(o2, "", h)
+    assert cp.historico_preco(con, Oferta("Amazon Brasil", "x", "https://www.amazon.com.br/dp/X", 10)) is None

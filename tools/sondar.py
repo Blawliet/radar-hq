@@ -184,17 +184,34 @@ def main():
         (PASTA / "nesta.txt").write_text(f"pareado: {achou}\n", encoding="utf-8")
         print("nesta", achou)
     if "nesta-teste" in pedidos:
-        # manda um rascunho de exemplo para a conversa privada (o primeiro do último teste seco)
+        # rascunho de teste com a melhor oferta guardada (capa + histórico de preço)
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+        import sqlite3
         import canal_publico as cp
+        from models import Oferta
         cfg = cp.config()
-        arq = Path(__file__).resolve().parents[1] / "data" / "debug" / "nesta-estante-rascunhos.txt"
-        post = arq.read_text(encoding="utf-8").split("-" * 40)[0].strip() if arq.exists() else "📚 *Teste*"
-        post = "\n".join(l for l in post.splitlines() if not l.startswith("[")).strip()
-        r = httpx.post(f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage", timeout=20, json={
+        con = sqlite3.connect(Path(__file__).resolve().parents[1] / "data" / "radar.db")
+        tok = os.environ["TELEGRAM_BOT_TOKEN"]
+        row = None
+        try:
+            row = con.execute("SELECT dados FROM canal_candidatos ORDER BY desconto DESC LIMIT 1").fetchone()
+        except sqlite3.OperationalError:
+            pass
+        if row:
+            d = json.loads(row[0])
+            o = Oferta("Amazon Brasil", d["titulo"], d["url"], d["preco"], preco_lista=d["preco_lista"],
+                       vendedor=d.get("vendedor"), extra={"asin": d.get("asin"), "imagem": d.get("imagem")})
+            post = cp.montar_post(o, cfg["tag"], cp.historico_preco(con, o))
+            if o.extra.get("imagem"):
+                httpx.post(f"https://api.telegram.org/bot{tok}/sendPhoto", timeout=30, json={
+                    "chat_id": cfg["chat"], "photo": o.extra["imagem"],
+                    "caption": "🖼️ Capa: segure a imagem e salve (ou compartilhe direto no WhatsApp)."})
+        else:
+            post = "📚 *Teste*"
+        r = httpx.post(f"https://api.telegram.org/bot{tok}/sendMessage", timeout=20, json={
             "chat_id": cfg["chat"], "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
             "text": "🧪 <b>Teste</b> do Nesta Estante\n\n" + cp.mensagem_rascunho(post, 1, 1)})
-        (PASTA / "nesta.txt").write_text(f"teste enviado: {r.status_code} {r.json().get('ok')}\n", encoding="utf-8")
+        (PASTA / "nesta.txt").write_text(f"teste enviado: {r.status_code} {r.json().get('ok')}\n{post}\n", encoding="utf-8")
         print("nesta-teste", r.status_code)
     if "colecao" in pedidos:
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))

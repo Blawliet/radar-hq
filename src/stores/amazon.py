@@ -91,6 +91,11 @@ class AmazonLoja(Loja):
         titulo = s.select_one("#productTitle")
         if titulo:
             o.titulo = titulo.get_text(" ", strip=True)
+        img = s.select_one("#landingImage, #imgBlkFront, #ebooksImgBlkFront, img#main-image")
+        if img:
+            o.extra["imagem"] = img.get("data-old-hires") or img.get("src")
+        elif s.select_one('meta[property="og:image"]'):
+            o.extra["imagem"] = s.select_one('meta[property="og:image"]').get("content")
 
         # só edição brasileira: ISBN (o ASIN de livro é o ISBN-10) e idioma da ficha
         asin = o.extra.get("asin", "")
