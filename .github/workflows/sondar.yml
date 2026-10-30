@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: radar
+  group: sonda
   cancel-in-progress: false
 
 jobs:
