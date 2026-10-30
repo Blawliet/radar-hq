@@ -113,9 +113,65 @@ def com_navegador(urls):
     return saida
 
 
+def rede(url: str, espera_ms: int = 12000) -> str:
+    """Abre a página num navegador novo e lista as chamadas XHR/fetch que ela faz."""
+    from playwright.sync_api import sync_playwright
+    linhas = [f"## rede {url}"]
+    with sync_playwright() as p:
+        b = p.chromium.launch()
+        ctx = b.new_context(user_agent=UA, locale="pt-BR", viewport={"width": 1366, "height": 900})
+        pg = ctx.new_page()
+        vistos = []
+
+        def resp(r):
+            try:
+                if r.request.resource_type in ("xhr", "fetch"):
+                    corpo = ""
+                    try:
+                        corpo = r.text()[:600]
+                    except Exception:
+                        pass
+                    vistos.append(f"{r.request.method} {r.status} {r.url[:400]}\n    {corpo!r}")
+            except Exception:
+                pass
+        pg.on("response", resp)
+        try:
+            r = pg.goto(url, timeout=45000, wait_until="domcontentloaded")
+            pg.wait_for_timeout(espera_ms)
+            linhas.append(f"status: {r.status if r else 0} final: {pg.url} titulo: {pg.title()}")
+            html = pg.content()
+            linhas.append("forms: " + json.dumps(re.findall(r"<form[^>]*>", html)[:10], ensure_ascii=False))
+            linhas.append("links busca: " + json.dumps(sorted(set(re.findall(
+                r'href="([^"]*(?:busca|pesquisa|search|catalogo)[^"]*)"', html, re.I)))[:20], ensure_ascii=False))
+            texto = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(
+                r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S | re.I)))
+            linhas.append("texto: " + texto[:2500])
+        except Exception as e:
+            linhas.append(f"ERRO: {e}"[:400])
+        linhas.append("chamadas:")
+        linhas += vistos[:80]
+        b.close()
+    return "\n".join(linhas) + "\n"
+
+
+REDE = {
+    "leitura-rede": ["https://leitura.com.br/catalogo?q=frieren"],
+    "mundos-rede": ["https://www.mundosinfinitos.com.br/"],
+    "kabum-json": [],
+}
+
+
 def main():
     pedidos = set(sys.argv[1].split(",")) if len(sys.argv) > 1 and sys.argv[1] else set(ALVOS)
     PASTA.mkdir(parents=True, exist_ok=True)
+    for alvo, urls in REDE.items():
+        if alvo in pedidos and urls:
+            (PASTA / f"{alvo}.txt").write_text("".join(rede(u) for u in urls), encoding="utf-8")
+            print(alvo, "ok")
+    if "kabum-json" in pedidos:
+        r = httpx.get(ALVOS["kabum"][0][1], headers=CAB, timeout=20)
+        d = r.json()["data"]
+        (PASTA / "kabum-json.txt").write_text(json.dumps(d[:3], ensure_ascii=False, indent=1)[:20000], encoding="utf-8")
     with httpx.Client(headers=CAB, follow_redirects=True, timeout=20) as c:
         for alvo, urls in ALVOS.items():
             if alvo not in pedidos:
