@@ -32,15 +32,6 @@ bloqueios:
     termos: [invencivel]
     excluir: [homem de ferro]
     volumes: todos
-  - id: spawn-mensal-1-8
-    nome: Spawn (mensal)
-    termos: [spawn]
-    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio, batman]
-    volumes: "1-8"
-  - id: spawn-origens-1-9-11
-    nome: Spawn Origens
-    termos: [spawn, origens]
-    volumes: "1-9,11"
   - id: box-gantz-parte-1
     nome: Box Gantz Parte 1
     termos: [gantz]
@@ -131,24 +122,6 @@ raros:
 # PROMOÇÕES (só com desconto real >= desconto_minimo)
 # ---------------------------------------------------------------------
 promocoes:
-  # Spawn: saiu dos raros (aparece em várias lojas). Alerta com 25% OFF, a melhor oferta.
-  - id: spawn-origens
-    nome: Spawn Origens
-    editora: Panini
-    termos: [spawn, origens]
-    volumes: "10,12+"
-    formato: Encadernado
-    buscas: [spawn origens]
-
-  - id: spawn-mensal
-    nome: Spawn (mensal)
-    editora: Panini
-    termos: [spawn]
-    excluir: [origens, omnibus, rei, cogliostro, sam, twitch, medieval, compendio, batman]
-    volumes: "9+"
-    formato: Encadernado
-    buscas: [spawn panini]
-
   - id: flash-geoff-johns
     nome: Flash por Geoff Johns
     editora: Panini
@@ -200,8 +173,7 @@ promocoes:
     formato: Encadernado
     buscas: [kit lanterna verde panini]
 
-  # Séries em andamento: volumes que você ainda NÃO tem.
-  # Quando comprar um volume, suba o número (ex.: "2+" vira "3+").
+  # Séries de mangá e HQ que você coleciona ficam na planilha da coleção (lá em cima).
   # Dandadan: só pacotes/kits com vários volumes (novo ou usado). O preço de capa
   # do pacote é estimado: nº de volumes x preço típico de um volume avulso.
   - id: dandadan
@@ -221,28 +193,6 @@ promocoes:
     volumes: "1+"
     formato: Encadernado
     buscas: [tartarugas ninja pipoca e nanquim]
-
-  - id: hunter-x-hunter
-    nome: Hunter x Hunter
-    termos: [hunter x hunter]
-    volumes: "38+"
-    formato: Mangá
-    buscas: [hunter x hunter vol 38, hunter x hunter]
-
-  - id: frieren
-    nome: Frieren
-    termos: [frieren]
-    volumes: "2+"
-    formato: Mangá
-    buscas: [frieren]
-
-  - id: sakamoto-days
-    nome: Sakamoto Days
-    termos: [sakamoto days]
-    volumes: "2+"
-    formato: Mangá
-    buscas: [sakamoto days]
-
 
   # Graphic novels avulsas (volume único). Se só 1 ou 2 lojas tiverem, o radar
   # avisa mesmo sem desconto ("difícil de achar"); se estiver fácil, só com 25% OFF.
