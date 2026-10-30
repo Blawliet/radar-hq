@@ -124,6 +124,15 @@ raros:
     urls:
       - https://panini.com.br/lobo-omnibus-vol-1
 
+  - id: batman-noite-das-corujas
+    nome: "Batman: A Noite das Corujas (Os Novos 52)"
+    editora: Panini
+    termos: [batman, noite das corujas]
+    excluir: [funko, camiseta, poster, action figure, boneco, dvd, blu ray, filme]
+    volumes: todos
+    formato: Encadernado
+    buscas: [batman a noite das corujas, batman noite das corujas novos 52]
+
   # vols. 2 a 4, todos esgotados na Panini: alerta em qualquer loja que tiver, em qualquer preço
   - id: homem-aranha-definitiva
     nome: "O Espetacular Homem-Aranha: Edição Definitiva"
