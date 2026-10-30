@@ -149,6 +149,27 @@ promocoes:
     formato: Omnibus
     buscas: [sociedade da justica da america geoff johns omnibus, sociedade da justica geoff johns vol 1]
 
+  # A Panini lista o vol. 1 sem número no título: a primeira entrada pega o vol. 1 e
+  # o título sem número, a segunda pega o vol. 2
+  - id: vingadores-busiek-perez-1
+    nome: "Os Vingadores por Kurt Busiek e George Pérez (Omnibus) vol. 1"
+    editora: Panini
+    termos: [vingadores, busiek]
+    excluir_regex: 'vol(ume)?\s*0?([2-9]|\d\d)\b|\b0?2\s*$'
+    volumes: todos
+    formato: Omnibus
+    buscas: [vingadores kurt busiek george perez omnibus]
+    urls:
+      - https://panini.com.br/os-vingadores-por-kurt-busiek-e-george-perez-omnibus
+
+  - id: vingadores-busiek-perez-2
+    nome: "Os Vingadores por Kurt Busiek e George Pérez (Omnibus) vol. 2"
+    editora: Panini
+    termos: [vingadores, busiek]
+    volumes: "2"
+    formato: Omnibus
+    buscas: [vingadores busiek perez omnibus vol 2]
+
   - id: box-ajin
     nome: Box Ajin (vols. 1 ao 17)
     editora: Panini
