@@ -1112,3 +1112,23 @@ def test_colecao_reveza_as_buscas():
     b0 = {d["id"]: d["buscas"] for d in entradas(linhas, janela=0)["promocoes"]}
     b2 = {d["id"]: d["buscas"] for d in entradas(linhas, janela=2)["promocoes"]}
     assert b0["colecao-serie-0"] != b2["colecao-serie-0"]   # alterna entre busca geral e por volume
+
+
+def test_mercado_livre_link_fixo_de_catalogo(monkeypatch):
+    from stores.mercadolivre import MercadoLivreLoja
+    monkeypatch.setenv("ML_CLIENT_ID", "1"); monkeypatch.setenv("ML_CLIENT_SECRET", "x")
+
+    class Resp:
+        status_code = 200
+        text = ""
+        def json(self): return {"access_token": "T", "expires_in": 21600}
+
+    class Http:
+        def post(self, *a, **k): return Resp()
+    f = _FetcherFalso({"/products/MLB54797458/items": (200, {"results": [
+        {"item_id": "MLB777", "price": 289.9, "condition": "new", "currency_id": "BRL"}]})})
+    f.http = Http()
+    loja = MercadoLivreLoja(f, {"nome": "Mercado Livre"})
+    o = loja.validar(Oferta("Mercado Livre", "Questão Omnibus",
+                            "https://www.mercadolivre.com.br/questao-vol-1/p/MLB54797458", 0, extra={"fixa": True}))
+    assert o.disponivel and o.preco == 289.9 and o.url.endswith("MLB-777") and o.extra.get("fixa")

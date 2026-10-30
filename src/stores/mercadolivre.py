@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import time
 from urllib.parse import quote
 
@@ -138,6 +139,14 @@ class MercadoLivreLoja(Loja):
 
     # ---------------- validação
     def validar(self, o):
+        # link fixo de produto do catálogo (.../p/MLB123): busca a melhor oferta pela API
+        if not o.extra.get("ml_item"):
+            m = re.search(r"/p/(MLB\d+)", o.url or "")
+            if m:
+                novo = self._melhor_oferta(m.group(1), o.titulo)
+                if novo:
+                    novo.extra.update({k: v for k, v in o.extra.items() if k not in novo.extra})
+                    o = novo
         # /products/{id}/items só lista ofertas ATIVAS (com estoque), e a página do
         # anúncio é bloqueada para acessos da nuvem: a API é a fonte do estoque aqui.
         if o.extra.get("ml_item"):

@@ -102,6 +102,17 @@ raros:
     formato: Encadernado
     buscas: [absolute batman]
 
+  - id: questao-oneil-cowan
+    nome: "Questão por Dennis O'Neil e Denys Cowan (Omnibus)"
+    editora: Panini
+    termos: [questao]
+    qualquer: [o neil, oneil, cowan]
+    volumes: "1"
+    formato: Omnibus
+    buscas: [questao dennis o neil denys cowan omnibus, questao omnibus panini]
+    urls:
+      - https://www.mercadolivre.com.br/questao-por-dennis-oneil-e-denys-cowan-vol-1-ominbus-oneil-dennis-panini-capa-dura/p/MLB54797458
+
   # vols. 2 a 4, todos esgotados na Panini: alerta em qualquer loja que tiver, em qualquer preço
   - id: homem-aranha-definitiva
     nome: "O Espetacular Homem-Aranha: Edição Definitiva"
