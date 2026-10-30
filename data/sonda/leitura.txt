@@ -1,0 +1,122 @@
+# sonda leitura em 29/10 23:26
+
+## home [http]
+url: https://leitura.com.br/
+final: https://leitura.com.br/
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa0b9ca4b0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## home-www [http]
+url: https://www.leitura.com.br/
+final: https://leitura.com.br/
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa146aa2b0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## busca-q [http]
+url: https://www.leitura.com.br/busca?q=frieren
+final: https://leitura.com.br/busca?q=frieren
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa1b5edab0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## busca-search [http]
+url: https://www.leitura.com.br/search?q=frieren
+final: https://leitura.com.br/search?q=frieren
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa22299eb0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## busca-pesquisa [http]
+url: https://www.leitura.com.br/pesquisa?t=frieren
+final: https://leitura.com.br/pesquisa?t=frieren
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa290ca9b0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## vtex-api [http]
+url: https://www.leitura.com.br/api/catalog_system/pub/products/search?ft=frieren&_from=0&_to=9
+final: https://leitura.com.br/api/catalog_system/pub/products/search?ft=frieren&_from=0&_to=9
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa2fef24b0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## vtex-ft [http]
+url: https://www.leitura.com.br/frieren
+final: https://leitura.com.br/frieren
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa36c983b0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## magento [http]
+url: https://www.leitura.com.br/catalogsearch/result/?q=frieren
+final: https://leitura.com.br/catalogsearch/result/?q=frieren
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudflare", "cf-ray": "a526fa3d7cdfb0f4-STL"}
+tamanho: 11631
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['cloudflare']
+trechos: []
+texto:  Leitura — Livros e mais 
+
+## home [navegador]
+url: https://leitura.com.br/
+final: https://leitura.com.br/
+status: 200
+cabecalhos: {"cf-ray": "a526fa484ec7b0f4-STL", "content-type": "text/html; charset=utf-8", "server": "cloudflare"}
+tamanho: 336222
+titulo: Leitura — Livros e mais
+plataforma (dicas): ['magento', 'cloudflare']
+trechos: ["\"availability\">68 lojas</div></div><a class=\"buy-button\" href=\"/produto/amor-pelas-coisas-impe", "\"availability\">68 lojas</div></div><a class=\"buy-button\" href=\"/produto/amor-pelas-coisas-impe", "\"availability\">69 lojas</div></div><a class=\"buy-button\" href=\"/produto/a-mulher-que-voce-nasc", "application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"Leitura\",\"url\":\"https://leitura.com.br\",\"logo\":\"https://leitura.com.br/favicon.png\",\"description\":\"A maior rede de livrarias do Brasil. Milhares de títulos com entrega para todo o Brasil.\",\"contactPoint\":{\"@type\":\"ContactPoint\",\"telephone\":\"+55-19-3208-1068\",\"contactType\":\"sales\",\"availableLanguage\":\"Portuguese\"},\"sameAs\":[\"https://pt-br.facebook.com/livraria.leitura\",\"https://instagram.com/livrarialeitura?hl=pt-br\",\"https://pt.linkedin.com/company/livraria-leitura\",\"https://youtube.com/channel/UCwidZVaByjUfjsJ5KsSqurw\"]}", "application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"Leitura\",\"url\":\"https://leitura.com.br\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://leitura.com.br/catalogo?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"]
+texto:  Leitura — Livros e mais Usamos cookies essenciais para o site funcionar. Com sua autorização, também usamos cookies para medição e publicidade. Você pode mudar sua escolha em Preferências de cookies. Política de Privacidade . Aceitar Recusar +140 LOJAS EM TODO BRASIL FRETE GRATIS A PARTIR DE R$&nbsp;99,00 Tudo Título Autor ISBN/Código Editora Enviar para Informe seu CEP Favoritos Listas ou cadastrar Entrar 0 CATEGORIAS PRÉ-VENDA BESTSELLERS REVISTA OFERTAS Leitura Ganhadores Prêmio Jabuti Massaranduba Abáz 1 loja em estoque &nbsp; R$&nbsp;52,25 no Pix à vista R$&nbsp;55,00 no cartão Comprar Viagem no país da crônica Humberto Werneck 1 loja em estoque &nbsp; R$&nbsp;104,40 no Pix à vista R$&nbsp;109,90 no cartão em até 2x de R$&nbsp;54,95 sem juros Comprar -26% Pitangas verdes Mariana Lobato Botter 41 lojas em estoque R$&nbsp;49,90 A partir de R$&nbsp;35,15 no Pix à vista R$&nbsp;37,00 no cartão Comprar -20% Ouroboros Luckas Lohanathan 5 lojas em estoque R$&nbsp;89,90 A partir de R$&nbsp;68,62 no Pix à vista R$&nbsp;72,23 no cartão Comprar -12% Boris e Marina Martins, Alberto 35 lojas em estoque R$&nbsp;89,90 A partir de R$&nbsp;75,04 no Pix à vista R$&nbsp;78,99 no cartão Comprar -17% Cartografia para caminhos incertos Ian Fraser 47 lojas em estoque R$&nbsp;69,90 A partir de R$&nbsp;55,34 no Pix à vista R$&nbsp;58,25 no cartão Comprar -27% Meridiana Eliana Alves Cruz 69 lojas em estoque R$&nbsp;69,90 A partir de R$&nbsp;48,30 no Pix à vista R$&nbsp;50,84 no cartão Comprar -3% Abdias, intérprete do Brasil Abdias Nascimento 19 lojas em estoque R$&nbsp;105,90 A partir de R$&nbsp;97,33 no Pix à vista R$&nbsp;102,45 no cartão em até 2x de R$&nbsp;51,22 sem juros Comprar -34% Trincheira tropical Ruy Castro 72 lojas em estoque R$&nbsp;119,90 A partir de R$&nbsp;75,04 no Pix à vista R$&nbsp;78,99 no cartão Comprar -25% A (r)evolução das habilidades para o futuro do trabalho na era da inteligência artificial Gabriel Martha 66 lojas em estoque R$&nbsp;80,00 A partir de R$&nbsp;57,00 no Pix à vista R$&nbsp;60,00 no cartão Comprar -17% Educando crianças antirracistas Bárbara Carine Soares Pinheiro 65 lojas em estoque R$&nbsp;59,90 A partir de R$&nbsp;47,23 no Pix à vista R$&nbsp;49,72 no cartão Comprar -9% Não se esqueça! Cortella, Mario Sergio 75 lojas em estoque R$&nbsp;44,90 A partir de R$&nbsp;38,78 no Pix à vista R$&nbsp;40,82 no cartão Comprar -21% A paixão pela mentira Paulo Schiller 26 lojas em estoque R$&nbsp;99,90 A partir de R$&nbsp;75,04 no Pix à vista R$&nbsp;78,99 no cartão Comprar -20% O cavaleiro de bronze Aleksandr Púchkin 42 lojas em estoque R$&nbsp;52,90 A partir de R$&nbsp;40,40 no Pix à vista R$&nbsp;42,53 no cartão Comprar -45% Os substitutos Bernardo Carvalho 30 lojas em estoque R$&nbsp;82,90 A partir de R$&nbsp;43,23 no Pix à vista R$&nbsp;45,51 no cartão Comprar Previous slide Next slide 15 minutos longe das telas Seu próximo intervalo começa com um livro 4 LIVROS PARA SE DESCONECTAR E DESCOBRIR NOVAS HISTÓRIAS Entre uma reunião, um
+
+## home-www [navegador]
+url: https://www.leitura.com.br/
+final: https://leitura.com.br/
+status: 403
+cabecalhos: {"cf-ray": "a526fa63eefcb0f4-STL", "content-type": "text/html; charset=UTF-8", "server": "cloudflare"}
+tamanho: 28814
+titulo: Um momento…
+plataforma (dicas): ['magento', 'cloudflare']
+trechos: []
+texto:  Um momento… leitura.com.br Executando verificação de segurança Este site utiliza um serviço de segurança para proteção contra bots maliciosos. Esta página é exibida enquanto o site verifica se você não é um bot. Verificação bem-sucedida. Esperando a resposta de leitura.com.br Enable JavaScript and cookies to continue Ray ID: a526fa63eefcb0f4 Desempenho e segurança da Cloudflare Privacidade 
+
+## busca-q [navegador]
+url: https://www.leitura.com.br/busca?q=frieren
+final: https://leitura.com.br/busca?q=frieren
+status: 403
+cabecalhos: {"cf-ray": "a526fa7dace6b0f4-STL", "content-type": "text/html; charset=UTF-8", "server": "cloudflare"}
+tamanho: 28895
+titulo: Um momento…
+plataforma (dicas): ['magento', 'cloudflare']
+trechos: []
+texto:  Um momento… leitura.com.br Executando verificação de segurança Este site utiliza um serviço de segurança para proteção contra bots maliciosos. Esta página é exibida enquanto o site verifica se você não é um bot. Verificação bem-sucedida. Esperando a resposta de leitura.com.br Enable JavaScript and cookies to continue Ray ID: a526fa7dace6b0f4 Desempenho e segurança da Cloudflare Privacidade 

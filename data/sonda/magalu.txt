@@ -1,0 +1,23 @@
+# sonda magalu em 29/10 23:29
+
+## busca [http]
+url: https://www.magazineluiza.com.br/busca/frieren/
+final: https://www.magazineluiza.com.br/busca/frieren/
+status: 403
+cabecalhos: {"content-type": "text/html", "set-cookie": "mlparceiro=3653; expires=Sun, 29-Nov-2026 02:29:02 GMT; path=/; domain=.magazineluiza.com.br, basket_abtest=B; expires=Fri, 30-Oct-2026 04:29:02 GMT; path=/; domain=.magazineluiza.com.br, abtest_prebasket=B; expires=Sat, 31-Oct-2026 02:29:02 GMT; path=/; domain=.magazineluiza.com.br, login_abtest=B; expires=Sat, 31-Oct-2026 02:29:02 GMT; path=/; domain=.magazineluiza.com.br, toggle_modal_added_to_bag=true; path=/; domain=.magazineluiza.com.br; SameSite=Strict, filter_categories_modal_added_to_bag=%5B%22AM%22%5D%5B%22AF%22%5D%5B%22AU%22%5D%5B%22BS%22%5D%5B%22CM%22%5D%5B%22PI%22%5D%5B%22DE%22%5D%5B%22FM%22%5D%5B%22FJ%22%5D%5B%22LI%22%5D%5B%22MD%22%5D%5B%22ME%22%5D%5B%22MS%22%5D%5B%22PA%22%5D%5B%22PE%22%5D%5B%22RG%22%5D%5B%22RE%22%5D%5B%22SE%22%5D%
+tamanho: 1074
+titulo: Magazine Luiza | Não é possível acessar a página
+plataforma (dicas): []
+trechos: []
+texto:  Magazine Luiza | Não é possível acessar a página Não é possível acessar a página (Erro 403 ) Por favor, tente novamente em 1 minuto. Se precisar, a gente pode te ajudar. ID: 0.4e0ec617.1793327342.90d1f8b Falar com o Magalu 
+
+## busca [navegador]
+url: https://www.magazineluiza.com.br/busca/frieren/
+final: https://www.magazineluiza.com.br/busca/frieren/
+status: 403
+cabecalhos: {"content-type": "text/html"}
+tamanho: 1074
+titulo: Magazine Luiza | Não é possível acessar a página
+plataforma (dicas): []
+trechos: []
+texto:  Magazine Luiza | Não é possível acessar a página Não é possível acessar a página (Erro 403 ) Por favor, tente novamente em 1 minuto. Se precisar, a gente pode te ajudar. ID: 0.4e0ec617.1793327343.90d28e6 Falar com o Magalu 

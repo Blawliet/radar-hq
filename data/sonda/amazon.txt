@@ -1,0 +1,78 @@
+# sonda amazon em 29/10 23:28
+
+## busca [http]
+url: https://www.amazon.com.br/s?k=frieren&i=stripbooks
+final: https://www.amazon.com.br/s?k=frieren&i=stripbooks
+status: 503
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 d2d41bdb78d0a5d94793f7a0c0917876.cloudfront.net (CloudFront)"}
+tamanho: 1643
+titulo: Amazon.com.br Algo deu errado
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Algo deu errado 
+
+## dp-bloqueado [http]
+url: https://www.amazon.com.br/dp/652591311X
+final: https://www.amazon.com.br/dp/652591311X
+status: 200
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 d2d41bdb78d0a5d94793f7a0c0917876.cloudfront.net (CloudFront)"}
+tamanho: 3900
+titulo: Amazon.com.br
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Clique no botão abaixo para continuar comprando Continuar comprando Condições de Uso Políticas de Privacidade &copy; 1996 , Amazon.com, Inc. ou suas afiliadas 
+
+## dp-ok [http]
+url: https://www.amazon.com.br/dp/6525935903
+final: https://www.amazon.com.br/dp/6525935903
+status: 200
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 d2d41bdb78d0a5d94793f7a0c0917876.cloudfront.net (CloudFront)"}
+tamanho: 3900
+titulo: Amazon.com.br
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Clique no botão abaixo para continuar comprando Continuar comprando Condições de Uso Políticas de Privacidade &copy; 1996 , Amazon.com, Inc. ou suas afiliadas 
+
+## aod [http]
+url: https://www.amazon.com.br/gp/aod/ajax/ref=auto_load_aod?asin=652591311X&pc=dp
+final: https://www.amazon.com.br/gp/aod/ajax/ref=auto_load_aod?asin=652591311X&pc=dp
+status: 503
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 d2d41bdb78d0a5d94793f7a0c0917876.cloudfront.net (CloudFront)"}
+tamanho: 1643
+titulo: Amazon.com.br Algo deu errado
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Algo deu errado 
+
+## busca [navegador]
+url: https://www.amazon.com.br/s?k=frieren&i=stripbooks
+final: https://www.amazon.com.br/s?k=frieren&i=stripbooks
+status: 503
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 f920edb4e5d27ee4048d42d253473dda.cloudfront.net (CloudFront)"}
+tamanho: 1721
+titulo: Amazon.com.br Algo deu errado
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Algo deu errado 
+
+## dp-bloqueado [navegador]
+url: https://www.amazon.com.br/dp/652591311X
+final: https://www.amazon.com.br/dp/652591311X
+status: 200
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 f920edb4e5d27ee4048d42d253473dda.cloudfront.net (CloudFront)"}
+tamanho: 3618
+titulo: Amazon.com.br
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Clique no botão abaixo para continuar comprando Continuar comprando Condições de Uso Políticas de Privacidade © 1996 -2026, Amazon.com, Inc. ou suas afiliadas 
+
+## dp-ok [navegador]
+url: https://www.amazon.com.br/dp/6525935903
+final: https://www.amazon.com.br/dp/6525935903
+status: 200
+cabecalhos: {"content-type": "text/html", "server": "Server", "via": "1.1 925dca724534b9e2ea0c989957321ad0.cloudfront.net (CloudFront)"}
+tamanho: 3618
+titulo: Amazon.com.br
+plataforma (dicas): []
+trechos: []
+texto:  Amazon.com.br Clique no botão abaixo para continuar comprando Continuar comprando Condições de Uso Políticas de Privacidade © 1996 -2026, Amazon.com, Inc. ou suas afiliadas 
