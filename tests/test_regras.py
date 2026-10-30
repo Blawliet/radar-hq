@@ -45,7 +45,7 @@ def test_volume(titulo, vol):
 @pytest.mark.parametrize("titulo", [
     "A Saga do Flash Vol. 8", "A Saga do Flash Vol. 14", "One Piece Vol. 97", "One Piece Vol. 104",
     "Blueberry: Edição Definitiva Vol. 4", "Supergirl por Peter David Vol. 5",
-    "A Saga do Lanterna Verde Vol. 3", "A Saga do Lanterna Verde Vol. 7", "Absolute Batman Vol. 2",
+    "A Saga do Lanterna Verde Vol. 4", "A Saga do Lanterna Verde Vol. 7", "Absolute Batman Vol. 2",
     "Quarteto Fantástico por Jonathan Hickman Omnibus Vol. 2",
 ])
 def test_raros_alertam_mesmo_caro(titulo):
