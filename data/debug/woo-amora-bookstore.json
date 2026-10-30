@@ -5,7 +5,7 @@
   "exemplos": [
    {
     "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -26,7 +26,7 @@
   "exemplos": [
    {
     "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -47,7 +47,7 @@
   "exemplos": [
    {
     "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
