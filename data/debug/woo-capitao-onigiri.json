@@ -236,125 +236,136 @@
   "itens": 0,
   "exemplos": []
  },
- "frieren": {
+ "sakamoto days": {
   "http": 200,
-  "itens": 1,
+  "itens": 0,
+  "exemplos": []
+ },
+ "spawn origens 12": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "shaman king big": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "one punch": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dr stone 13": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "we never learn": {
+  "http": 200,
+  "itens": 2,
   "exemplos": [
    {
-    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
+    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "hunter x hunter": {
+ "naruto gold": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "spawn": {
+ "yuuna pensao assombrada": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "soul eater perfect": {
+ "jojo battle tendency 2": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "black clover": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "golden kamui": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "jujutsu kaisen 6": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "jagaaaaaan": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "gigant": {
-  "http": 200,
-  "itens": 5,
-  "exemplos": [
-   {
-    "nome": "Gigant – Vol.6 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Gigant – Vol.4 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Gigant – Vol.3 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "jojo stardust crusaders": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "dragon ball super": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "lost canvas especial": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "ao no exorcist": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "hokuto no ken": {
+ "food wars": {
   "http": 200,
   "itens": 4,
   "exemplos": [
    {
-    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
+    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
+    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
+    "nome": "Food Wars! em JPN – Vol.1 ao 15 (Festival de Importados #30)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "inuyasha": {
+ "spy x family": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "ancient magus": {
+ "terra formars 22": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
+    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "boku no hero": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "fruits basket": {
+  "http": 200,
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "Fruits Basket – Primeira Edição – Vol.7 (Festival de Avulsos #123)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Fruits Basket – Primeira Edição – Vol.6 (Festival de Avulsos #123)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Fruits Basket – Primeira Edição – Vol.5 (Festival de Avulsos #123)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "citrus": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "Citrus Fruits Continuous Action em JPN – Vol.1 ao 8 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Citrus em ING – Vol.1 e 2 (Festival de Importados #28)",
     "estoque": true,
     "compravel": true
    }
