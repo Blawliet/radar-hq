@@ -106,18 +106,20 @@ raros:
     formato: Encadernado
     buscas: [absolute batman]
 
-  # esgotado na Panini: alerta em qualquer loja que tiver, em qualquer preço
+  # vols. 2 e 3 esgotados na Panini: alerta em qualquer loja que tiver, em qualquer preço
   - id: homem-aranha-definitiva
     nome: "O Espetacular Homem-Aranha: Edição Definitiva"
     editora: Panini
     termos: [espetacular homem aranha]
     qualquer: [edicao definitiva, ed definitiva, definitiva]
     excluir: [omnibus, miniatura, funko, boneco, camiseta]
-    volumes: "2"
+    volumes: "2,3"
     formato: Capa Dura
-    buscas: [espetacular homem aranha edicao definitiva vol 2, homem aranha edicao definitiva]
+    buscas: [espetacular homem aranha edicao definitiva vol 2, espetacular homem aranha edicao definitiva vol 3,
+             homem aranha edicao definitiva]
     urls:
       - https://panini.com.br/o-espetacular-homem-aranha-edicao-definitiva-vol-2-alizt002r2
+      - https://panini.com.br/o-espetacular-homem-aranha-edicao-definitiva-vol-3-alizt003r2
 
 # ---------------------------------------------------------------------
 # PROMOÇÕES (só com desconto real >= desconto_minimo)
