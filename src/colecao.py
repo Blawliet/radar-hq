@@ -186,7 +186,13 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
             continue
         spec = compactar(buracos)
         if seguinte:
-            spec = f"{spec},{seguinte}+" if spec else f"{seguinte}+"
+            # série em andamento: os próximos volumes, com um teto (último que tenho + 25).
+            # Evita pegar a numeração de outra edição, como Spawn nº 167 da Abril.
+            prox = f"{seguinte}-{seguinte + 24}"
+            legivel = f"{spec},{seguinte}+" if spec else f"{seguinte}+"
+            spec = f"{spec},{prox}" if spec else prox
+        else:
+            legivel = spec
         termo_busca = " ".join(termos)
         alvo = (buracos + ([seguinte] if seguinte else []))[:3]
         todas = [termo_busca] + [f"{termo_busca} {v}" for v in alvo]
@@ -195,7 +201,8 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
         else:
             buscas = [todas[(janela // 2) % len(todas)]] if (i + janela) % 2 == 0 else []
         destino = "raros" if alerta.startswith("raro") else "promocoes"
-        out[destino].append({**base, "id": f"colecao-{slug}", "volumes": spec, "buscas": buscas,
+        out[destino].append({**base, "id": f"colecao-{slug}", "volumes": spec, "volumes_txt": legivel,
+                             "buscas": buscas,
                              "origem": "planilha"})
     return out
 

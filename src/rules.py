@@ -57,6 +57,36 @@ class SpecVolume:
 
 
 # ------------------------------------------------------------------ entradas
+# Editoras de quadrinhos e mangá (apelidos sem acento). Se a entrada diz a editora e o
+# título cita OUTRA, é outra edição (ex.: Spawn da Abril/Pandora x Spawn da Panini).
+EDITORAS = {
+    "panini": ["panini"], "jbc": ["jbc"], "newpop": ["newpop", "new pop"], "devir": ["devir"],
+    "mythos": ["mythos"], "abril": ["abril", "editora abril"], "pandora": ["pandora", "pandora books"],
+    "hqm": ["hqm"], "conrad": ["conrad"], "pipoca": ["pipoca e nanquim", "pipoca nanquim"],
+    "darkside": ["darkside"], "comix zone": ["comix zone"], "qs comics": ["qs comics"],
+    "hqueria": ["hqueria"], "mino": ["editora mino"], "skript": ["skript"], "nemo": ["editora nemo"],
+    "veneta": ["veneta"], "planeta": ["planeta deagostini", "planeta de agostini"], "salvat": ["salvat"],
+    "eaglemoss": ["eaglemoss"], "ediouro": ["ediouro"], "globo": ["editora globo"],
+}
+
+
+def _grupo_editora(nome: str) -> str | None:
+    n = normalizar(nome)
+    for chave, apelidos in EDITORAS.items():
+        if any(contem(n, a) for a in apelidos):
+            return chave
+    return None
+
+
+def outra_editora(titulo_norm: str, editora: str) -> bool:
+    """True se o título cita uma editora diferente da esperada."""
+    minha = _grupo_editora(editora)
+    if not minha:
+        return False
+    return any(chave != minha and any(contem(titulo_norm, a) for a in apelidos)
+               for chave, apelidos in EDITORAS.items())
+
+
 @dataclass
 class Entrada:
     id: str
@@ -97,7 +127,7 @@ class Entrada:
             ativo=d.get("ativo", True),
             buscas=d.get("buscas", []),
             editora=d.get("editora"),
-            volumes_txt=str(d.get("volumes", "todos")),
+            volumes_txt=str(d.get("volumes_txt") or d.get("volumes", "todos")),
             modo=d.get("modo", "normal"),
             categoria=d.get("categoria", "livros"),
             so_menor_preco=bool(d.get("so_menor_preco", False)),
@@ -107,6 +137,8 @@ class Entrada:
 
     def casa(self, t: str) -> bool:
         if not all(contem(t, x) for x in self.termos):
+            return False
+        if self.editora and outra_editora(t, self.editora):
             return False
         if self.qualquer and not any(contem(t, x) for x in self.qualquer):
             return False

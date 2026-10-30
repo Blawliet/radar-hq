@@ -1090,7 +1090,7 @@ def test_colecao_vira_entradas_do_radar():
     e = entradas(ler_csv(csv_txt), janela=0)
     promo = {d["id"]: d for d in e["promocoes"]}
     raro = {d["id"]: d for d in e["raros"]}
-    assert promo["colecao-spawn-origens"]["volumes"] == "10,12+"
+    assert promo["colecao-spawn-origens"]["volumes"] == "10,12-36"
     assert promo["colecao-spawn-origens"]["termos"] == ["spawn", "origens"]
     assert raro["colecao-berserk"]["volumes"] == "41"
     assert raro["colecao-berserk"]["buscas"] == ["berserk", "berserk 41"]     # raro busca toda rodada
@@ -1099,6 +1099,7 @@ def test_colecao_vira_entradas_do_radar():
     assert bloq["colecao-akira-tenho"]["volumes"] == "1-6" and "colecao-gibis-tenho" in bloq
     sv = SpecVolume.parse(promo["colecao-spawn-origens"]["volumes"])
     assert sv.aceita(10) and sv.aceita(12) and sv.aceita(20) and not sv.aceita(11) and not sv.aceita(5)
+    assert not sv.aceita(167)                       # numeração de outra edição
     ent = Entrada.de_dict(promo["colecao-spawn-origens"])
     assert ent.casa("spawn origens vol 10")
 
@@ -1132,3 +1133,20 @@ def test_mercado_livre_link_fixo_de_catalogo(monkeypatch):
     o = loja.validar(Oferta("Mercado Livre", "Questão Omnibus",
                             "https://www.mercadolivre.com.br/questao-vol-1/p/MLB54797458", 0, extra={"fixa": True}))
     assert o.disponivel and o.preco == 289.9 and o.url.endswith("MLB-777") and o.extra.get("fixa")
+
+
+@pytest.mark.parametrize("titulo,alerta", [
+    ("Spawn nº 167", False),                         # Abril: fora do teto de volumes
+    ("Spawn Vol. 10 - Panini", True),
+    ("Spawn Vol. 10 - Editora Abril", False),        # outra editora
+    ("Spawn Vol. 10 - Pandora Books", False),
+])
+def test_spawn_outra_edicao(titulo, alerta):
+    from colecao import ler_csv, entradas
+    from rules import Entrada
+    csv_txt = ('"Série","Editora","Volumes que tenho","Alerta","Palavras que o título precisa ter","Palavras para ignorar"\n'
+               '"Spawn (mensal)","Panini","1-9","promoção","spawn","origens"\n')
+    d = entradas(ler_csv(csv_txt), janela=0)["promocoes"][0]
+    e = Entrada.de_dict(d)
+    n = normalizar(titulo)
+    assert (e.casa(n) and e.volumes.aceita(extrair_volume(n))) == alerta
