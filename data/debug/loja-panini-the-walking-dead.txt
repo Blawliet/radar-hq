@@ -3,7 +3,7 @@ final: https://panini.com.br/panini-comics/the-walking-dead
 via: http
 status: 200
 motivo: sem preço legível
-tamanho do texto: 24163
+tamanho do texto: 24213
 
 pagina 3 pagina avancar exibir 12 24 36 por pagina ordenar por posicao titulo do produto avaliacao do produto edicao desconto mais recentes preco - crescente preco - decrescente definir direcao decrescente 24% the walking dead vol. 30 preco especial r$ 33,68 preco r$ 44,90 adicionar adicionar a lista de desejos adicionar para comparar 24% the walking dead vol. 29 preco especial r$ 33,68 preco r$ 44,90 adicionar adicionar a lista de desejos adicionar para comparar 24% the walking dead vol. 28 preco especial r$ 33,68 preco r$ 44,90 avise-me adicionar a lista de desejos adicionar para comparar 24% the walking dead vol. 27 preco especial r$ 33,68 preco r$ 44,90 avise-me adicionar a lista de desejos adicionar para comparar 24% the walking dead vol. 26 preco especial r$ 33,68 preco r$ 44,90 adicionar adicionar a lista de desejos adicionar para comparar 24% the walking dead vol. 25 preco especial r$ 33,68 preco r$ 44,90 avise-me adicionar a lista de desejos adicionar para comparar 34% the walking dead vol. 24 preco especial r$ 25,94 preco r$ 39,90 avise-me adicionar a lista de desejos adicionar para comparar 34% the walking dead vol. 23 preco especial r$ 25,94 preco r$ 3
 [...]
