@@ -145,9 +145,12 @@ class Catalogo:
             self.nome = listas.get("nome") or Path(pessoa).stem.title()
             ligados = set(listas.get("radares") or [])
             radares = [r for r in radares if r["id"] in ligados]
-        self.bloqueios = [Entrada.de_dict(d) for d in listas.get("bloqueios") or []]
-        self.raros = [Entrada.de_dict(d) for d in listas.get("raros") or []]
-        self.promocoes = [Entrada.de_dict(d) for d in listas.get("promocoes") or []]
+        # coleção numa planilha Google: o que a pessoa tem vira bloqueio, o que falta vira busca
+        from colecao import carregar
+        col = carregar(listas.get("colecao") or {}, self.nome or "geral")
+        self.bloqueios = [Entrada.de_dict(d) for d in (listas.get("bloqueios") or []) + col["bloqueios"]]
+        self.raros = [Entrada.de_dict(d) for d in (listas.get("raros") or []) + col["raros"]]
+        self.promocoes = [Entrada.de_dict(d) for d in (listas.get("promocoes") or []) + col["promocoes"]]
         self.radares = [Entrada.de_dict({**d, "volumes": "todos"}) for d in radares]
         ro = dados.get("radar_omnibus")          # formato antigo do catálogo
         if ro and not any(r.id == "radar-omnibus" for r in self.radares):

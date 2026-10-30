@@ -3,6 +3,11 @@
 # =====================================================================
 nome: Bruno
 
+# coleção na planilha Google "Coleção do Bruno (Radar HQ)": o que tenho vira bloqueio
+# e o que falta vira busca, em toda rodada
+colecao:
+  planilha: 1CPqDMzQePPmV3kXr47gi_CJYv_W3mSvDDL91Ax3kEFI
+
 # radares permanentes ligados para esta pessoa (definidos em catalogo.yaml)
 radares: [radar-omnibus, radar-boxes]
 

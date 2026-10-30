@@ -1064,3 +1064,37 @@ def test_kabum_api():
     fixa = Oferta("KaBuM!", "PS5", "https://www.kabum.com.br/produto/1065184/console-ps5", 0, extra={"fixa": True})
     r = loja.validar(fixa)
     assert r.disponivel is False and r.extra.get("fixa")
+
+
+# ---------------- coleção na planilha
+def test_colecao_expande_e_calcula_o_que_falta():
+    from colecao import expandir, compactar, faltam
+    assert expandir("1-3, 5, 8-9") == [1, 2, 3, 5, 8, 9]
+    assert compactar([1, 2, 3, 5, 8, 9]) == "1-3,5,8-9"
+    assert faltam([1, 2, 3, 5, 8, 9], 10) == ([4, 6, 7, 10], None)
+    assert faltam(expandir("1-9, 11"), None) == ([10], 12)
+    assert faltam(expandir("1-10"), 10) == ([], None)
+
+
+def test_colecao_vira_entradas_do_radar():
+    from colecao import ler_csv, entradas
+    from rules import Entrada, SpecVolume
+    csv_txt = ('"Série","Editora","Volumes que tenho (ex.: 1-5, 7, 9)","Total de volumes (vazio = em andamento)",'
+               '"Alerta","Faltam (calculado)","Palavras que o título precisa ter (opcional)","Palavras para ignorar (opcional)"\n'
+               '"Spawn Origens","Panini","1-9, 11","","promoção","10, 12 em diante","spawn, origens",""\n'
+               '"Berserk","Panini","1-40","41","raro","41","",""\n'
+               '"Akira","JBC","1-6","6","promoção","completa","",""\n'
+               '"Gibis","","1-3","","não buscar","","",""\n')
+    e = entradas(ler_csv(csv_txt))
+    promo = {d["id"]: d for d in e["promocoes"]}
+    raro = {d["id"]: d for d in e["raros"]}
+    assert promo["colecao-spawn-origens"]["volumes"] == "10,12+"
+    assert promo["colecao-spawn-origens"]["termos"] == ["spawn", "origens"]
+    assert raro["colecao-berserk"]["volumes"] == "41"
+    assert "colecao-akira" not in promo and "colecao-gibis" not in promo
+    bloq = {d["id"]: d for d in e["bloqueios"]}
+    assert bloq["colecao-akira-tenho"]["volumes"] == "1-6" and "colecao-gibis-tenho" in bloq
+    sv = SpecVolume.parse(promo["colecao-spawn-origens"]["volumes"])
+    assert sv.aceita(10) and sv.aceita(12) and sv.aceita(20) and not sv.aceita(11) and not sv.aceita(5)
+    ent = Entrada.de_dict(promo["colecao-spawn-origens"])
+    assert ent.casa("spawn origens vol 10")
