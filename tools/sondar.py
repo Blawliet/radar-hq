@@ -52,6 +52,10 @@ ALVOS: dict[str, list[tuple[str, str]]] = {
         ("termo", "https://mundosinfinitos.com.br/geek/solucoes/busca.aspx?termo=frieren"),
         ("produto", "https://mundosinfinitos.com.br/geek/solucoes/Busca.aspx?a=374&o=0"),
     ],
+    "comiccity": [
+        ("busca", "https://www.comiccitystore.com.br/buscar?q=batman"),
+        ("produto", "https://www.comiccitystore.com.br/a-vida-da-capita-marvel"),
+    ],
     "mirane": [
         ("produto", "https://miranecomics.com.br/produtos/sakamoto-days-16/"),
     ],
@@ -83,7 +87,7 @@ def resumo(nome: str, url: str, r: httpx.Response | None, erro: str = "", via: s
     texto = re.sub(r"<[^>]+>", " ", texto)
     texto = re.sub(r"\s+", " ", texto)
     extras = []
-    for rx in (r'data-variants="[^"]{0,1500}', r'"availability"[^,}]{0,80}', r'"price"\s*:\s*"?[\d.,]+',
+    for rx in (r'<a[^>]+class="[^"]*nome-produto[^"]*"[^>]*>', r'data-variants="[^"]{0,1500}', r'"availability"[^,}]{0,80}', r'"price"\s*:\s*"?[\d.,]+',
                r'application/ld\+json[^<]{0,1200}'):
         for m in list(re.finditer(rx, corpo))[:3]:
             extras.append(m.group(0)[:1500])
