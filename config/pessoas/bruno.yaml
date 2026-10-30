@@ -106,7 +106,7 @@ raros:
     formato: Encadernado
     buscas: [absolute batman]
 
-  # vols. 2 a 4 (2 e 3 esgotados na Panini): alerta em qualquer loja que tiver, em qualquer preço
+  # vols. 2 a 4, todos esgotados na Panini: alerta em qualquer loja que tiver, em qualquer preço
   - id: homem-aranha-definitiva
     nome: "O Espetacular Homem-Aranha: Edição Definitiva"
     editora: Panini
@@ -120,6 +120,7 @@ raros:
     urls:
       - https://panini.com.br/o-espetacular-homem-aranha-edicao-definitiva-vol-2-alizt002r2
       - https://panini.com.br/o-espetacular-homem-aranha-edicao-definitiva-vol-3-alizt003r2
+      - https://panini.com.br/o-espetacular-homem-aranha-edicao-definitiva-vol-4-alizt004r
 
 # ---------------------------------------------------------------------
 # PROMOÇÕES (só com desconto real >= desconto_minimo)
