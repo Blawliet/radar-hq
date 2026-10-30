@@ -1193,3 +1193,24 @@ def test_telegram_canal_le_posts_com_preco():
     assert round(o.preco_lista, 2) == 43.68                     # 69% de desconto
     assert loja.buscar("outra") == []                          # lê o canal uma vez por varredura
     assert loja.validar(o).disponivel
+
+
+def test_telegram_formatos_de_outros_canais():
+    from stores.telegram_canal import ler_posts, post_para_ofertas
+    html = """<div class="tgme_widget_message" data-post="hqbarata/60850"><div class="tgme_widget_message_text">
+    🚨🚨 DESTAQUE DA MEGA OFERTA 🚨🚨<br/>SOMENTE 4 UNIDADES<br/><br/>
+    📚 Batman por Neal Adams - Edição Absoluta Vol. 1 》De R$ 249,90 por R$ 118,69 (53% OFF)<br/>
+    <a href="https://link.amazon/xyz">https://link.amazon/xyz</a><br/><br/>
+    Só no app: 50% off no livro mais barato, levando 2: <a href="https://link.amazon/app">link</a><br/>
+    TODAS as Ofertas de HQs: <a href="https://t.me/hqbarata">t.me</a></div>
+    <time datetime="2099-10-30T06:35:00+00:00"></time></div>
+    <div class="tgme_widget_message" data-post="grupo2quadrinhos/13207"><div class="tgme_widget_message_text">
+    [PROMO] Mais Devir!<br/>➡️ Vênus Invisível (-42%) <a href="https://link.amazon/v1">link</a><br/>
+    ➡️ Extremity por R$ 49 <a href="https://amzlink.to/e2">link</a></div>
+    <time datetime="2099-10-30T06:35:00+00:00"></time></div>"""
+    posts = ler_posts(html)
+    a = post_para_ofertas(posts[0], "hqbarata")
+    assert len(a) == 1 and a[0].titulo == "Batman por Neal Adams - Edição Absoluta Vol. 1"
+    assert a[0].preco == 118.69 and a[0].preco_lista == 249.9 and a[0].url == "https://link.amazon/xyz"
+    b = post_para_ofertas(posts[1], "grupo2quadrinhos")
+    assert [o.titulo for o in b] == ["Extremity"] and b[0].preco == 49 and b[0].loja.startswith("Amazon")

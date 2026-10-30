@@ -167,6 +167,18 @@ lojas:
     horas: 6
     delay: 1
 
+  - nome: "Telegram @hqbarata"
+    adaptador: telegram
+    canal: hqbarata
+    horas: 6
+    delay: 1
+
+  - nome: "Telegram @grupo2quadrinhos"
+    adaptador: telegram
+    canal: grupo2quadrinhos
+    horas: 6
+    delay: 1
+
   # Shopee: desativada. A busca exige login e tem antirrobô agressivo; um
   # coletor estável violaria os termos de uso. Ofertas da Shopee costumam
   # aparecer em grupos de promoção, que o webhook do WhatsApp já escuta.

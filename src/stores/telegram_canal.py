@@ -28,6 +28,7 @@ from stores.base import Loja
 log = logging.getLogger("coleta")
 
 LOJAS_POR_DOMINIO = {
+    "amzlink": "Amazon",
     "amazon": "Amazon", "amzn": "Amazon", "shopee": "Shopee", "shope.ee": "Shopee",
     "mercadolivre": "Mercado Livre", "mercadolibre": "Mercado Livre", "meli.la": "Mercado Livre",
     "magalu": "Magalu", "magazineluiza": "Magalu", "magazinevoce": "Magalu", "kabum": "KaBuM!",
@@ -47,66 +48,112 @@ def _loja_do_link(url: str) -> str | None:
 
 
 def ler_posts(html: str) -> list[dict]:
-    """Extrai os posts da página t.me/s/<canal>."""
+    """Extrai os posts da página t.me/s/<canal>: cada linha do texto com os links dela."""
     soup = BeautifulSoup(html, "lxml")
     posts = []
     for msg in soup.select("div.tgme_widget_message[data-post]"):
         corpo = msg.select_one(".tgme_widget_message_text")
         if not corpo:
             continue
+        links = []
+        for a in corpo.find_all("a", href=True):
+            links.append(a["href"])
+            a.replace_with(f" [[L{len(links) - 1}]] ")
         for br in corpo.find_all("br"):
             br.replace_with("\n")
-        texto = corpo.get_text()
-        links = [a["href"] for a in corpo.find_all("a", href=True)]
+        linhas = []
+        for bruta in corpo.get_text().splitlines():
+            idx = [int(i) for i in re.findall(r"\[\[L(\d+)\]\]", bruta)]
+            texto = re.sub(r"\s+", " ", re.sub(r"\[\[L\d+\]\]", " ", bruta)).strip()
+            if texto or idx:
+                linhas.append({"texto": texto, "links": [links[i] for i in idx]})
         quando = msg.select_one("time[datetime]")
-        posts.append({
-            "id": msg["data-post"],
-            "texto": texto.strip(),
-            "links": links,
-            "quando": quando["datetime"] if quando else None,
-        })
+        posts.append({"id": msg["data-post"], "linhas": linhas, "links": links,
+                      "quando": quando["datetime"] if quando else None})
     return posts
 
 
-def post_para_oferta(post: dict, canal: str) -> Oferta | None:
-    linhas = [l.strip() for l in post["texto"].splitlines() if l.strip()]
-    if not linhas:
-        return None
-    m = None
-    for l in linhas:
-        m = RX_PRECO.search(l)
-        if m and not re.search(r"\b(off|acima|cupom|frete)\b", l, re.I):
-            break
-        m = None
-    if not m:
-        return None                                       # cupom ou aviso sem preço de produto
-    preco = _num(m.group(1)) or 0
-    if preco <= 0:
-        return None
-    pct = int(m.group(2)) if m.group(2) else None
-    lista = round(preco / (1 - pct / 100), 2) if pct and 0 < pct < 95 else None
-    titulo = linhas[0]
+RX_DE_POR = re.compile(r"de\s*R\$\s*([\d.,]+)\s*(?:por|→|->|➡️?|>)\s*R\$\s*([\d.,]+)", re.I)
+RX_CUPOM = re.compile(r"R\$\s*[\d.,]+\s*off|\d+\s*%\s*off\s+(no|na|em|acima)|acima de|\bcupom|cashback|\bparcel", re.I)
+RX_SEPARADOR = re.compile(r"\s*(?:》|»|➡️?|➜|→|->|\|\s*de\s*R\$|\bde\s*R\$|R\$).*$", re.I)
+
+
+def _limpar_titulo(t: str) -> tuple[str, str | None]:
+    """Tira enfeites e o '| Loja' do fim. Devolve (título, loja citada)."""
     loja = None
     for nome in NOMES_LOJA:
-        if re.search(rf"\|\s*{re.escape(nome)}\s*$", titulo, re.I):
+        if re.search(rf"\|\s*{re.escape(nome)}\s*$", t, re.I):
             loja = "Magalu" if nome == "Magazine Luiza" else nome
-            titulo = re.sub(rf"\s*\|\s*{re.escape(nome)}\s*$", "", titulo, flags=re.I)
+            t = re.sub(rf"\s*\|\s*{re.escape(nome)}\s*$", "", t, flags=re.I)
             break
-    link = None
-    for u in post["links"]:
-        host = urlparse(u).netloc.lower()
-        if not host or host.endswith("t.me") or host.endswith("telegram.me"):
+    t = re.sub(r"^[^\w(\[]+", "", t)                       # emojis e setas do começo
+    t = re.sub(r"\[(promo|oferta|pr[ée]-?venda|apenas[^\]]*|destaque[^\]]*)\]\s*", "", t, flags=re.I)
+    return t.strip(" -–|:"), loja
+
+
+def _parece_titulo(t: str) -> bool:
+    if len(t) < 4 or "R$" in t or RX_CUPOM.search(t):
+        return False
+    letras = [c for c in t if c.isalpha()]
+    # cabeçalho todo em maiúsculas com emoji ("DESTAQUE DA MEGA OFERTA") não é título
+    return bool(letras) and not (sum(c.isupper() for c in letras) / len(letras) > 0.8 and len(letras) > 12)
+
+
+def _melhor_link(links: list[str]) -> str | None:
+    bons = [u for u in links if urlparse(u).netloc and not urlparse(u).netloc.lower().endswith(("t.me", "telegram.me"))]
+    for u in bons:
+        if _loja_do_link(u) or "amzlink" in u or "bit.ly" in u:
+            return u
+    return bons[0] if bons else None
+
+
+def post_para_ofertas(post: dict, canal: str) -> list[Oferta]:
+    """Um post pode ter um ou vários produtos. Cada linha com preço de produto vira
+    uma oferta; o título é o texto antes do preço ou a linha de cima."""
+    linhas = post["linhas"]
+    saida = []
+    for i, ln in enumerate(linhas):
+        t = ln["texto"]
+        if "R$" not in t or RX_CUPOM.search(t):
             continue
-        if _loja_do_link(u) or link is None:
-            link = u
-            if _loja_do_link(u):
+        m2 = RX_DE_POR.search(t)
+        if m2:
+            lista, preco = _num(m2.group(1)), _num(m2.group(2))
+            mp = re.search(r"\((\d{1,2})\s*%", t)
+            pct = int(mp.group(1)) if mp else None
+        else:
+            m = RX_PRECO.search(t)
+            if not m:
+                continue
+            preco = _num(m.group(1))
+            pct = int(m.group(2)) if m.group(2) else None
+            lista = round(preco / (1 - pct / 100), 2) if preco and pct and 0 < pct < 95 else None
+        if not preco or preco <= 0:
+            continue
+        sem_inicio = re.sub(r"^[^\w(\[]+", "", t)                # setas/emojis do começo
+        titulo = re.sub(r"\s+(por|de|a partir de|só)\s*$", "", RX_SEPARADOR.sub("", sem_inicio).strip(), flags=re.I)
+        if not _parece_titulo(titulo):
+            # linha só com preço: o título é a linha de cima (que não seja outro item com link)
+            titulo = next((linhas[j]["texto"] for j in range(i - 1, max(-1, i - 4), -1)
+                           if _parece_titulo(linhas[j]["texto"]) and not linhas[j]["links"]), "")
+        titulo, loja = _limpar_titulo(titulo)
+        if len(titulo) < 3:
+            continue
+        # link: o da própria linha, senão o das linhas seguintes até o próximo preço
+        cand = list(ln["links"])
+        for j in range(i + 1, min(len(linhas), i + 4)):
+            if "R$" in linhas[j]["texto"]:
                 break
-    if not link:
-        return None
-    loja = loja or _loja_do_link(link) or "loja"
-    return Oferta(loja=f"{loja} (via @{canal})", titulo=titulo[:200], url=link, preco=preco,
-                  preco_lista=lista, extra={"telegram": post["id"], "telegram_quando": post["quando"],
-                                            "loja_original": loja})
+            cand += linhas[j]["links"]
+        link = _melhor_link(cand)
+        if not link:
+            continue
+        loja = loja or _loja_do_link(link) or ("Amazon" if "amzlink" in link else "loja")
+        saida.append(Oferta(loja=f"{loja} (via @{canal})", titulo=titulo[:200], url=link, preco=preco,
+                            preco_lista=lista if lista and lista > preco else None,
+                            extra={"telegram": post["id"], "telegram_quando": post["quando"],
+                                   "loja_original": loja}))
+    return saida
 
 
 class TelegramCanalLoja(Loja):
@@ -139,9 +186,7 @@ class TelegramCanalLoja(Loja):
                 quando = None
             if quando and quando < limite:
                 continue
-            o = post_para_oferta(p, self.canal)
-            if o:
-                saida.append(o)
+            saida.extend(post_para_ofertas(p, self.canal))
         log.info("Telegram @%s: %d posts com preço nas últimas %.0f h", self.canal, len(saida), self.horas)
         return saida
 
