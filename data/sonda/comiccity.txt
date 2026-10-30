@@ -1,0 +1,45 @@
+# sonda comiccity em 30/10 18:01
+
+## busca [http]
+url: https://www.comiccitystore.com.br/buscar?q=batman
+final: https://www.comiccitystore.com.br/buscar?q=batman
+status: 403
+cabecalhos: {"content-type": "text/html", "server": "AmazonS3", "via": "1.1 e2e05b1ebac9d176f82bde2c066c5fa8.cloudfront.net (CloudFront)"}
+tamanho: 696
+titulo: Acesso Bloqueado
+plataforma (dicas): []
+trechos: []
+texto:  Acesso Bloqueado Ops :( Seu request foi bloqueado por seguran&ccedil;a. 
+
+## produto [http]
+url: https://www.comiccitystore.com.br/a-vida-da-capita-marvel
+final: https://www.comiccitystore.com.br/a-vida-da-capita-marvel
+status: 403
+cabecalhos: {"content-type": "text/html", "server": "AmazonS3", "via": "1.1 e2e05b1ebac9d176f82bde2c066c5fa8.cloudfront.net (CloudFront)"}
+tamanho: 696
+titulo: Acesso Bloqueado
+plataforma (dicas): []
+trechos: []
+texto:  Acesso Bloqueado Ops :( Seu request foi bloqueado por seguran&ccedil;a. 
+
+## busca [navegador]
+url: https://www.comiccitystore.com.br/buscar?q=batman
+final: https://www.comiccitystore.com.br/buscar?q=batman
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudfront", "via": "1.1 962d5e462d98b7ff1b8a2361adb83eee.cloudfront.net (CloudFront)", "x-powered-by": "vtex-integrated-store"}
+tamanho: 65324
+titulo: batman - Comic City Store
+plataforma (dicas): ['loja_integrada']
+trechos: ["<a data-href=\"--PRODUTO_URL--\" class=\"nome-produto cor-secundaria\">", "<a href=\"https://www.comiccitystore.com.br/batman-0159-capa-variante-panini\" class=\"nome-produto cor-secundaria\">", "<a href=\"https://www.comiccitystore.com.br/os-melhores-do-mundo-batman-super-homem-vol-1-ao-3\" class=\"nome-produto cor-secundaria\">"]
+texto:  batman - Comic City Store Fale Conosco Telefone: (19) 3365-0105 &nbsp; Olá, Minha conta Meus pedidos Meus favoritos Sair Bem-vindo, identifique-se para fazer pedidos Meus Pedidos Minha Conta 0 Meu Carrinho Produtos adicionados Carrinho vazio R$ --PRODUTO_PRECO_DE-- R$ --PRODUTO_PRECO_POR-- --PRODUTO_NOME-- --PRODUTO_SKU-- --CARRINHO_QUANTIDADE-- produto no carrinho Total: R$ --CARRINHO_TOTAL_ITENS-- Ir para o carrinho Páginas Quem Somos You Tube Marcas DC Comics (3) disney hyperion (1) ebal (13) Editora Abril (8) Funko pop (1) hqm editora (1) Image (3) JBC (3) leya (2) Marvel Comics (8) marvel universe (1) New Pop (1) nova fronteira (1) Panini (24) Panini / Planet Mangá (3) viseu (1) Blu-Ray DVD Livros Quadrinhos DC Marvel Mangás Colecionáveis Action Figures Estátuas 1 2 3 Previous Next Página inicial Resultado de busca Blu-Ray DVD Livros Quadrinhos DC Marvel Mangás Colecionáveis Action Figures Estátuas Filtrar por Marca DC Comics (1) Editora Abril (1) Panini (1) Filtrar por Preço de R$ 0,00 até R$ 24,99 (1) de R$ 70,00 até R$ 99,99 (1) de R$ 400,00 até R$ 599,99 (1) Relevância Relevância Ordem alfabética Mais vendidos Menor preço Maior preço Maior desconto batman Batman 01/59 - Capa Variante Panini NN4G4SNJ2 R$ 24,00 Ver mais Ver mais Os Melhores do Mundo - Batman &amp; Super-Homem - Vol. 1 ao 3 EE9PGC8DQ R$ 79,90 Ver mais Ver mais Batman: Joker War Completo, Capa Dura, Tynion IV, Jomenez (importado e Autografado!) 9781779514301 6x de R$ 114,30 R$ 649,90 R$ 599,90 Ver mais Ver mais 8% Desconto 1 Categorias Blu-Ray DVD Livros Quadrinhos Mangás Colecionáveis Conteúdo Fale Conosco Quem Somos You Tube Contato Telefone: (19) 3365-0105 E-mail: comiccitybrasil@gmail.com Social Pague com Selos Márcio Roberto do Carmo Júnior - CNPJ: 18.460.818/0001-52 © Todos os direitos reservados. 2026 Comic City Store Fale Conosco Tel: (19) 3365-0105 0 Produtos no carrinho Carrinho vazio R$ --PRODUTO_PRECO_DE-- R$ --PRODUTO_PRECO_POR-- --PRODUTO_NOME-- --PRODUTO_SKU-- --CARRINHO_QUANTIDADE-- produto no carrinho Total: R$ --CARRINHO_TOTAL_ITENS-- Ir para o carrinho Carregando conteúdo, aguarde... Fechar Fale Conosco Preencha o formulário abaixo. Newsletter Receba nossas ofertas por e-mail Obrigado por se inscrever! Aguarde novidades da nossa loja em breve. Favorito adicionado O produto foi adicionado com sucesso à sua Lista de Desejos . Fechar Visualizar Lista de Desejos Erro ao adicionar favorito O produto não foi adicionado com sucesso ao seus favoritos, por favor tente mais tarde. Visualizar a lista de favoritos . Fechar Logar Produto adicionado com sucesso! Continuar comprando Finalizar compra Ir para o carrinho Não foi possível adicionar o produto ao carrinho Tente novamente Ops! Esse produto encontra-se indisponível. Deixe seu e-mail que avisaremos quando chegar. Obrigado! Você receberá um e-mail de notificação, assim que esse produto estiver disponível em estoque 
+
+## produto [navegador]
+url: https://www.comiccitystore.com.br/a-vida-da-capita-marvel
+final: https://www.comiccitystore.com.br/a-vida-da-capita-marvel
+status: 200
+cabecalhos: {"content-type": "text/html; charset=utf-8", "server": "cloudfront", "via": "1.1 c919eabe071323f9a1b4ff171a300ae6.cloudfront.net (CloudFront)", "x-powered-by": "vtex-integrated-store"}
+tamanho: 105365
+titulo: A Vida da Capitã Marvel - Comic City Store
+plataforma (dicas): ['loja_integrada']
+trechos: ["<a data-href=\"--PRODUTO_URL--\" class=\"nome-produto cor-secundaria\">", "<a href=\"https://www.comiccitystore.com.br/abducao-03-marvel-especial-uma-aventura-alem-do-infinito\" class=\"nome-produto cor-secundaria\" itemprop=\"name\">", "<a href=\"https://www.comiccitystore.com.br/homem-aranha-spider-man-2099-marvel-universe\" class=\"nome-produto cor-secundaria\" itemprop=\"name\">", "\"availability\" content=\"http://schema.org/InStock\">\n    <meta itemprop=\"itemCondition\" itemtyp"]
+texto:  A Vida da Capitã Marvel - Comic City Store Fale Conosco Telefone: (19) 3365-0105 &nbsp; Olá, Minha conta Meus pedidos Meus favoritos Sair Bem-vindo, identifique-se para fazer pedidos Meus Pedidos Minha Conta 0 Meu Carrinho Produtos adicionados Carrinho vazio R$ --PRODUTO_PRECO_DE-- R$ --PRODUTO_PRECO_POR-- --PRODUTO_NOME-- --PRODUTO_SKU-- --CARRINHO_QUANTIDADE-- produto no carrinho Total: R$ --CARRINHO_TOTAL_ITENS-- Ir para o carrinho Páginas Quem Somos You Tube Marcas DC Comics (3) disney hyperion (1) ebal (13) Editora Abril (8) Funko pop (1) hqm editora (1) Image (3) JBC (3) leya (2) Marvel Comics (8) marvel universe (1) New Pop (1) nova fronteira (1) Panini (24) Panini / Planet Mangá (3) viseu (1) Blu-Ray DVD Livros Quadrinhos DC Marvel Mangás Colecionáveis Action Figures Estátuas 1 2 3 Previous Next Newsletter Receba nossas ofertas por e-mail Obrigado por se inscrever! Aguarde novidades da nossa loja em breve. Previous Next Lista de Desejos Início Quadrinhos Marvel A Vida da Capitã Marvel --> A Vida da Capitã Marvel Código: P7NUKSQ3A Marca: Panini R$ 39,90 Comprar Disponibilidade: Imediata Aproveite! Resta apenas 1 unidade R$ 39,90 R$ 39,90 R$ 39,90 Calcule o frete OK &nbsp; Não sei meu CEP * Este prazo de entrega está considerando a disponibilidade do produto + prazo de entrega. --> Produtos relacionados Abdução 03 - Marvel Especial - Uma Aventura Além Do Infinito 9EC3PBQ3B R$ 24,90 Ver mais Ver mais Homem Aranha / Spider-man 2099 Marvel Universe GRWHL53RV 3x de R$ 64,84 R$ 189,90 R$ 174,90 Ver mais Ver mais 8% Desconto Professor X Xavier - Funko Pop Nº 641 - Marvel YNZRA5XF4 5x de R$ 57,13 R$ 270,00 R$ 249,90 Ver mais Ver mais 7% Desconto Avengers Vol.2, Hickman - Marvel Now - Capa Dura 9780785197089 6x de R$ 68,57 R$ 389,90 R$ 359,90 Ver mais Ver mais 8% Desconto A Vida da Capitã Marvel R$ 39,90 Comprar Disponibilidade: Imediata Aproveite! Resta apenas 1 unidade Está vendo Categorias Blu-Ray DVD Livros Quadrinhos Mangás Colecionáveis Conteúdo Fale Conosco Quem Somos You Tube Contato Telefone: (19) 3365-0105 E-mail: comiccitybrasil@gmail.com Social Pague com Selos Márcio Roberto do Carmo Júnior - CNPJ: 18.460.818/0001-52 © Todos os direitos reservados. 2026 Comic City Store Fale Conosco Tel: (19) 3365-0105 0 Produtos no carrinho Carrinho vazio R$ --PRODUTO_PRECO_DE-- R$ --PRODUTO_PRECO_POR-- --PRODUTO_NOME-- --PRODUTO_SKU-- --CARRINHO_QUANTIDADE-- produto no carrinho Total: R$ --CARRINHO_TOTAL_ITENS-- Ir para o carrinho Carregando conteúdo, aguarde... Fechar Fale Conosco Preencha o formulário abaixo. Newsletter Receba nossas ofertas por e-mail Obrigado por se inscrever! Aguarde novidades da nossa loja em breve. Favorito adicionado O produto foi adicionado com sucesso à sua Lista de Desejos . Fechar Visualizar Lista de Desejos Erro ao adicionar favorito O produto não foi adicionado com sucesso ao seus favoritos, por favor tente mais tarde. Visualizar a lista de favoritos . Fechar Logar Produto adicionado com sucesso! Continuar comprando Fin
