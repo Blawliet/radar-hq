@@ -170,6 +170,18 @@ promocoes:
     formato: Omnibus
     buscas: [vingadores busiek perez omnibus vol 2]
 
+  - id: lobo-omnibus
+    nome: "Lobo (DC Omnibus)"
+    editora: Panini
+    termos: [lobo, omnibus]
+    excluir: [lobo solitario, lobo mau, lobos, lobo do mar, kozure, wolf]
+    volumes: "1,2"
+    formato: Omnibus
+    buscas: [lobo omnibus panini, lobo omnibus vol 1]
+    urls:
+      - https://panini.com.br/lobo-omnibus-vol-1
+      - https://panini.com.br/lobo-omnibus-vol-2
+
   - id: box-ajin
     nome: Box Ajin (vols. 1 ao 17)
     editora: Panini
