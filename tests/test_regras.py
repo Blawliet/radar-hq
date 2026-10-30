@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -13,6 +14,7 @@ from rules import Catalogo, avaliar  # noqa: E402
 from stock import validar_html  # noqa: E402
 from texto import extrair_volume, normalizar  # noqa: E402
 
+os.environ["RADAR_COLECAO_FIXTURES"] = str(RAIZ / "tests" / "fixtures")   # coleção de exemplo
 CAT = Catalogo(RAIZ / "config" / "catalogo.yaml", RAIZ / "config" / "pessoas" / "bruno.yaml")
 
 
@@ -117,7 +119,7 @@ def test_series_em_andamento(titulo, alerta):
 
 @pytest.mark.parametrize("titulo", [
     "Box Chainsaw Man - Volumes 1 ao 11 (Panini)",
-    "Kit Mangá Jujutsu Kaisen 1 a 5",
+    "Kit Mangá Chainsaw Man 1 a 5",
     "Coleção Completa Vagabond Mangá - 37 volumes",
 ])
 def test_radar_boxes_sugere(titulo):

@@ -120,9 +120,13 @@ def baixar(planilha: str, aba: str, pessoa: str) -> list[dict]:
     chave = f"{planilha}|{aba}"
     if chave in _lidas:
         return _lidas[chave]
-    if os.getenv("PYTEST_CURRENT_TEST"):
-        return []                      # testes não dependem da planilha real
-    copia = PASTA / f"{re.sub(r'[^a-z0-9]+', '-', normalizar(pessoa))}.csv"
+    import sys
+    slug = re.sub(r'[^a-z0-9]+', '-', normalizar(pessoa))
+    if "pytest" in sys.modules:
+        # testes usam uma cópia fixa (tests/fixtures), nunca a planilha real
+        fix = Path(os.getenv("RADAR_COLECAO_FIXTURES", "/nao-existe")) / f"colecao-{slug}.csv"
+        return ler_csv(fix.read_text(encoding="utf-8")) if fix.exists() else []
+    copia = PASTA / f"{slug}.csv"
     texto = None
     if True:
         try:
