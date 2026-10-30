@@ -148,6 +148,17 @@ lojas:
     seletor_espera: 'text=no cartão'
     max_resultados: 8
 
+  # Loja Integrada; recusa acesso simples (HTTP 403), então abre no navegador.
+  # Os produtos ficam na raiz do site: pega só os links dos cartões da busca.
+  - nome: Comic City Store
+    adaptador: html
+    base: https://www.comiccitystore.com.br
+    busca: "/buscar?q={q}"
+    playwright: true
+    seletor_busca: "a.nome-produto"
+    seletor_produto: "a.nome-produto"
+    max_resultados: 8
+
   - nome: Mirane Comics
     delay: 1.5
     adaptador: nuvemshop

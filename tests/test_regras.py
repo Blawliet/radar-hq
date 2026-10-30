@@ -1281,3 +1281,16 @@ def test_canal_publico_historico_de_preco(tmp_path):
     o2 = Oferta("Amazon Brasil", "Vingadores", url, 320.0, preco_lista=459.9)
     assert "Já esteve por R$ 299,90 em 28/10" in cp.montar_post(o2, "", h)
     assert cp.historico_preco(con, Oferta("Amazon Brasil", "x", "https://www.amazon.com.br/dp/X", 10)) is None
+
+
+def test_html_loja_com_seletor_de_produto():
+    from stores.plataformas import HtmlLoja
+    busca = """<html><body><nav><a href="https://www.comiccitystore.com.br/batman">Batman</a></nav>
+    <a data-href="--PRODUTO_URL--" class="nome-produto">x</a>
+    <a href="https://www.comiccitystore.com.br/batman-a-noite-das-corujas-panini" class="nome-produto cor-secundaria">Batman: A Noite das Corujas</a>
+    </body></html>"""
+    f = _FetcherFalso({"/buscar?q=": busca})
+    loja = HtmlLoja(f, {"nome": "Comic City Store", "base": "https://www.comiccitystore.com.br",
+                        "busca": "/buscar?q={q}", "seletor_produto": "a.nome-produto"}, "html")
+    achados = loja.buscar("batman noite das corujas")
+    assert [o.url for o in achados] == ["https://www.comiccitystore.com.br/batman-a-noite-das-corujas-panini"]

@@ -216,12 +216,15 @@ class HtmlLoja(Loja):
         soup = BeautifulSoup(r.html, "lxml")
         host = urlparse(base).netloc.replace("www.", "")
         vistos, saida = set(), []
-        for a in soup.find_all("a", href=True):
+        # seletor_produto: só os links dos cartões de produto (ex.: "a.nome-produto")
+        sel = self.cfg.get("seletor_produto")
+        links = soup.select(f"{sel}[href]") if sel else soup.find_all("a", href=True)
+        for a in links:
             href = urljoin(r.url_final, a["href"])
             p = urlparse(href)
             if host not in p.netloc or p.path in ("", "/"):
                 continue
-            if self.rx_produto and not self.rx_produto.search(p.path):
+            if self.rx_produto and not sel and not self.rx_produto.search(p.path):
                 continue
             if re.search(r"/(busca|search|categoria|category|collections?/?$|conta|account|carrinho|cart|login|blog)", p.path, re.I):
                 continue
