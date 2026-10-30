@@ -1238,9 +1238,14 @@ def test_canal_publico_seleciona_e_monta(tmp_path, monkeypatch):
     assert "*Gyo - Junji Ito*" in post and "~R$ 99,90~" in post and "*R$ 63,72*" in post and "(36% OFF)" in post
     assert "https://www.amazon.com.br/dp/6555940000?tag=nestaestante-20" in post and "Associado da Amazon" in post
     assert "<pre>" in cp.mensagem_rascunho(post, 1, 1)
-    # sem o Secret do chat: não envia, só mostra; e lembra o que já foi postado
-    n = cp.publicar(ofertas, ["english"], enviar=False, db=tmp_path / "r.db")
-    assert n == 1
+    # fora do horário de post: só guarda o candidato
+    from datetime import datetime
+    db = tmp_path / "r.db"
+    assert cp.publicar(ofertas, ["english"], enviar=False, db=db, agora=datetime(2026, 10, 30, 11, 0)) == 0
+    # no horário (13h30, com a rodada chegando 13h50): escolhe a melhor oferta guardada
+    assert cp.horario_da_vez(cfg, datetime(2026, 10, 30, 13, 50)) == "13:30"
+    assert cp.horario_da_vez(cfg, datetime(2026, 10, 30, 16, 0)) is None
+    assert cp.publicar([], ["english"], enviar=False, db=db, agora=datetime(2026, 10, 30, 13, 50)) == 1
 
 
 def test_canal_publico_reveza_buscas():

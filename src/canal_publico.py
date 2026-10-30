@@ -43,7 +43,8 @@ def config() -> dict:
     cfg["chat"] = os.getenv("NESTA_RASCUNHO_CHAT") or cfg.get("chat") or ""
     cfg["tag"] = os.getenv("AMAZON_TAG") or cfg.get("tag") or ""
     cfg.setdefault("desconto_minimo", 30)
-    cfg.setdefault("max_posts_rodada", 5)
+    cfg.setdefault("horarios_post", ["09:30", "13:30", "19:30"])
+    cfg.setdefault("posts_por_horario", 1)
     cfg.setdefault("repostar_dias", 7)
     cfg.setdefault("buscas_por_rodada", 3)
     return cfg
@@ -110,6 +111,7 @@ def mensagem_rascunho(post: str, n: int, total: int) -> str:
 def _con(db: Path) -> sqlite3.Connection:
     con = sqlite3.connect(db, check_same_thread=False)
     con.execute("CREATE TABLE IF NOT EXISTS canal_posts (chave TEXT PRIMARY KEY, preco REAL, quando TEXT, titulo TEXT)")
+    con.execute("CREATE TABLE IF NOT EXISTS canal_candidatos (chave TEXT PRIMARY KEY, desconto REAL, visto TEXT, dados TEXT)")
     return con
 
 
@@ -145,57 +147,105 @@ def selecionar(validadas: list, cfg: dict, excluir_titulos: list[str]) -> list:
     return saida
 
 
+def _guardar_candidatos(con, cands: list):
+    """Junta as ofertas boas de cada rodada; o post do horário escolhe a melhor do período."""
+    import json
+    agora = datetime.now().isoformat(timespec="seconds")
+    with _lock:
+        for o in cands:
+            dados = {"titulo": o.titulo, "url": o.url, "preco": o.preco, "preco_lista": o.preco_lista,
+                     "vendedor": o.vendedor, "asin": o.extra.get("asin")}
+            con.execute("INSERT OR REPLACE INTO canal_candidatos VALUES (?,?,?,?)",
+                        (o.extra.get("asin") or o.url, desconto(o) or 0, agora, json.dumps(dados, ensure_ascii=False)))
+        con.execute("DELETE FROM canal_candidatos WHERE visto < ?",
+                    ((datetime.now() - timedelta(days=2)).isoformat(timespec="seconds"),))
+        con.commit()
+
+
+def horario_da_vez(cfg: dict, agora: datetime | None = None) -> str | None:
+    """'13:30' se esta rodada cai num horário de post (até 60 min de diferença), senão None."""
+    agora = agora or datetime.now()
+    for h in cfg.get("horarios_post") or []:
+        hh, mm = (int(x) for x in str(h).split(":"))
+        alvo = agora.replace(hour=hh, minute=mm, second=0, microsecond=0)
+        if abs((agora - alvo).total_seconds()) <= 60 * 60:
+            return f"{hh:02d}:{mm:02d}"
+    return None
+
+
 def publicar(validadas: list, excluir_titulos: list[str], enviar: bool = True,
-             db: Path | None = None) -> int:
+             db: Path | None = None, agora: datetime | None = None) -> int:
+    """Guarda as ofertas boas de toda rodada; nos horários de post, manda o rascunho da
+    melhor oferta das últimas horas (que ainda não foi postada)."""
+    import json
+    from models import Oferta
     cfg = config()
     if not ativo(cfg):
         return 0
-    cands = selecionar(validadas, cfg, excluir_titulos)
-    if not cands:
-        log.info("Canal público: nenhuma oferta nova da Amazon com %s%%+.", cfg["desconto_minimo"])
-        return 0
+    agora = agora or datetime.now()
     con = _con(db or RAIZ / "data" / "radar.db")
-    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
-    postados = 0
-    for o in cands:
-        if postados >= int(cfg["max_posts_rodada"]):
-            break
-        chave = o.extra.get("asin") or o.url
+    _guardar_candidatos(con, selecionar(validadas, cfg, excluir_titulos))
+    slot = horario_da_vez(cfg, agora)
+    if not slot:
+        return 0
+    marca = f"horario:{agora.date()} {slot}"
+    with _lock:
+        if con.execute("SELECT 1 FROM canal_posts WHERE chave=?", (marca,)).fetchone():
+            return 0                                   # este horário já foi usado hoje
+        desde = (agora - timedelta(hours=float(cfg.get("janela_horas", 8)))).isoformat(timespec="seconds")
+        linhas = con.execute("SELECT chave, dados FROM canal_candidatos WHERE visto >= ? ORDER BY desconto DESC",
+                             (desde,)).fetchall()
+    escolhidos = []
+    for chave, dados in linhas:
+        d = json.loads(dados)
+        o = Oferta("Amazon Brasil", d["titulo"], d["url"], d["preco"], preco_lista=d["preco_lista"],
+                   vendedor=d.get("vendedor"), disponivel=True, extra={"asin": d.get("asin")})
         with _lock:
             if ja_postado(con, chave, o.preco, int(cfg["repostar_dias"])):
                 continue
-        texto = mensagem_rascunho(montar_post(o, cfg["tag"]), postados + 1, min(len(cands), int(cfg["max_posts_rodada"])))
+        escolhidos.append((chave, o))
+        if len(escolhidos) >= int(cfg.get("posts_por_horario", 1)):
+            break
+    if not escolhidos:
+        log.info("Canal público: horário %s sem oferta nova com %s%%+.", slot, cfg["desconto_minimo"])
+        return 0
+    token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    postados = 0
+    for chave, o in escolhidos:
+        post = montar_post(o, cfg["tag"])
         if not enviar or not cfg["chat"] or not token:
             if not cfg["chat"] and enviar:
                 log.warning("Canal público: falta o Secret NESTA_RASCUNHO_CHAT; só mostrando no log.")
-            texto_post = montar_post(o, cfg["tag"])
-            print("\n[Nesta Estante]\n" + texto_post + "\n" + "-" * 40)
+            print("\n[Nesta Estante]\n" + post + "\n" + "-" * 40)
             if not os.getenv("PYTEST_CURRENT_TEST"):
-                # modo seco: guarda os rascunhos para conferir depois
                 arq = RAIZ / "data" / "debug" / "nesta-estante-rascunhos.txt"
                 arq.parent.mkdir(parents=True, exist_ok=True)
-                with arq.open("a" if postados else "w", encoding="utf-8") as fh:
-                    fh.write(texto_post + "\n" + "-" * 40 + "\n")
+                with arq.open("a", encoding="utf-8") as fh:
+                    fh.write(f"[{agora:%d/%m %H:%M}] horário {slot}\n{post}\n" + "-" * 40 + "\n")
             postados += 1
             continue
         import httpx
+        r = None
         try:
             r = httpx.post(f"https://api.telegram.org/bot{token}/sendMessage", timeout=20, json={
-                "chat_id": cfg["chat"], "text": texto, "parse_mode": "HTML",
-                "link_preview_options": {"is_disabled": True}})
+                "chat_id": cfg["chat"], "text": mensagem_rascunho(post, postados + 1, len(escolhidos)),
+                "parse_mode": "HTML", "link_preview_options": {"is_disabled": True}})
             ok = r.status_code == 200 and r.json().get("ok")
         except Exception as e:
-            log.warning("Canal público: falha ao postar (%s)", e)
+            log.warning("Canal público: falha ao enviar o rascunho (%s)", e)
             ok = False
         if not ok:
-            log.warning("Canal público: Telegram recusou o post (%s)", getattr(r, "text", "")[:200])
+            log.warning("Canal público: Telegram recusou (%s)", getattr(r, "text", "")[:200])
             break
         with _lock:
             con.execute("INSERT OR REPLACE INTO canal_posts VALUES (?,?,?,?)",
-                        (chave, o.preco, datetime.now().isoformat(timespec="seconds"), o.titulo[:200]))
+                        (chave, o.preco, agora.isoformat(timespec="seconds"), o.titulo[:200]))
             con.commit()
         postados += 1
-        import time
-        time.sleep(3)
-    log.info("Canal público: %d rascunho(s) para o WhatsApp.", postados)
+    if postados and enviar and cfg["chat"] and token:
+        with _lock:
+            con.execute("INSERT OR REPLACE INTO canal_posts VALUES (?,?,?,?)",
+                        (marca, 0, agora.isoformat(timespec="seconds"), "horário usado"))
+            con.commit()
+    log.info("Canal público: %d rascunho(s) no horário %s.", postados, slot)
     return postados

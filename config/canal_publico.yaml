@@ -10,7 +10,10 @@
 # =====================================================================
 ativo: true
 desconto_minimo: 30        # % de desconto para virar post
-max_posts_rodada: 5        # no máximo N posts por rodada (a cada 2 h)
+# começo devagar: 3 posts por dia, cada um a melhor oferta das últimas 8 horas
+horarios_post: ["09:30", "13:30", "19:30"]
+posts_por_horario: 1
+janela_horas: 8
 repostar_dias: 7           # o mesmo produto só volta se o preço cair de novo
 
 # buscas próprias do canal na Amazon (3 por rodada, revezando), além das buscas das listas
