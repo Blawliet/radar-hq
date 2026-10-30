@@ -119,7 +119,10 @@ lojas:
     adaptador: shopify
     base: https://tavernadorei.com.br
 
+  # desativada: a busca do site demora mais de 30 s por consulta (e os produtos só
+  # aparecem depois, por JavaScript); não cabe no tempo de uma varredura
   - nome: Mundos Infinitos
+    ativo: false
     adaptador: html
     base: https://mundosinfinitos.com.br
     busca: "/geek/solucoes/busca.aspx?t={q}"
@@ -130,11 +133,18 @@ lojas:
     adaptador: vtex
     base: https://www.livrariascuritiba.com.br
 
-  # plataforma não identificada daqui: o radar detecta sozinho na primeira execução
-  # (o resultado fica em data/plataformas.json)
+  # site montado por JavaScript e protegido pelo Cloudflare: cada página abre num
+  # navegador novo. A busca é /catalogo?q= e a página do produto tem JSON-LD com preço
+  # e estoque
   - nome: Leitura
-    adaptador: auto
+    adaptador: html
     base: https://leitura.com.br
+    busca: "/catalogo?q={q}"
+    padrao_produto: "^/produto/"
+    playwright: true
+    seletor_busca: 'a[href*="/produto/"]'
+    seletor_espera: 'text=no cartão'
+    max_resultados: 8
 
   - nome: Mirane Comics
     delay: 1.5

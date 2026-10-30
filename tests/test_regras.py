@@ -763,7 +763,10 @@ def test_lojas_novas_configuradas(tmp_path, monkeypatch):
     lojas = {l.nome: l for l in stores.montar_lojas(RAIZ / "config" / "lojas.yaml")}
     assert isinstance(lojas["Capitão Onigiri"], WooLoja) and isinstance(lojas["Amora Bookstore"], WooLoja)
     assert isinstance(lojas["Taverna do Rei"], ShopifyLoja)
-    assert type(lojas["Mundos Infinitos"]) is HtmlLoja
+    assert "Mundos Infinitos" not in lojas                     # desativada (busca lenta demais)
+    assert type(lojas["Leitura"]) is HtmlLoja and lojas["Leitura"].busca == "/catalogo?q={q}"
+    from stores.kabum import KabumLoja
+    assert isinstance(lojas["KaBuM!"], KabumLoja)
     assert lojas["Capitão Onigiri"].busca == "/?s={q}&post_type=product"
     from stores.plataformas import VtexLoja
     assert isinstance(lojas["Livrarias Curitiba"], VtexLoja) and "Leitura" in lojas

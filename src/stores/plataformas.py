@@ -208,7 +208,8 @@ class HtmlLoja(Loja):
         q = quote(termo) if "{q_path}" in self.busca else quote_plus(termo)
         slug = re.sub(r"[^a-z0-9]+", "-", normalizar(termo)).strip("-")
         url = base + self.busca.replace("{q_slug}", slug).replace("{q_path}", q).replace("{q}", q)
-        r = self._pegar(url)
+        # sites montados por JavaScript: espera os produtos aparecerem antes de ler a página
+        r = self._pegar(url, self.cfg.get("seletor_busca"))
         if r.status != 200:
             log.info("%s: busca devolveu HTTP %s", self.nome, r.status)
             return []
