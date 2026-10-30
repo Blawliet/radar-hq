@@ -158,6 +158,7 @@ lojas:
     seletor_busca: "a.nome-produto"
     seletor_produto: "a.nome-produto"
     max_resultados: 8
+    tempo_max_min: 10       # cada busca abre o navegador (~10 s); não segura a varredura
 
   - nome: Mirane Comics
     delay: 1.5
