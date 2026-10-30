@@ -113,12 +113,22 @@
   "itens": 0,
   "exemplos": []
  },
- "spawn origens": {
+ "espetacular homem aranha edicao definitiva vol 2": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "spawn panini": {
+ "espetacular homem aranha edicao definitiva vol 3": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "espetacular homem aranha edicao definitiva vol 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "homem aranha edicao definitiva": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -206,32 +216,6 @@
   "itens": 0,
   "exemplos": []
  },
- "hunter x hunter vol 38": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "hunter x hunter": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "frieren": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "sakamoto days": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
  "carbono e silicio bablet": {
   "http": 200,
   "itens": 0,
@@ -251,6 +235,130 @@
   "http": 200,
   "itens": 0,
   "exemplos": []
+ },
+ "frieren": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "hunter x hunter": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "spawn": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "soul eater perfect": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "black clover": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "golden kamui": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jujutsu kaisen 6": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jagaaaaaan": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "gigant": {
+  "http": 200,
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Gigant – Vol.6 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.4 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Gigant – Vol.3 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "jojo stardust crusaders": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dragon ball super": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lost canvas especial": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ao no exorcist": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hokuto no ken": {
+  "http": 200,
+  "itens": 4,
+  "exemplos": [
+   {
+    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "inuyasha": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ancient magus": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "omnibus marvel": {
   "http": 200,
