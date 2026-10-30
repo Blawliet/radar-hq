@@ -6,6 +6,7 @@ Uso: python tools/sondar.py [alvo1,alvo2,...]   (sem argumento = todos)
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import time
@@ -182,6 +183,19 @@ def main():
         achou = bool(cfg["chat"]) or bool(cp.descobrir_chat(cfg))
         (PASTA / "nesta.txt").write_text(f"pareado: {achou}\n", encoding="utf-8")
         print("nesta", achou)
+    if "nesta-teste" in pedidos:
+        # manda um rascunho de exemplo para a conversa privada (o primeiro do último teste seco)
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+        import canal_publico as cp
+        cfg = cp.config()
+        arq = Path(__file__).resolve().parents[1] / "data" / "debug" / "nesta-estante-rascunhos.txt"
+        post = arq.read_text(encoding="utf-8").split("-" * 40)[0].strip() if arq.exists() else "📚 *Teste*"
+        post = "\n".join(l for l in post.splitlines() if not l.startswith("[")).strip()
+        r = httpx.post(f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/sendMessage", timeout=20, json={
+            "chat_id": cfg["chat"], "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
+            "text": "🧪 <b>Teste</b> do Nesta Estante\n\n" + cp.mensagem_rascunho(post, 1, 1)})
+        (PASTA / "nesta.txt").write_text(f"teste enviado: {r.status_code} {r.json().get('ok')}\n", encoding="utf-8")
+        print("nesta-teste", r.status_code)
     if "colecao" in pedidos:
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
         import yaml
