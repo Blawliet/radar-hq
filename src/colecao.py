@@ -170,10 +170,18 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
     for i, ln in enumerate(linhas):
         nome = ln["serie"]
         slug = re.sub(r"[^a-z0-9]+", "-", normalizar(nome)).strip("-")
-        termos = _lista(ln["termos"]) or [normalizar(re.sub(r"\(.*?\)", "", nome))]
+        # "especial|esp" = qualquer uma das duas (vira o campo "qualquer" do YAML)
+        brutos = [x.strip() for x in re.split(r"[,;]", ln["termos"] or "") if x.strip()]
+        alternativas = [[normalizar(a) for a in b.split("|") if normalizar(a)] for b in brutos if "|" in b]
+        termos = ([normalizar(b) for b in brutos if "|" not in b and normalizar(b)]
+                  or ([] if alternativas else [normalizar(re.sub(r"\(.*?\)", "", nome))]))
         excluir = _lista(ln["excluir"])
         tenho = expandir(ln["tenho"])
         base = {"nome": nome, "termos": termos, "excluir": excluir}
+        if alternativas:
+            base["qualquer"] = alternativas[0]
+        if len(alternativas) > 1:
+            base["qualquer_2"] = alternativas[1]
         if ln["editora"]:
             base["editora"] = ln["editora"]
         if tenho:
@@ -193,7 +201,7 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
             spec = f"{spec},{prox}" if spec else prox
         else:
             legivel = spec
-        termo_busca = " ".join(termos)
+        termo_busca = " ".join(termos + [a[0] for a in alternativas])
         alvo = (buracos + ([seguinte] if seguinte else []))[:3]
         todas = [termo_busca] + [f"{termo_busca} {v}" for v in alvo]
         if alerta.startswith("raro"):

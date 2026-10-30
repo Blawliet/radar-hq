@@ -1150,3 +1150,17 @@ def test_spawn_outra_edicao(titulo, alerta):
     e = Entrada.de_dict(d)
     n = normalizar(titulo)
     assert (e.casa(n) and e.volumes.aceita(extrair_volume(n))) == alerta
+
+
+def test_colecao_palavras_alternativas():
+    from colecao import ler_csv, entradas
+    from rules import Entrada
+    csv_txt = ('"Série","Volumes que tenho","Alerta","Palavras que o título precisa ter","Palavras para ignorar"\n'
+               '"The Lost Canvas Especial","1-3","promoção","lost canvas, especial|esp","gaiden"\n')
+    d = entradas(ler_csv(csv_txt), janela=0)["promocoes"][0]
+    e = Entrada.de_dict(d)
+    assert e.casa(normalizar("CDZ The Lost Canvas ESP. #14 Determinação"))
+    assert e.casa(normalizar("Cavaleiros do Zodíaco - The Lost Canvas Especial 6"))
+    assert not e.casa(normalizar("The Lost Canvas - Saga de Hades 6"))
+    assert not e.casa(normalizar("The Lost Canvas Gaiden Especial 6"))
+    assert d["buscas"] == ["lost canvas especial"]
