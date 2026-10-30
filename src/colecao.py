@@ -190,7 +190,10 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
         termo_busca = " ".join(termos)
         alvo = (buracos + ([seguinte] if seguinte else []))[:3]
         todas = [termo_busca] + [f"{termo_busca} {v}" for v in alvo]
-        buscas = [todas[(janela // 2) % len(todas)]] if (i + janela) % 2 == 0 else []
+        if alerta.startswith("raro"):
+            buscas = todas[:3]          # raro procura em toda rodada, sem revezar
+        else:
+            buscas = [todas[(janela // 2) % len(todas)]] if (i + janela) % 2 == 0 else []
         destino = "raros" if alerta.startswith("raro") else "promocoes"
         out[destino].append({**base, "id": f"colecao-{slug}", "volumes": spec, "buscas": buscas,
                              "origem": "planilha"})

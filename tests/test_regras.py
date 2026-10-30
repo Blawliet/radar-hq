@@ -1093,6 +1093,7 @@ def test_colecao_vira_entradas_do_radar():
     assert promo["colecao-spawn-origens"]["volumes"] == "10,12+"
     assert promo["colecao-spawn-origens"]["termos"] == ["spawn", "origens"]
     assert raro["colecao-berserk"]["volumes"] == "41"
+    assert raro["colecao-berserk"]["buscas"] == ["berserk", "berserk 41"]     # raro busca toda rodada
     assert "colecao-akira" not in promo and "colecao-gibis" not in promo
     bloq = {d["id"]: d for d in e["bloqueios"]}
     assert bloq["colecao-akira-tenho"]["volumes"] == "1-6" and "colecao-gibis-tenho" in bloq
