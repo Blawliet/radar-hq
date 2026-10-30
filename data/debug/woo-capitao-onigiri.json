@@ -123,6 +123,21 @@
   "itens": 0,
   "exemplos": []
  },
+ "lobo omnibus vol 1": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "batman a noite das corujas": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "batman noite das corujas novos 52": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
  "espetacular homem aranha edicao definitiva vol 2": {
   "http": 200,
   "itens": 0,
@@ -196,6 +211,21 @@
   "exemplos": []
  },
  "vingadores busiek perez omnibus vol 2": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lobo omnibus panini": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "thorgal serie classica": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "thorgal serie classica vol 1": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -325,6 +355,11 @@
   "itens": 0,
   "exemplos": []
  },
+ "sociedade do cansaco byung chul han": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
  "carbono e silicio bablet": {
   "http": 200,
   "itens": 0,
@@ -345,93 +380,98 @@
   "itens": 0,
   "exemplos": []
  },
- "sakamoto days": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "spawn origens 10": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "shaman king big": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "one punch": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "dr stone 8": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "we never learn": {
-  "http": 200,
-  "itens": 2,
-  "exemplos": [
-   {
-    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "food wars": {
-  "http": 200,
-  "itens": 4,
-  "exemplos": [
-   {
-    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! em JPN – Vol.1 ao 15 (Festival de Importados #30)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "spy x family": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "terra formars 21": {
+ "frieren 2": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
+    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "boku no hero": {
+ "hunter x hunter 38": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "fruits basket colecionador": {
+ "spawn 9": {
   "http": 200,
   "itens": 0,
   "exemplos": []
+ },
+ "soul eater perfect 7": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "black clover 13": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "golden kamui 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jujutsu kaisen 5": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jagaaaaaan 6": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lost canvas especial 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ao no exorcist 17": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hokuto no ken 4": {
+  "http": 200,
+  "itens": 4,
+  "exemplos": [
+   {
+    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "inuyasha wideban 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ancient magus 3": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "omnibus marvel": {
   "http": 200,
