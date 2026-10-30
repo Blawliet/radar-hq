@@ -40,7 +40,7 @@ jobs:
         run: |
           git config user.name "radar-bot"
           git config user.email "radar-bot@users.noreply.github.com"
-          git add data/sonda
+          git add data/sonda data/colecao 2>/dev/null || git add data/sonda
           git diff --cached --quiet || git commit -m "sonda: $(date +'%d/%m %H:%M')"
           git pull --rebase -X theirs -q || true
           git push || echo "nada para enviar"

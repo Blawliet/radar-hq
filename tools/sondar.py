@@ -175,6 +175,22 @@ REDE = {
 def main():
     pedidos = set(sys.argv[1].split(",")) if len(sys.argv) > 1 and sys.argv[1] else set(ALVOS)
     PASTA.mkdir(parents=True, exist_ok=True)
+    if "colecao" in pedidos:
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+        import yaml
+        from colecao import carregar
+        linhas = []
+        for arq in sorted((Path(__file__).resolve().parents[1] / "config" / "pessoas").glob("*.yaml")):
+            cfg = yaml.safe_load(arq.read_text(encoding="utf-8")) or {}
+            if cfg.get("colecao"):
+                e = carregar(cfg["colecao"], cfg.get("nome") or arq.stem)
+                linhas.append(f"## {arq.stem}: {len(e['bloqueios'])} bloqueios, "
+                              f"{len(e['promocoes'])} promoções, {len(e['raros'])} raros")
+                for k in ("promocoes", "raros"):
+                    for d in e[k]:
+                        linhas.append(f"{k}: {d['nome']} | termos {d['termos']} | volumes {d['volumes']} | buscas {d['buscas']}")
+        (PASTA / "colecao.txt").write_text("\n".join(linhas) + "\n", encoding="utf-8")
+        print("colecao ok")
     for alvo, urls in REDE.items():
         if alvo in pedidos and urls:
             (PASTA / f"{alvo}.txt").write_text("".join(rede(u) for u in urls), encoding="utf-8")
