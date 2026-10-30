@@ -184,6 +184,17 @@ promocoes:
     formato: Mangá
     buscas: [dandadan kit, dandadan box, dandadan colecao, dandadan volumes]
 
+  # Gigant (Panini, 10 volumes): só a coleção completa, num kit ou box. Avulso não.
+  - id: gigant-completo
+    nome: Gigant (coleção completa)
+    editora: Panini
+    termos: [gigant]
+    qualquer: [box, kit, pack, pacote, lote, combo, colecao, completa, completo, volumes, vols]
+    regex: '1\s*(a|ao|-|ate)\s*10|10\s*(volumes|vols|livros|mangas)|complet'
+    modo: pacote
+    formato: Mangá
+    buscas: [gigant colecao completa, gigant kit, gigant box]
+
   - id: tmnt-idw
     nome: Tartarugas Ninja IDW
     editora: Pipoca & Nanquim
