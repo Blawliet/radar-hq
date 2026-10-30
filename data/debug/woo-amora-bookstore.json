@@ -10,12 +10,12 @@
    },
    {
     "nome": "Berserk Pacote 1 ao 14",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -31,12 +31,12 @@
    },
    {
     "nome": "Berserk Pacote 1 ao 14",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -52,12 +52,12 @@
    },
    {
     "nome": "Berserk Pacote 1 ao 14",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
