@@ -549,196 +549,143 @@
   "itens": 0,
   "exemplos": []
  },
- "frieren": {
-  "http": 200,
-  "itens": 8,
-  "exemplos": [
-   {
-    "nome": "FRIEREN E A JORNADA PARA O ALÉM VOL. 13",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "FRIEREN E A JORNADA PARA O ALÉM – NOVEL 01",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "FRIEREN E A JORNADA PARA O ALÉM VOL. 6",
-    "estoque": false,
-    "compravel": true
-   }
-  ]
- },
- "hunter x hunter": {
-  "http": 200,
-  "itens": 12,
-  "exemplos": [
-   {
-    "nome": "HUNTER X HUNTER – VOL. 03",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "HUNTER X HUNTER – VOL. 02",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "HUNTER X HUNTER • VOL. 37",
-    "estoque": false,
-    "compravel": true
-   }
-  ]
- },
- "spawn": {
-  "http": 200,
-  "itens": 12,
-  "exemplos": [
-   {
-    "nome": "SPAWN APRESENTA: OS CONDENADOS VOL. 4",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "SPAWN APRESENTA: SAM & TWITCH VOL.3",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "REI SPAWN VOL.4",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "soul eater perfect": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "SOUL EATER PERFECT EDITION VOL. 12",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "black clover": {
-  "http": 200,
-  "itens": 7,
-  "exemplos": [
-   {
-    "nome": "BLACK CLOVER • VOL. 22",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "BLACK CLOVER • 14",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "BLACK CLOVER • 15",
-    "estoque": false,
-    "compravel": true
-   }
-  ]
- },
- "golden kamui": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "jujutsu kaisen": {
-  "http": 200,
-  "itens": 9,
-  "exemplos": [
-   {
-    "nome": "JUJUTSU KAISEN – GUIA COMPLETO DA 1ª TEMPORADA DO ANIMÊ",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "JUJUTSU KAISEN: BATALHA DE FEITICEIROS • VOL. 00",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "JUJUTSU KAISEN: BATALHA DE FEITICEIROS • VOL. 01",
-    "estoque": false,
-    "compravel": true
-   }
-  ]
- },
- "jagaaaaaan": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "lost canvas especial": {
-  "http": 200,
-  "itens": 4,
-  "exemplos": [
-   {
-    "nome": "CAVALEIROS DO ZODÍACO – THE LOST CANVAS ESPECIAL • VOL.25",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "CAVALEIROS DO ZODÍACO – THE LOST CANVAS ESPECIAL • VOL.24",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "CAVALEIROS DO ZODÍACO – LOST CANVAS ESPECIAL • VOL.23",
-    "estoque": false,
-    "compravel": true
-   }
-  ]
- },
- "ao no exorcist": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "hokuto no ken": {
-  "http": 200,
-  "itens": 12,
-  "exemplos": [
-   {
-    "nome": "HOKUTO NO KEN – THE FIST OF THE NORTH STAR • VOL.18",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "HOKUTO NO KEN • VOL.17",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "HOKUTO NO KEN • VOL.16",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "inuyasha wideban": {
+ "sakamoto days": {
   "http": 200,
   "itens": 2,
   "exemplos": [
    {
-    "nome": "INUYASHA WIDEBAN • VOL 7",
+    "nome": "SAKAMOTO DAYS • 01",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "SAKAMOTO DAYS • VOL.04",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "spawn origens 12": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "shaman king big": {
+  "http": 200,
+  "itens": 2,
+  "exemplos": [
+   {
+    "nome": "SHAMAN KING BIG • VOL.05",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "INUYASHA WIDEBAN • VOL.02",
+    "nome": "SHAMAN KING BIG • VOL.04",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "one punch": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "dr stone 13": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "we never learn": {
+  "http": 200,
+  "itens": 10,
+  "exemplos": [
+   {
+    "nome": "WE NEVER LEARN • 5",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "WE NEVER LEARN • 4",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "WE NEVER LEARN • VOL.19",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "food wars": {
+  "http": 200,
+  "itens": 10,
+  "exemplos": [
+   {
+    "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "FOOD WARS! – 2",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "FOOD WARS! – 4",
     "estoque": false,
     "compravel": true
    }
   ]
  },
- "ancient magus": {
+ "spy x family": {
+  "http": 200,
+  "itens": 12,
+  "exemplos": [
+   {
+    "nome": "SPY X FAMILY VOL. 16",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "SPY X FAMILY VOL. 8",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "SPY X FAMILY VOL. 4",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "terra formars 22": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "boku no hero": {
+  "http": 200,
+  "itens": 7,
+  "exemplos": [
+   {
+    "nome": "MY HERO ACADEMIA – BOKU NO HERO – VOL. 3",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "MY HERO ACADEMIA: BOKU NO HERO – VOLUME 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "MY HERO ACADEMIA – BOKU NO HERO – VOL. 42",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
+ },
+ "fruits basket colecionador": {
   "http": 200,
   "itens": 0,
   "exemplos": []
