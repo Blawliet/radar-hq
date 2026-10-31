@@ -380,93 +380,98 @@
   "itens": 0,
   "exemplos": []
  },
- "sakamoto days 2": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "spawn origens 12": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "shaman king big 3": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "one punch 16": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "dr stone 13": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "we never learn 4": {
-  "http": 200,
-  "itens": 2,
-  "exemplos": [
-   {
-    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "food wars 13": {
-  "http": 200,
-  "itens": 4,
-  "exemplos": [
-   {
-    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Food Wars! em JPN – Vol.1 ao 15 (Festival de Importados #30)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "spy x family 4": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "terra formars 22": {
+ "frieren": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
+    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "boku no hero 17": {
+ "hunter x hunter": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "fruits basket colecionador 2": {
+ "spawn": {
   "http": 200,
   "itens": 0,
   "exemplos": []
+ },
+ "soul eater perfect": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "black clover": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "golden kamui": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jujutsu kaisen 6": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jagaaaaaan": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lost canvas especial": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ao no exorcist": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hokuto no ken": {
+  "http": 200,
+  "itens": 4,
+  "exemplos": [
+   {
+    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "inuyasha wideban": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ancient magus": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
  },
  "omnibus marvel": {
   "http": 200,
