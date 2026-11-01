@@ -98,6 +98,7 @@ def ler_csv(texto: str) -> list[dict]:
         "tenho": _coluna(cab, "volumes que tenho", "tenho"), "total": _coluna(cab, "total"),
         "alerta": _coluna(cab, "alerta"), "termos": _coluna(cab, "palavras que"),
         "excluir": _coluna(cab, "palavras para ignorar", "ignorar", "excluir"),
+        "desconto": _coluna(cab, "desconto minimo", "desconto"),
     }
     if idx["serie"] is None or idx["tenho"] is None:
         log.warning("Planilha da coleção sem as colunas Série e Volumes que tenho.")
@@ -112,7 +113,9 @@ def ler_csv(texto: str) -> list[dict]:
         tot = re.sub(r"\D", "", campo("total"))
         saida.append({"serie": campo("serie"), "editora": campo("editora"), "tenho": campo("tenho"),
                       "total": int(tot) if tot else None, "alerta": normalizar(campo("alerta")) or "promocao",
-                      "termos": campo("termos"), "excluir": campo("excluir")})
+                      "termos": campo("termos"), "excluir": campo("excluir"),
+                      "desconto": (re.sub(r"[^\d,.]", "", campo("desconto")).replace(",", ".") or None)
+                      if idx["desconto"] is not None else None})
     return saida
 
 
@@ -184,6 +187,11 @@ def entradas(linhas: list[dict], janela: int | None = None) -> dict[str, list[di
             base["qualquer_2"] = alternativas[1]
         if ln["editora"]:
             base["editora"] = ln["editora"]
+        if ln.get("desconto"):
+            try:
+                base["desconto_minimo"] = float(ln["desconto"])
+            except ValueError:
+                pass
         if tenho:
             out["bloqueios"].append({**base, "id": f"colecao-{slug}-tenho", "volumes": compactar(tenho)})
         alerta = ln["alerta"]

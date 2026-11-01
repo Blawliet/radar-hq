@@ -109,6 +109,7 @@ class Entrada:
     so_menor_preco: bool = False          # só alerta quando bate o menor preço já visto
     urls: tuple = ()                      # páginas de produto conferidas em toda varredura
     preco_volume: float | None = None     # referência manual de 1 volume (opcional)
+    desconto_minimo: float | None = None  # mínimo próprio desta entrada (senão vale o geral)
 
     @classmethod
     def de_dict(cls, d: dict) -> "Entrada":
@@ -133,6 +134,7 @@ class Entrada:
             so_menor_preco=bool(d.get("so_menor_preco", False)),
             urls=tuple(d.get("urls") or ()),
             preco_volume=d.get("preco_volume"),
+            desconto_minimo=float(d["desconto_minimo"]) if d.get("desconto_minimo") not in (None, "") else None,
         )
 
     def casa(self, t: str) -> bool:
@@ -402,6 +404,7 @@ def _decidir_promo(oferta, cat, entrada, t, vol, ref_capa, regra) -> Decisao:
                 preco_capa=capa, desconto_pct=desc)
     if desc is None:
         return Decisao(False, motivo="sem preço de capa confiável", **base)
-    if desc < cat.desconto_minimo:
-        return Decisao(False, motivo=f"desconto {desc}% abaixo do mínimo", **base)
+    minimo = entrada.desconto_minimo if entrada.desconto_minimo is not None else cat.desconto_minimo
+    if desc < minimo:
+        return Decisao(False, motivo=f"desconto {desc}% abaixo do mínimo ({minimo:g}%)", **base)
     return Decisao(True, motivo=f"desconto {desc}%", **base)

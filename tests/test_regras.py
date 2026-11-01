@@ -1294,3 +1294,18 @@ def test_html_loja_com_seletor_de_produto():
                         "busca": "/buscar?q={q}", "seletor_produto": "a.nome-produto"}, "html")
     achados = loja.buscar("batman noite das corujas")
     assert [o.url for o in achados] == ["https://www.comiccitystore.com.br/batman-a-noite-das-corujas-panini"]
+
+
+def test_colecao_desconto_minimo_proprio():
+    from colecao import ler_csv, entradas
+    from rules import Entrada, _decidir_promo, Catalogo
+    csv_txt = ('"Série","Editora","Volumes que tenho","Alerta","Palavras que o título precisa ter",'
+               '"Palavras para ignorar","Desconto mínimo (%)"\n'
+               '"Saga","Devir","1-3, 5, 8, 11","promoção","saga","saga do, saga da, a saga","15"\n')
+    d = entradas(ler_csv(csv_txt), janela=0)["promocoes"][0]
+    assert d["desconto_minimo"] == 15.0 and d["volumes"].startswith("4,6-7,9-10")
+    e = Entrada.de_dict(d)
+    assert e.casa(normalizar("Saga Vol. 4 - Devir")) and not e.casa(normalizar("A Saga do Flash Vol. 4"))
+    o = Oferta("x", "Saga Vol. 4", "u", 84.0, preco_lista=100.0)                  # 16% off
+    dec = _decidir_promo(o, CAT, e, normalizar(o.titulo), 4, None, "B")
+    assert dec.alertar
