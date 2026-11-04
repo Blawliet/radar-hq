@@ -4,18 +4,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": false,
+    "nome": "Btooom Coleção Completa 27 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Berserk Pacote 1 ao 14",
-    "estoque": false,
+    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": false,
+    "nome": "The Legend of Zelda Majora’s Mask",
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -25,18 +25,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": false,
+    "nome": "Btooom Coleção Completa 27 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Berserk Pacote 1 ao 14",
-    "estoque": false,
+    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": false,
+    "nome": "The Legend of Zelda Majora’s Mask",
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -46,18 +46,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vagabond Pacote 1 ao 20",
-    "estoque": false,
+    "nome": "Btooom Coleção Completa 27 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Berserk Pacote 1 ao 14",
-    "estoque": false,
+    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "20th Century Boys Coleção Completa + 21st Completo 2 Volumes",
-    "estoque": false,
+    "nome": "The Legend of Zelda Majora’s Mask",
+    "estoque": true,
     "compravel": true
    }
   ]
