@@ -3,7 +3,7 @@ final: https://panini.com.br/lobo-omnibus-vol-1
 via: http
 status: 200
 motivo: JSON-LD diz outofstock
-tamanho do texto: 23278
+tamanho do texto: 23328
 
 nguem cruzar seu caminho! keith giffen (legiao dos super-herois, liga da justica internacional), alan grant (juiz dredd) e simon bisley (hellblazer) juntam-se a muitos outros criadores para uma edicao como voce nunca viu! ler mais leia menos fora de estoque referencia alobo001 preco especial r$ 209,95 preco r$ 419,90 produto indisponivel nome e-mail avise-me quando disponivel adicionar detalhes do produto mais informacoes alobo001 alan grant, keith giffen, simon bisley, val semeiks 2024 dezembro 1048 capa dura com sobrecapa lobo vol. 01 (dc omnibus) 18 anos omnibus & edicoes de luxo lobo, the last cz
 [...]
