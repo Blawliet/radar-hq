@@ -275,8 +275,6 @@ promocoes:
     formato: Encadernado
     buscas: [tartarugas ninja pipoca e nanquim]
 
-  # Graphic novels avulsas (volume único). Se só 1 ou 2 lojas tiverem, o radar
-  # avisa mesmo sem desconto ("difícil de achar"); se estiver fácil, só com 25% OFF.
   - id: sociedade-do-cansaco
     nome: "Sociedade do Cansaço (Byung-Chul Han)"
     editora: Vozes
@@ -284,14 +282,3 @@ promocoes:
     excluir: [kindle, ebook, e book, audiolivro]
     formato: Livro
     buscas: [sociedade do cansaco byung chul han]
-
-  - id: resta-um
-    nome: Resta Um (Jordan Crane)
-    editora: HQueria
-    termos: [resta um]
-    excluir: [jogo, tabuleiro, brinquedo, madeira, pinos, pecas, solitario, puzzle,
-              noronha, companhia das letras]   # outro livro com o mesmo nome
-    formato: Graphic Novel
-    buscas: [resta um jordan crane, resta um hqueria]
-    urls:
-      - https://www.amazon.com.br/dp/6560250113
