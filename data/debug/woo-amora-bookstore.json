@@ -40,5 +40,26 @@
     "compravel": true
    }
   ]
+ },
+ "one piece vol 97": {
+  "http": 200,
+  "itens": 20,
+  "exemplos": [
+   {
+    "nome": "Btooom Coleção Completa 27 Volumes",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
+    "estoque": false,
+    "compravel": true
+   },
+   {
+    "nome": "The Legend of Zelda Majora’s Mask",
+    "estoque": false,
+    "compravel": true
+   }
+  ]
  }
 }
