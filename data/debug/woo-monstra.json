@@ -41,7 +41,7 @@
    },
    {
     "nome": "ONE PIECE VOL. 112",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -62,7 +62,7 @@
    },
    {
     "nome": "ONE PIECE VOL. 112",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -83,7 +83,7 @@
    },
    {
     "nome": "ONE PIECE VOL. 112",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -104,7 +104,7 @@
    },
    {
     "nome": "ONE PIECE VOL. 112",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -436,7 +436,7 @@
    },
    {
     "nome": "LANTERNA VERDE (2025) 11",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -566,7 +566,7 @@
   "itens": 0,
   "exemplos": []
  },
- "sakamoto days": {
+ "sakamoto days 2": {
   "http": 200,
   "itens": 2,
   "exemplos": [
@@ -582,12 +582,12 @@
    }
   ]
  },
- "spawn origens 15": {
+ "spawn origens 17": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "shaman king big": {
+ "shaman king big 3": {
   "http": 200,
   "itens": 2,
   "exemplos": [
@@ -603,17 +603,17 @@
    }
   ]
  },
- "one punch": {
+ "one punch 16": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "dr stone 8": {
+ "dr stone 13": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "we never learn": {
+ "we never learn 4": {
   "http": 200,
   "itens": 10,
   "exemplos": [
@@ -634,7 +634,7 @@
    }
   ]
  },
- "food wars": {
+ "food wars 13": {
   "http": 200,
   "itens": 10,
   "exemplos": [
@@ -655,10 +655,15 @@
    }
   ]
  },
- "spy x family": {
+ "spy x family 4": {
   "http": 200,
   "itens": 12,
   "exemplos": [
+   {
+    "nome": "SPY X FAMILY VOL. 17",
+    "estoque": true,
+    "compravel": true
+   },
    {
     "nome": "SPY X FAMILY VOL. 16",
     "estoque": false,
@@ -668,20 +673,15 @@
     "nome": "SPY X FAMILY VOL. 8",
     "estoque": false,
     "compravel": true
-   },
-   {
-    "nome": "SPY X FAMILY VOL. 4",
-    "estoque": false,
-    "compravel": true
    }
   ]
  },
- "terra formars 21": {
+ "terra formars 22": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "boku no hero": {
+ "boku no hero 17": {
   "http": 200,
   "itens": 7,
   "exemplos": [
@@ -702,12 +702,12 @@
    }
   ]
  },
- "fruits basket colecionador 3": {
+ "fruits basket colecionador 4": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "saga 6": {
+ "saga 7": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -728,7 +728,7 @@
    }
   ]
  },
- "rei spawn": {
+ "rei spawn 3": {
   "http": 200,
   "itens": 4,
   "exemplos": [
@@ -749,7 +749,7 @@
    }
   ]
  },
- "liga da justica internacional luxo": {
+ "liga da justica internacional luxo 4": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -952,7 +952,7 @@
   "exemplos": [
    {
     "nome": "O MELHOR DA DC – LANTERNA VERDE: O OUTRO LANTERNA VERDE DA TERRA",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
