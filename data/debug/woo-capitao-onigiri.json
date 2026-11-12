@@ -369,138 +369,105 @@
   "itens": 0,
   "exemplos": []
  },
- "sakamoto days": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "spawn origens": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "shaman king big": {
+ "frieren 2": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "Shaman King Big – Vol.1 ao 4 (Lote #364)",
+    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "one punch": {
+ "hunter x hunter 38": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "dr stone 13": {
+ "spawn 11": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "we never learn": {
+ "soul eater perfect 7": {
   "http": 200,
-  "itens": 2,
-  "exemplos": [
-   {
-    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
+  "itens": 0,
+  "exemplos": []
  },
- "food wars": {
+ "black clover 13": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "golden kamui 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jujutsu kaisen 5": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jagaaaaaan 6": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "lost canvas especial 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ao no exorcist 17": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "hokuto no ken 4": {
   "http": 200,
   "itens": 4,
   "exemplos": [
    {
-    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
+    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
+    "nome": "Hokuto no Ken – Vol.2 (Festival de Avulsos #122)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Food Wars! em JPN – Vol.1 ao 15 (Festival de Importados #30)",
+    "nome": "Hokuto no Ken Toki Gaiden em JPN – Vol.1 ao 6 (Festival de Importados #26)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "spy x family": {
+ "inuyasha wideban 4": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "ancient magus 3": {
   "http": 200,
   "itens": 2,
   "exemplos": [
    {
-    "nome": "Spy x Family – Vol.1 ao 7 (Lote #364)",
+    "nome": "The Ancient Magus Bride – Vol.1 ao 5 (Lote #364)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Spy x Family – Vol.1 ao 14 (Lote #363)",
+    "nome": "The Ancient Magus Bride em JPN edição especial – Vol.10 (Festival de Importados ",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "terra formars 22": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "boku no hero": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "fruits basket colecionador": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "saga": {
-  "http": 200,
-  "itens": 4,
-  "exemplos": [
-   {
-    "nome": "Vinland Saga – Vol.21 (Festival de Avulsos #127)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Vinland Saga – Vol.1 ao 18 (Lote #364)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Vinland Saga Deluxe – Vol.7 (Festival de Avulsos #125)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "rei spawn": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "liga da justica internacional luxo": {
+ "spawn pistoleiro 2": {
   "http": 200,
   "itens": 0,
   "exemplos": []
