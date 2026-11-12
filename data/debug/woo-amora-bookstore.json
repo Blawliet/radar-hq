@@ -4,18 +4,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Btooom Coleção Completa 27 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 9",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 8",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "The Legend of Zelda Majora’s Mask",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 7",
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -25,18 +25,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Btooom Coleção Completa 27 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 9",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 8",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "The Legend of Zelda Majora’s Mask",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 7",
+    "estoque": true,
     "compravel": true
    }
   ]
@@ -46,18 +46,18 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Btooom Coleção Completa 27 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 9",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Rurouni Kenshin Coleção Completa 28 Volumes",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 8",
+    "estoque": true,
     "compravel": true
    },
    {
-    "nome": "The Legend of Zelda Majora’s Mask",
-    "estoque": false,
+    "nome": "Vinland Saga Deluxe 7",
+    "estoque": true,
     "compravel": true
    }
   ]
