@@ -5,7 +5,7 @@
   "exemplos": [
    {
     "nome": "Vinland Saga Deluxe 9",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -26,7 +26,7 @@
   "exemplos": [
    {
     "nome": "Vinland Saga Deluxe 9",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -47,7 +47,7 @@
   "exemplos": [
    {
     "nome": "Vinland Saga Deluxe 9",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
