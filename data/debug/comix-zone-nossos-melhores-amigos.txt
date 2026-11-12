@@ -3,7 +3,7 @@ final: https://comixzone.com.br/produto/nossos-melhores-amigos/
 via: http
 status: 200
 motivo: botão de compra ativo + JSON-LD instock
-tamanho do texto: 4619
+tamanho do texto: 4343
 
  nossos melhores amigos – a verdadeira historia de friends - comix zone frete gratis acima de r$ 399 (sudeste) e r$ 499 (demais regioes) quadrinhos mangas produtos autores editora faq contato 0 oferta! pre-venda nossos melhores amigos – a verdadeira historia de friends por laurent hopman e isaac jadraque capa dura • formato 21 x 27,5 cm • 176 paginas • isbn 97865
 [...]
