@@ -111,7 +111,7 @@ def test_battle_royale_vol_6_nao_cai_no_radar():
 @pytest.mark.parametrize("titulo,alerta", [
     ("Frieren Vol. 1", False), ("Frieren Vol. 2", True), ("Sakamoto Days Vol. 1", False),
     ("Sakamoto Days Vol. 5", True), ("Hunter x Hunter Vol. 37", False), ("Hunter x Hunter Vol. 38", True),
-    ("Dandadan Vol. 1", False), ("Tartarugas Ninja Vol. 1 (Pipoca & Nanquim)", True),
+    ("Dandadan Vol. 1", False), ("Tartarugas Ninja (Coleção IDW) - Edição Absoluta Vol. 3", True),
 ])
 def test_series_em_andamento(titulo, alerta):
     assert avaliar(of(titulo, preco=70), CAT, ref_capa=100).alertar is alerta, titulo
@@ -473,7 +473,7 @@ def test_esgotado_em_produtos_relacionados_nao_conta():
 
 
 @pytest.mark.parametrize("titulo,alerta", [
-    ("Tartarugas Ninja Vol. 3", True),
+    ("Tartarugas Ninja Edição Absoluta Vol. 3", True),
     ("Power Rangers e Tartarugas Ninja Vol. 2", False),
     ("Batman e Tartarugas Ninja Vol. 2", False),
     ("Tartarugas Ninja: Coleção Clássica Vol. 2", False),
@@ -550,7 +550,7 @@ def _perfil(nome):
     ("Superman: As Quatro Estações (DC de Bolso)", True),
     ("Superman: O Mundo", True), ("Supergirl: O Mundo", True), ("Coringa: O Mundo", True),
     ("Superman: O Homem que salvou o mundo", False),
-    ("Tartarugas Ninja: Coleção Clássica Vol. 5", True), ("Tartarugas Ninja: Coleção Clássica Vol. 4", False),
+    ("Tartarugas Ninja: Coleção Clássica Vol. 6", True), ("Tartarugas Ninja: Coleção Clássica Vol. 5", False),
     ("Tartarugas Ninja: O Último Ronin", True), ("Tartarugas Ninja: O Último Ronin - Os Anos Perdidos", True),
     ("Tartarugas Ninja: Preto, Branco e Verde", True),
     ("O Eternauta: Segunda Parte", True), ("O Eternauta", False),
@@ -665,7 +665,7 @@ def test_relatorio_disponibilidade(tmp_path, monkeypatch, capsys):
     thiago = out[out.index("Rastreamento de Thiago"):]
     assert "🟢" in thiago and "• Superman: O Mundo: 3 lojas, a partir de R$ 51,00 (A)" in thiago
     assert "• Dylan Dog Omnibus vol. 4: 3 lojas" in thiago
-    assert "🟡" in thiago and "Coleção Clássica vol. 6: 1 loja," in thiago
+    assert "🟡" in thiago and "Tartarugas Ninja: Coleção Clássica: 1 loja," in thiago
     assert "🔴" in thiago and "• Dylan Dog Omnibus vol. 5" in thiago and "• Coringa: O Mundo" in thiago
 
 

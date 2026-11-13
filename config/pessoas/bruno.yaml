@@ -82,7 +82,7 @@ raros:
     editora: Panini
     termos: [supergirl]
     qualquer: [peter david, gary frank]
-    volumes: "4,5"
+    volumes: "5"             # vol. 4 comprado em 10/11
     formato: Encadernado
     buscas: [supergirl peter david]
 
@@ -265,15 +265,17 @@ promocoes:
     formato: Mangá
     buscas: [gigant colecao completa, gigant kit, gigant box]
 
+  # coleção na Edição Absoluta da Pipoca & Nanquim: vols. 1 e 2 comprados em 11/11
   - id: tmnt-idw
-    nome: Tartarugas Ninja IDW
+    nome: "Tartarugas Ninja (Coleção IDW): Edição Absoluta"
     editora: Pipoca & Nanquim
     termos: [tartarugas ninja]
+    qualquer: [absoluta]
     excluir: [omnibus, batman, power rangers, colecao classica, colecao historica, ultimo ronin, mutantes, mutant,
               x men, ghostbusters, jogos, colorir, figura, action figure]
-    volumes: "1+"
+    volumes: "3+"
     formato: Encadernado
-    buscas: [tartarugas ninja pipoca e nanquim]
+    buscas: [tartarugas ninja edicao absoluta, tartarugas ninja colecao idw absoluta]
 
   - id: sociedade-do-cansaco
     nome: "Sociedade do Cansaço (Byung-Chul Han)"
