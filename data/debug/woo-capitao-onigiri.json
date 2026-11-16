@@ -379,7 +379,7 @@
   "itens": 0,
   "exemplos": []
  },
- "spawn origens 15": {
+ "spawn origens": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -400,7 +400,7 @@
   "itens": 0,
   "exemplos": []
  },
- "dr stone": {
+ "dr stone 13": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -453,7 +453,7 @@
    }
   ]
  },
- "terra formars": {
+ "terra formars 22": {
   "http": 200,
   "itens": 1,
   "exemplos": [
@@ -469,12 +469,12 @@
   "itens": 0,
   "exemplos": []
  },
- "fruits basket colecionador 3": {
+ "fruits basket colecionador": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "saga 6": {
+ "saga": {
   "http": 200,
   "itens": 4,
   "exemplos": [
