@@ -4,17 +4,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vinland Saga Deluxe 9",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "Vinland Saga Deluxe 8",
+    "nome": "Yarichin Bitch Club 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Vinland Saga Deluxe 7",
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
     "estoque": true,
     "compravel": true
    }
@@ -25,17 +25,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vinland Saga Deluxe 9",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "Vinland Saga Deluxe 8",
+    "nome": "Yarichin Bitch Club 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Vinland Saga Deluxe 7",
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
     "estoque": true,
     "compravel": true
    }
@@ -46,17 +46,101 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Vinland Saga Deluxe 9",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "Vinland Saga Deluxe 8",
+    "nome": "Yarichin Bitch Club 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Vinland Saga Deluxe 7",
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "one piece vol 98": {
+  "http": 200,
+  "itens": 20,
+  "exemplos": [
+   {
+    "nome": "Yarichin Bitch Club 1",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "one piece vol 103": {
+  "http": 200,
+  "itens": 20,
+  "exemplos": [
+   {
+    "nome": "Yarichin Bitch Club 1",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "one piece vol 104": {
+  "http": 200,
+  "itens": 20,
+  "exemplos": [
+   {
+    "nome": "Yarichin Bitch Club 1",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "blueberry edicao definitiva": {
+  "http": 200,
+  "itens": 20,
+  "exemplos": [
+   {
+    "nome": "Yarichin Bitch Club 1",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 2",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Twisted Wonderland Manga Antologia 1",
     "estoque": true,
     "compravel": true
    }
