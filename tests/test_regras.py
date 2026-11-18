@@ -1309,3 +1309,15 @@ def test_colecao_desconto_minimo_proprio():
     o = Oferta("x", "Saga Vol. 4", "u", 84.0, preco_lista=100.0)                  # 16% off
     dec = _decidir_promo(o, CAT, e, normalizar(o.titulo), 4, None, "B")
     assert dec.alertar
+
+
+def test_desconto_minimo_proprio_e_so_com_desconto():
+    from rules import _decidir_promo
+    import main
+    e = [x for x in CAT.promocoes if x.id == "hoka-hey"][0]
+    assert e.desconto_minimo == 50 and e.so_com_desconto
+    o = Oferta("x", "Hoka Hey!", "u", 131.94, preco_lista=219.9)                # 40%
+    assert not _decidir_promo(o, CAT, e, normalizar(o.titulo), None, None, "B").alertar
+    o2 = Oferta("x", "Hoka Hey!", "u", 109.0, preco_lista=219.9)                # 50,4%
+    assert _decidir_promo(o2, CAT, e, normalizar(o2.titulo), None, None, "B").alertar
+    assert main._aceita_escasso(CAT, "hoka-hey") is False

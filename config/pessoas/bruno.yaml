@@ -282,6 +282,8 @@ promocoes:
     editora: Taverna do Rei
     termos: [hoka hey]
     excluir: [english, edition, label 619, magnetic]
+    desconto_minimo: 50      # só com 50% ou mais
+    so_com_desconto: true    # nem por "difícil de achar"
     formato: Capa Dura
     buscas: [hoka hey neyef, "9786598138165"]
 

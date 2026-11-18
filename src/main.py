@@ -119,6 +119,7 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco,
     # vale mesmo sem desconto (o mais barato entre elas é o que vai no alerta)
     if (not d.alertar and d.regra == "B" and not d.pacote and n_lojas and cat.escasso_max_lojas
             and not o.extra.get("telegram")          # post de canal não prova que o item é raro
+            and _aceita_escasso(cat, d.entrada_id)
             and n_lojas <= cat.escasso_max_lojas
             and d.motivo.startswith(("desconto", "sem preço de capa"))):
         d.alertar, d.regra = True, "ESCASSO"
@@ -129,6 +130,14 @@ def avaliar_perfil(o: Oferta, cat: Catalogo, oficial: bool, banco: Banco,
         return d
     log.info("sem alerta %s[%s] %s: %s", quem, o.loja, o.titulo[:60], d.motivo)
     return None
+
+
+def _aceita_escasso(cat, entrada_id) -> bool:
+    """Item com 'so_com_desconto: true' só alerta pelo desconto mínimo, nunca por estar difícil de achar."""
+    for e in cat.promocoes:
+        if e.id == entrada_id:
+            return not getattr(e, "so_com_desconto", False)
+    return True
 
 
 def _varrer_loja(loja, grupo: Grupo, banco: Banco) -> list[Oferta]:

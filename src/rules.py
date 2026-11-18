@@ -110,6 +110,7 @@ class Entrada:
     urls: tuple = ()                      # páginas de produto conferidas em toda varredura
     preco_volume: float | None = None     # referência manual de 1 volume (opcional)
     desconto_minimo: float | None = None  # mínimo próprio desta entrada (senão vale o geral)
+    so_com_desconto: bool = False         # não alerta por "difícil de achar", só pelo desconto
 
     @classmethod
     def de_dict(cls, d: dict) -> "Entrada":
@@ -135,6 +136,7 @@ class Entrada:
             urls=tuple(d.get("urls") or ()),
             preco_volume=d.get("preco_volume"),
             desconto_minimo=float(d["desconto_minimo"]) if d.get("desconto_minimo") not in (None, "") else None,
+            so_com_desconto=bool(d.get("so_com_desconto", False)),
         )
 
     def casa(self, t: str) -> bool:
