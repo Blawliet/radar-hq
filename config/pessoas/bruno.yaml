@@ -287,6 +287,27 @@ promocoes:
     formato: Capa Dura
     buscas: [hoka hey neyef, "9786598138165"]
 
+  # pedido reembolsado em novembro: espera uma promoção boa
+  - id: drome
+    nome: "Drome (Jesse Lonergan)"
+    termos: [drome]
+    excluir: [hipodromo, autodromo, velodrome, sambodromo]
+    desconto_minimo: 50
+    so_com_desconto: true
+    formato: Graphic Novel
+    buscas: [drome jesse lonergan]
+
+  - id: jesse-james
+    nome: "Jesse James (HQ)"
+    termos: [jesse james]
+    excluir: [lucky luke, dvd, blu ray, filme, biografia, romance]
+    desconto_minimo: 50
+    so_com_desconto: true
+    formato: Graphic Novel
+    buscas: [jesse james hq, "9788550820733"]
+    urls:
+      - https://www.amazon.com.br/dp/8550820733
+
   - id: sociedade-do-cansaco
     nome: "Sociedade do Cansaço (Byung-Chul Han)"
     editora: Vozes
