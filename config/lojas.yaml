@@ -120,6 +120,7 @@ lojas:
     delay: 1.5
     adaptador: shopify
     base: https://tavernadorei.com.br
+    oficial: true        # também é editora (Hoka Hey!...): preço cheio vira referência de capa
 
   # desativada: a busca do site demora mais de 30 s por consulta (e os produtos só
   # aparecem depois, por JavaScript); não cabe no tempo de uma varredura

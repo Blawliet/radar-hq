@@ -277,6 +277,14 @@ promocoes:
     formato: Encadernado
     buscas: [tartarugas ninja edicao absoluta, tartarugas ninja colecao idw absoluta]
 
+  - id: hoka-hey
+    nome: "Hoka Hey! (Neyef)"
+    editora: Taverna do Rei
+    termos: [hoka hey]
+    excluir: [english, edition, label 619, magnetic]
+    formato: Capa Dura
+    buscas: [hoka hey neyef, "9786598138165"]
+
   - id: sociedade-do-cansaco
     nome: "Sociedade do Cansaço (Byung-Chul Han)"
     editora: Vozes
