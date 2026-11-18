@@ -349,116 +349,151 @@
   "itens": 0,
   "exemplos": []
  },
+ "hoka hey neyef": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "9786598138165": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "drome jesse lonergan": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "jesse james hq": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "9788550820733": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
  "sociedade do cansaco byung chul han": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "frieren": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "hunter x hunter": {
+ "sakamoto days": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "spawn": {
+ "spawn origens 15": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "soul eater perfect": {
+ "shaman king big": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "black clover": {
+ "one punch": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "golden kamui": {
+ "dr stone 8": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "jujutsu kaisen 6": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Jujutsu Kaisen – Vol.11 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "jagaaaaaan": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "lost canvas especial": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "ao no exorcist": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "hokuto no ken": {
-  "http": 200,
-  "itens": 6,
-  "exemplos": [
-   {
-    "nome": "Hokuto no Ken em ITA – Vol.10 (Festival de Importados #33)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Hokuto no Ken – Vol.1 ao 6 (Lote #365)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "inuyasha wideban": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "ancient magus": {
+ "we never learn": {
   "http": 200,
   "itens": 2,
   "exemplos": [
    {
-    "nome": "The Ancient Magus Bride – Vol.1 ao 4 (Lote #365)",
+    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "The Ancient Magus Bride – Vol.1 ao 5 (Lote #364)",
+    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "spawn pistoleiro": {
+ "food wars": {
+  "http": 200,
+  "itens": 3,
+  "exemplos": [
+   {
+    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Food Wars! em ING – Vol.1 ao 4 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "spy x family": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "terra formars 21": {
+  "http": 200,
+  "itens": 1,
+  "exemplos": [
+   {
+    "nome": "Terra Formars em ING – Vol.21 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "boku no hero": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "fruits basket colecionador 3": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "saga 6": {
+  "http": 200,
+  "itens": 5,
+  "exemplos": [
+   {
+    "nome": "Vinland Saga – Vol.1 ao 19 (Lote #365)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Vinland Saga – Vol.21 (Festival de Avulsos #127)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Vinland Saga – Vol.1 ao 18 (Lote #364)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "rei spawn": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "liga da justica internacional luxo": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -491,7 +526,7 @@
  },
  "box manga": {
   "http": 200,
-  "itens": 5,
+  "itens": 4,
   "exemplos": [
    {
     "nome": "Detective Conan em JPN – Animanga – Vol.1 ao 25 (Festival de Importados #32)",
@@ -504,7 +539,7 @@
     "compravel": true
    },
    {
-    "nome": "Katsugeki Touken Ranbu em JPN (Coletânea com 12 mangás) (Festival de Importados ",
+    "nome": "Mangá Theater Bunko em JPN – Vol.1 e 2 (Festival de Importados #25)",
     "estoque": true,
     "compravel": true
    }
@@ -512,7 +547,7 @@
  },
  "box mangá panini": {
   "http": 200,
-  "itens": 5,
+  "itens": 4,
   "exemplos": [
    {
     "nome": "Detective Conan em JPN – Animanga – Vol.1 ao 25 (Festival de Importados #32)",
@@ -525,7 +560,7 @@
     "compravel": true
    },
    {
-    "nome": "Katsugeki Touken Ranbu em JPN (Coletânea com 12 mangás) (Festival de Importados ",
+    "nome": "Mangá Theater Bunko em JPN – Vol.1 e 2 (Festival de Importados #25)",
     "estoque": true,
     "compravel": true
    }
