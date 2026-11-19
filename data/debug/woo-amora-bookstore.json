@@ -4,17 +4,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Yarichin Bitch Club 1",
+    "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 2",
+    "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 1",
+    "nome": "Bleach Remix Coleção Completa 26 Volumes",
     "estoque": true,
     "compravel": true
    }
@@ -25,17 +25,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Yarichin Bitch Club 1",
+    "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 2",
+    "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 1",
+    "nome": "Bleach Remix Coleção Completa 26 Volumes",
     "estoque": true,
     "compravel": true
    }
@@ -46,101 +46,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Yarichin Bitch Club 1",
+    "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 2",
+    "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Twisted Wonderland Manga Antologia 1",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 98": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Yarichin Bitch Club 1",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 2",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 1",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 103": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Yarichin Bitch Club 1",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 2",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 1",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 104": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Yarichin Bitch Club 1",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 2",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 1",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "blueberry edicao definitiva": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Yarichin Bitch Club 1",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 2",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Twisted Wonderland Manga Antologia 1",
+    "nome": "Bleach Remix Coleção Completa 26 Volumes",
     "estoque": true,
     "compravel": true
    }
