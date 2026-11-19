@@ -4,6 +4,11 @@
   "itens": 20,
   "exemplos": [
    {
+    "nome": "Aoharaido Coleção Completa 13 Volumes",
+    "estoque": true,
+    "compravel": true
+   },
+   {
     "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
@@ -11,11 +16,6 @@
    {
     "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Bleach Remix Coleção Completa 26 Volumes",
-    "estoque": false,
     "compravel": true
    }
   ]
@@ -25,6 +25,11 @@
   "itens": 20,
   "exemplos": [
    {
+    "nome": "Aoharaido Coleção Completa 13 Volumes",
+    "estoque": true,
+    "compravel": true
+   },
+   {
     "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
@@ -32,11 +37,6 @@
    {
     "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Bleach Remix Coleção Completa 26 Volumes",
-    "estoque": false,
     "compravel": true
    }
   ]
@@ -46,6 +46,11 @@
   "itens": 20,
   "exemplos": [
    {
+    "nome": "Aoharaido Coleção Completa 13 Volumes",
+    "estoque": true,
+    "compravel": true
+   },
+   {
     "nome": "Monster Kanzenban 1",
     "estoque": true,
     "compravel": true
@@ -53,11 +58,6 @@
    {
     "nome": "Boa Noite Punpun Coleção Completa 7 Volumes",
     "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Bleach Remix Coleção Completa 26 Volumes",
-    "estoque": false,
     "compravel": true
    }
   ]
