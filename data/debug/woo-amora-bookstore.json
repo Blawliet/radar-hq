@@ -10,7 +10,7 @@
    },
    {
     "nome": "Monster Kanzenban 1",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -31,7 +31,7 @@
    },
    {
     "nome": "Monster Kanzenban 1",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -52,7 +52,7 @@
    },
    {
     "nome": "Monster Kanzenban 1",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
