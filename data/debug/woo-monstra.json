@@ -586,7 +586,7 @@
   "itens": 0,
   "exemplos": []
  },
- "frieren 2": {
+ "frieren": {
   "http": 200,
   "itens": 8,
   "exemplos": [
@@ -607,7 +607,7 @@
    }
   ]
  },
- "hunter x hunter 38": {
+ "hunter x hunter": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -628,7 +628,7 @@
    }
   ]
  },
- "spawn 11": {
+ "spawn": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -649,7 +649,7 @@
    }
   ]
  },
- "soul eater perfect 7": {
+ "soul eater perfect": {
   "http": 200,
   "itens": 1,
   "exemplos": [
@@ -660,7 +660,7 @@
    }
   ]
  },
- "black clover 13": {
+ "black clover": {
   "http": 200,
   "itens": 7,
   "exemplos": [
@@ -681,12 +681,12 @@
    }
   ]
  },
- "golden kamui 4": {
+ "golden kamui": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "jujutsu kaisen 5": {
+ "jujutsu kaisen 6": {
   "http": 200,
   "itens": 10,
   "exemplos": [
@@ -707,12 +707,12 @@
    }
   ]
  },
- "jagaaaaaan 6": {
+ "jagaaaaaan": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "lost canvas especial 4": {
+ "lost canvas especial": {
   "http": 200,
   "itens": 4,
   "exemplos": [
@@ -733,12 +733,12 @@
    }
   ]
  },
- "ao no exorcist 17": {
+ "ao no exorcist": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "hokuto no ken 4": {
+ "hokuto no ken": {
   "http": 200,
   "itens": 12,
   "exemplos": [
@@ -759,7 +759,7 @@
    }
   ]
  },
- "inuyasha wideban 4": {
+ "inuyasha wideban": {
   "http": 200,
   "itens": 2,
   "exemplos": [
@@ -775,12 +775,12 @@
    }
   ]
  },
- "ancient magus 3": {
+ "ancient magus": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "spawn pistoleiro 2": {
+ "spawn pistoleiro": {
   "http": 200,
   "itens": 1,
   "exemplos": [
