@@ -14,17 +14,17 @@
   "itens": 12,
   "exemplos": [
    {
-    "nome": "One Piece – Vol.1 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
     "nome": "One Piece Red (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "One Piece 3 em 1 – Vol.9 (Festival de Avulsos #124)",
+    "nome": "One Piece 3 em 1 – Vol.1 (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece – Vol.9 (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    }
@@ -35,17 +35,17 @@
   "itens": 12,
   "exemplos": [
    {
-    "nome": "One Piece – Vol.1 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
     "nome": "One Piece Red (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "One Piece 3 em 1 – Vol.9 (Festival de Avulsos #124)",
+    "nome": "One Piece 3 em 1 – Vol.1 (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece – Vol.9 (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    }
@@ -56,17 +56,17 @@
   "itens": 12,
   "exemplos": [
    {
-    "nome": "One Piece – Vol.1 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
     "nome": "One Piece Red (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "One Piece 3 em 1 – Vol.9 (Festival de Avulsos #124)",
+    "nome": "One Piece 3 em 1 – Vol.1 (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece – Vol.9 (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    }
@@ -77,17 +77,17 @@
   "itens": 12,
   "exemplos": [
    {
-    "nome": "One Piece – Vol.1 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   },
-   {
     "nome": "One Piece Red (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "One Piece 3 em 1 – Vol.9 (Festival de Avulsos #124)",
+    "nome": "One Piece 3 em 1 – Vol.1 (Festival de Avulsos #124)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "One Piece – Vol.9 (Festival de Avulsos #124)",
     "estoque": true,
     "compravel": true
    }
@@ -227,14 +227,8 @@
  },
  "box ajin": {
   "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Ajin – Completo (Lote #366)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
+  "itens": 0,
+  "exemplos": []
  },
  "box gantz parte 2": {
   "http": 200,
@@ -385,117 +379,137 @@
   "itens": 0,
   "exemplos": []
  },
- "frieren": {
+ "sakamoto days": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "spawn origens": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "shaman king big": {
   "http": 200,
   "itens": 1,
   "exemplos": [
    {
-    "nome": "Frieren em ING – Vol.6 (Festival de Importados #29)",
+    "nome": "Shaman King Big – Vol.1 (Festival de Avulsos #129)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "hunter x hunter": {
+ "one punch": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "spawn": {
+ "dr stone 8": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "soul eater perfect": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "black clover": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "golden kamui": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "jujutsu kaisen 6": {
-  "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Jujutsu Kaisen – Vol.11 (Festival de Avulsos #128)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "jagaaaaaan": {
-  "http": 200,
-  "itens": 0,
-  "exemplos": []
- },
- "lost canvas especial": {
+ "we never learn": {
   "http": 200,
   "itens": 2,
   "exemplos": [
    {
-    "nome": "The Lost Canvas Especial – Vol.4 (Festival de Avulsos #129)",
+    "nome": "We Never Learn – Vol.5 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "The Lost Canvas Especial – Vol.3 (Festival de Avulsos #129)",
+    "nome": "We Never Learn – Vol.11 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "ao no exorcist": {
+ "food wars": {
+  "http": 200,
+  "itens": 3,
+  "exemplos": [
+   {
+    "nome": "Food Wars! – Vol.6 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Food Wars! – Vol.10 (Festival de Avulsos #125)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Food Wars! em ING – Vol.1 ao 4 (Festival de Importados #29)",
+    "estoque": true,
+    "compravel": true
+   }
+  ]
+ },
+ "spy x family": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "hokuto no ken": {
+ "terra formars 21": {
   "http": 200,
-  "itens": 6,
+  "itens": 5,
   "exemplos": [
    {
-    "nome": "Hokuto no Ken em ITA – Vol.10 (Festival de Importados #33)",
+    "nome": "Terra Formars – Vol.15 (Festival de Avulsos #129)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Hokuto no Ken – Vol.1 ao 6 (Lote #365)",
+    "nome": "Terra Formars – Vol.14 (Festival de Avulsos #129)",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Hokuto no Ken – Vol.3 (Festival de Avulsos #122)",
+    "nome": "Terra Formars – Vol.13 (Festival de Avulsos #129)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "inuyasha wideban": {
+ "boku no hero": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "ancient magus": {
+ "fruits basket colecionador": {
   "http": 200,
-  "itens": 1,
+  "itens": 0,
+  "exemplos": []
+ },
+ "saga": {
+  "http": 200,
+  "itens": 3,
   "exemplos": [
    {
-    "nome": "The Ancient Magus Bride – Vol.1 ao 4 (Lote #365)",
+    "nome": "Vinland Saga – Vol.21 (Festival de Avulsos #127)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Vinland Saga – Vol.1 ao 18 (Lote #364)",
+    "estoque": true,
+    "compravel": true
+   },
+   {
+    "nome": "Vinland Saga – Vol.27 (Festival de Avulsos #125)",
     "estoque": true,
     "compravel": true
    }
   ]
  },
- "spawn pistoleiro": {
+ "rei spawn": {
+  "http": 200,
+  "itens": 0,
+  "exemplos": []
+ },
+ "liga da justica internacional luxo": {
   "http": 200,
   "itens": 0,
   "exemplos": []

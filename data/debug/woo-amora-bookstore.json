@@ -5,17 +5,17 @@
   "exemplos": [
    {
     "nome": "JOJO Parte 3 Volume 10 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 9 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 7 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -26,17 +26,17 @@
   "exemplos": [
    {
     "nome": "JOJO Parte 3 Volume 10 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 9 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 7 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
@@ -47,17 +47,17 @@
   "exemplos": [
    {
     "nome": "JOJO Parte 3 Volume 10 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 9 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
     "nome": "JOJO Parte 3 Volume 7 Semi-Novo",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    }
   ]
