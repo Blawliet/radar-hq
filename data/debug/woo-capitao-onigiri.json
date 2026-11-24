@@ -227,14 +227,8 @@
  },
  "box ajin": {
   "http": 200,
-  "itens": 1,
-  "exemplos": [
-   {
-    "nome": "Ajin – Completo (Lote #366)",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
+  "itens": 0,
+  "exemplos": []
  },
  "box gantz parte 2": {
   "http": 200,
@@ -390,7 +384,7 @@
   "itens": 0,
   "exemplos": []
  },
- "spawn origens": {
+ "spawn origens 15": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -411,7 +405,7 @@
   "itens": 0,
   "exemplos": []
  },
- "dr stone 13": {
+ "dr stone 8": {
   "http": 200,
   "itens": 0,
   "exemplos": []
@@ -458,7 +452,7 @@
   "itens": 0,
   "exemplos": []
  },
- "terra formars 22": {
+ "terra formars 21": {
   "http": 200,
   "itens": 2,
   "exemplos": [
@@ -479,12 +473,12 @@
   "itens": 0,
   "exemplos": []
  },
- "fruits basket colecionador": {
+ "fruits basket colecionador 3": {
   "http": 200,
   "itens": 0,
   "exemplos": []
  },
- "saga": {
+ "saga 6": {
   "http": 200,
   "itens": 2,
   "exemplos": [
