@@ -3,7 +3,7 @@ final: https://comixzone.com.br/produto/as-guerras-de-lucas-volume-2/
 via: http
 status: 200
 motivo: botão de compra ativo + JSON-LD instock
-tamanho do texto: 4866
+tamanho do texto: 4884
 
  as guerras de lucas – episodio ii - comix zone frete gratis acima de r$ 399 (sudeste) e r$ 499 (demais regioes) quadrinhos mangas produtos autores editora faq contato 0 oferta! oferta as guerras de lucas – episodio ii por laurent hopman e renaud roche capa dura • formato 21 x 27,5 cm • 208 paginas • isbn 9786598916923 logo apos o lancamen
 [...]
