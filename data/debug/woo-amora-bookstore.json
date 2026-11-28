@@ -4,17 +4,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Boa noite punpun Semi-Novo 5",
+    "nome": "Yu Yu Hakusho 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 4",
+    "nome": "Yona A Princesa do Alvorecer BIG 13",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 3",
+    "nome": "xxxHolic 1",
     "estoque": true,
     "compravel": true
    }
@@ -25,17 +25,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Boa noite punpun Semi-Novo 5",
+    "nome": "Yu Yu Hakusho 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 4",
+    "nome": "Yona A Princesa do Alvorecer BIG 13",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 3",
+    "nome": "xxxHolic 1",
     "estoque": true,
     "compravel": true
    }
@@ -46,101 +46,17 @@
   "itens": 20,
   "exemplos": [
    {
-    "nome": "Boa noite punpun Semi-Novo 5",
+    "nome": "Yu Yu Hakusho 1",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 4",
+    "nome": "Yona A Princesa do Alvorecer BIG 13",
     "estoque": true,
     "compravel": true
    },
    {
-    "nome": "Boa noite punpun Semi-Novo 3",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 98": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Boa noite punpun Semi-Novo 5",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 4",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 3",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 103": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Boa noite punpun Semi-Novo 5",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 4",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 3",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "one piece vol 104": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Boa noite punpun Semi-Novo 5",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 4",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 3",
-    "estoque": true,
-    "compravel": true
-   }
-  ]
- },
- "blueberry edicao definitiva": {
-  "http": 200,
-  "itens": 20,
-  "exemplos": [
-   {
-    "nome": "Boa noite punpun Semi-Novo 5",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 4",
-    "estoque": true,
-    "compravel": true
-   },
-   {
-    "nome": "Boa noite punpun Semi-Novo 3",
+    "nome": "xxxHolic 1",
     "estoque": true,
     "compravel": true
    }

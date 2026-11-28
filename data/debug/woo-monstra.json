@@ -425,17 +425,17 @@
   "itens": 12,
   "exemplos": [
    {
+    "nome": "ABSOLUTE LANTERNA VERDE 03",
+    "estoque": true,
+    "compravel": true
+   },
+   {
     "nome": "DC DE PRATA: LANTERNA VERDE",
     "estoque": false,
     "compravel": true
    },
    {
     "nome": "A SAGA DO LANTERNA VERDE 07",
-    "estoque": false,
-    "compravel": true
-   },
-   {
-    "nome": "LANTERNA VERDE (2025) 11",
     "estoque": false,
     "compravel": true
    }
@@ -634,7 +634,7 @@
   "exemplos": [
    {
     "nome": "SPAWN APRESENTA: OS CONDENADOS VOL. 4",
-    "estoque": false,
+    "estoque": true,
     "compravel": true
    },
    {
@@ -686,7 +686,7 @@
   "itens": 0,
   "exemplos": []
  },
- "jujutsu kaisen": {
+ "jujutsu kaisen 6": {
   "http": 200,
   "itens": 10,
   "exemplos": [
