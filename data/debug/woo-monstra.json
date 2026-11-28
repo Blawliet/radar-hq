@@ -31,7 +31,7 @@
   "exemplos": [
    {
     "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -52,7 +52,7 @@
   "exemplos": [
    {
     "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -73,7 +73,7 @@
   "exemplos": [
    {
     "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -94,7 +94,7 @@
   "exemplos": [
    {
     "nome": "FOOD WARS DO SANJI – BASEADO EM ONE PIECE DE EIICHIRO ODA 01",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -426,7 +426,7 @@
   "exemplos": [
    {
     "nome": "DC DE PRATA: LANTERNA VERDE",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -686,7 +686,7 @@
   "itens": 0,
   "exemplos": []
  },
- "jujutsu kaisen": {
+ "jujutsu kaisen 6": {
   "http": 200,
   "itens": 10,
   "exemplos": [
@@ -880,7 +880,7 @@
   "exemplos": [
    {
     "nome": "HQ DISNEY MICKEY ED. 86",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
@@ -901,7 +901,7 @@
   "exemplos": [
    {
     "nome": "HQ DISNEY MICKEY ED. 86",
-    "estoque": true,
+    "estoque": false,
     "compravel": true
    },
    {
